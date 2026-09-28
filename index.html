@@ -150,6 +150,128 @@
     const PUBLIKASI_TA_URL = "https://library.pnl.ac.id/?p=show_detail&id=41269";
     const LOA_JURNAL_TA_URL = "https://drive.google.com/file/d/1iFGWd6iRTROQEphB45YJC361gZESISFZ/view?usp=sharing";
     const JURNAL_PUBLIKASI_URL = "https://journal.universitaspahlawan.ac.id/index.php/jutin/article/view/40278/26106";
+    const INTERNSHIP_PHOTOS = [
+      {
+        src: "WhatsApp Image 2025-07-19 at 23.58.03.jpeg",
+        alt: "Meninjau progres pembangunan perumahan di lokasi proyek",
+        caption: "Pengecekan Progres Pembangunan Perumahan"
+      },
+      {
+        src: "WhatsApp Image 2025-07-19 at 23.58.03 (2).jpeg",
+        alt: "Meninjau progres pembangunan perumahan KPR di lapangan",
+        caption: "Pengecekan progres pembangunan perumahan KPR"
+      },
+      {
+        src: "WhatsApp Image 2025-07-19 at 23.56.16.jpeg",
+        alt: "Menyiapkan plat nomor perumahan KPR",
+        caption: "Penyiapan Plat Nomor Perumahan KPR"
+      },
+      {
+        src: "WhatsApp Image 2025-07-19 at 23.42.33.jpeg",
+        alt: "Meninjau berkas pembiayaan bersama tim dan mengarsipkan berkas",
+        caption: "Peninjauan berkas pembiayaan bersama tim dilanjutkan dengan pengarsipan berkas"
+      },
+      {
+        src: "WhatsApp Image 2025-07-19 at 23.58.03 (1).jpeg",
+        alt: "Meninjau lokasi pembangunan rumah di lapangan",
+        caption: "Pengecekan Progres Pembangunan Perumahan KPR"
+      },
+      {
+        src: "WhatsApp Image 2025-07-19 at 23.42.13.jpeg",
+        alt: "Meninjau progres pembangunan rumah KPR yang telah memasuki tahap dinding",
+        caption: "Pemeriksaan Berkas"
+      },
+      {
+        src: "WhatsApp Image 2025-07-19 at 23.41.03.jpeg",
+        alt: "Menyiapkan formulir pembukaan buku tabungan",
+        caption: "Penyiapan Formulir Pembukaan Buku Tabungan"
+      },
+      {
+        src: "Pembuatan Nomor CIF dan Rekening.jpg",
+        alt: "Mengoperasikan komputer untuk pembuatan nomor CIF dan rekening",
+        caption: "Pembuatan Nomor CIF dan Nomor Rekening"
+      },
+      {
+        src: "Pengisian Nomor Rekening dan Personalisasi Buku Tabungan.jpg",
+        alt: "Mengisi nomor rekening pada buku tabungan BTN",
+        caption: "Pengisian Nomor Rekening pada buku/Proses Personalisasi Buku Tabungan"
+      }
+    ];
+    const INTERNSHIP_PHOTO_DB = "jemeli-portfolio-gallery";
+    const INTERNSHIP_PHOTO_STORE = "replacements";
+
+    function openInternshipPhotoDatabase() {
+      return new Promise((resolve, reject) => {
+        if (!window.indexedDB) {
+          reject(new Error("Penyimpanan lokal tidak tersedia di browser ini."));
+          return;
+        }
+
+        const request = window.indexedDB.open(INTERNSHIP_PHOTO_DB, 1);
+        request.onupgradeneeded = () => {
+          if (!request.result.objectStoreNames.contains(INTERNSHIP_PHOTO_STORE)) {
+            request.result.createObjectStore(INTERNSHIP_PHOTO_STORE, { keyPath: "src" });
+          }
+        };
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error || new Error("Database foto tidak dapat dibuka."));
+      });
+    }
+
+    async function getSavedInternshipPhotos() {
+      const database = await openInternshipPhotoDatabase();
+      return new Promise((resolve, reject) => {
+        const transaction = database.transaction(INTERNSHIP_PHOTO_STORE, "readonly");
+        const request = transaction.objectStore(INTERNSHIP_PHOTO_STORE).getAll();
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error || new Error("Foto tersimpan tidak dapat dibaca."));
+        transaction.oncomplete = () => database.close();
+        transaction.onerror = () => {
+          database.close();
+          reject(transaction.error || new Error("Foto tersimpan tidak dapat dibaca."));
+        };
+      });
+    }
+
+    async function saveInternshipPhoto(src, file) {
+      const database = await openInternshipPhotoDatabase();
+      return new Promise((resolve, reject) => {
+        const transaction = database.transaction(INTERNSHIP_PHOTO_STORE, "readwrite");
+        transaction.objectStore(INTERNSHIP_PHOTO_STORE).put({ src, blob: file });
+        transaction.oncomplete = () => {
+          database.close();
+          resolve();
+        };
+        transaction.onerror = () => {
+          database.close();
+          reject(transaction.error || new Error("Foto pengganti gagal disimpan."));
+        };
+        transaction.onabort = () => {
+          database.close();
+          reject(transaction.error || new Error("Penyimpanan foto pengganti dibatalkan."));
+        };
+      });
+    }
+
+    async function removeSavedInternshipPhoto(src) {
+      const database = await openInternshipPhotoDatabase();
+      return new Promise((resolve, reject) => {
+        const transaction = database.transaction(INTERNSHIP_PHOTO_STORE, "readwrite");
+        transaction.objectStore(INTERNSHIP_PHOTO_STORE).delete(src);
+        transaction.oncomplete = () => {
+          database.close();
+          resolve();
+        };
+        transaction.onerror = () => {
+          database.close();
+          reject(transaction.error || new Error("Foto pengganti gagal dihapus."));
+        };
+        transaction.onabort = () => {
+          database.close();
+          reject(transaction.error || new Error("Pengembalian foto asli dibatalkan."));
+        };
+      });
+    }
 
     // YouTube Video ID for: Alan Walker - Different World
     const YOUTUBE_VIDEO_ID = "dhYOPzcsbGM";
@@ -510,6 +632,79 @@
       );
     }
 
+    function InternshipPhotoLightbox({ photo, onClose, triggerRef }) {
+      const dialogRef = useRef(null);
+      const closeButtonRef = useRef(null);
+
+      useEffect(() => {
+        closeButtonRef.current?.focus();
+        const previousOverflow = document.body.style.overflow;
+
+        const handleKeyDown = (event) => {
+          if (event.key === 'Escape') {
+            event.preventDefault();
+            onClose();
+          } else if (event.key === 'Tab') {
+            const focusableElements = dialogRef.current?.querySelectorAll('button:not([disabled])');
+            if (!focusableElements?.length) return;
+            const firstElement = focusableElements[0];
+            const lastElement = focusableElements[focusableElements.length - 1];
+            if (event.shiftKey && document.activeElement === firstElement) {
+              event.preventDefault();
+              lastElement.focus();
+            } else if (!event.shiftKey && document.activeElement === lastElement) {
+              event.preventDefault();
+              firstElement.focus();
+            }
+          }
+        };
+
+        document.body.style.overflow = 'hidden';
+        window.addEventListener('keydown', handleKeyDown);
+        return () => {
+          document.body.style.overflow = previousOverflow;
+          window.removeEventListener('keydown', handleKeyDown);
+          if (triggerRef.current?.isConnected) triggerRef.current.focus();
+        };
+      }, [photo]);
+
+      if (!photo) return null;
+
+      return (
+        <div
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-md p-4 sm:p-8"
+          onClick={onClose}
+        >
+          <div
+            ref={dialogRef}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="internship-photo-caption"
+            className="relative w-full max-w-5xl rounded-2xl border border-cyan-400/40 bg-navy-950/95 p-3 sm:p-5 shadow-2xl shadow-cyan-950/40"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <button
+              ref={closeButtonRef}
+              type="button"
+              onClick={onClose}
+              aria-label="Tutup foto"
+              className="absolute right-5 top-5 z-10 inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/30 bg-black/70 text-xl font-bold text-white transition hover:bg-cyan-500 hover:text-navy-950 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-cyan-300"
+            >
+              <span aria-hidden="true">×</span>
+            </button>
+            <img
+              src={photo.src}
+              alt={photo.alt}
+              className="mx-auto max-h-[78vh] w-full rounded-xl object-contain"
+            />
+            <p id="internship-photo-caption" className="pt-3 text-center text-sm font-medium text-cyan-100">
+              {photo.caption}
+            </p>
+          </div>
+        </div>
+      );
+    }
+
     // ============ INTERACTIVE SEMESTER ACCORDION ============
     function SemesterAccordion({ semestersData }) {
       const [openSem, setOpenSem] = React.useState(null);
@@ -741,10 +936,20 @@
       const [currentSlide, setCurrentSlide] = useState(0);
       const [isPlaying, setIsPlaying] = useState(false);
       const [selectedCert, setSelectedCert] = useState(null);
+      const [activeCredentialCategory, setActiveCredentialCategory] = useState("certification");
+      const [selectedInternshipPhoto, setSelectedInternshipPhoto] = useState(null);
+      const [internshipPhotoOverrides, setInternshipPhotoOverrides] = useState({});
+      const [isManagingInternshipPhotos, setIsManagingInternshipPhotos] = useState(false);
+      const [internshipPhotoMessage, setInternshipPhotoMessage] = useState("");
+      const [internshipPhotoMessageIsError, setInternshipPhotoMessageIsError] = useState(false);
       const [isMusicPlaying, setIsMusicPlaying] = useState(true);
 
       const totalSlides = 9;
       const audioRef = useRef(null);
+      const internshipPhotoTriggerRef = useRef(null);
+      const internshipPhotoUrlsRef = useRef(new Set());
+      const internshipPhotoOverrideUrlsRef = useRef({});
+      const internshipPhotoEditsRef = useRef(new Set());
 
       const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % totalSlides);
       const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + totalSlides) % totalSlides);
@@ -780,7 +985,7 @@
 
       useEffect(() => {
         const handleKeyDown = (e) => {
-          if (viewMode !== 'slides') return;
+          if (viewMode !== 'slides' || selectedInternshipPhoto) return;
           if (e.key === 'ArrowRight' || e.key === ' ') {
             e.preventDefault(); nextSlide();
           } else if (e.key === 'ArrowLeft') {
@@ -789,16 +994,116 @@
         };
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
-      }, [viewMode]);
+      }, [viewMode, selectedInternshipPhoto]);
+
+      useEffect(() => {
+        if (currentSlide !== 3 || viewMode !== 'slides') {
+          setSelectedInternshipPhoto(null);
+        }
+      }, [currentSlide, viewMode]);
+
+      useEffect(() => {
+        let isActive = true;
+        getSavedInternshipPhotos().then((savedPhotos) => {
+          const overrides = {};
+          savedPhotos.forEach(({ src, blob }) => {
+            if (internshipPhotoEditsRef.current.has(src)) return;
+            const url = URL.createObjectURL(blob);
+            internshipPhotoUrlsRef.current.add(url);
+            overrides[src] = url;
+          });
+          if (isActive) {
+            Object.entries(internshipPhotoOverrideUrlsRef.current).forEach(([src, url]) => {
+              overrides[src] = url;
+            });
+            internshipPhotoOverrideUrlsRef.current = overrides;
+            setInternshipPhotoOverrides(overrides);
+          } else {
+            Object.values(overrides).forEach((url) => URL.revokeObjectURL(url));
+          }
+        }).catch((error) => {
+          console.error("Gagal memuat foto galeri tersimpan:", error);
+          if (isActive) {
+            setInternshipPhotoMessage(error.message || "Foto galeri tersimpan tidak dapat dimuat.");
+            setInternshipPhotoMessageIsError(true);
+          }
+        });
+
+        return () => {
+          isActive = false;
+          internshipPhotoUrlsRef.current.forEach((url) => URL.revokeObjectURL(url));
+          internshipPhotoUrlsRef.current.clear();
+          internshipPhotoOverrideUrlsRef.current = {};
+          internshipPhotoEditsRef.current.clear();
+        };
+      }, []);
+
+      const handleInternshipPhotoUpload = async (photo, file) => {
+        if (!file.type.startsWith("image/")) {
+          setInternshipPhotoMessage("Pilih file gambar dengan format yang didukung.");
+          setInternshipPhotoMessageIsError(true);
+          return;
+        }
+        if (file.size > 20 * 1024 * 1024) {
+          setInternshipPhotoMessage("Ukuran gambar maksimal 20 MB.");
+          setInternshipPhotoMessageIsError(true);
+          return;
+        }
+
+        try {
+          await saveInternshipPhoto(photo.src, file);
+          internshipPhotoEditsRef.current.add(photo.src);
+          const url = URL.createObjectURL(file);
+          const previousUrl = internshipPhotoOverrideUrlsRef.current[photo.src];
+          if (previousUrl) {
+            URL.revokeObjectURL(previousUrl);
+            internshipPhotoUrlsRef.current.delete(previousUrl);
+          }
+          internshipPhotoUrlsRef.current.add(url);
+          internshipPhotoOverrideUrlsRef.current = {
+            ...internshipPhotoOverrideUrlsRef.current,
+            [photo.src]: url
+          };
+          setInternshipPhotoOverrides(internshipPhotoOverrideUrlsRef.current);
+          setInternshipPhotoMessage(`Foto "${photo.caption}" berhasil diganti dan tersimpan di browser ini.`);
+          setInternshipPhotoMessageIsError(false);
+        } catch (error) {
+          console.error("Gagal menyimpan foto pengganti:", error);
+          setInternshipPhotoMessage(error.message || "Foto pengganti gagal disimpan.");
+          setInternshipPhotoMessageIsError(true);
+        }
+      };
+
+      const handleRestoreInternshipPhoto = async (photo) => {
+        try {
+          await removeSavedInternshipPhoto(photo.src);
+          internshipPhotoEditsRef.current.add(photo.src);
+          const previousUrl = internshipPhotoOverrideUrlsRef.current[photo.src];
+          if (previousUrl) {
+            URL.revokeObjectURL(previousUrl);
+            internshipPhotoUrlsRef.current.delete(previousUrl);
+          }
+          const nextOverrides = { ...internshipPhotoOverrideUrlsRef.current };
+          delete nextOverrides[photo.src];
+          internshipPhotoOverrideUrlsRef.current = nextOverrides;
+          setInternshipPhotoOverrides(nextOverrides);
+          setInternshipPhotoMessage(`Foto asli "${photo.caption}" berhasil dikembalikan.`);
+          setInternshipPhotoMessageIsError(false);
+        } catch (error) {
+          console.error("Gagal mengembalikan foto asli:", error);
+          setInternshipPhotoMessage(error.message || "Foto asli gagal dikembalikan.");
+          setInternshipPhotoMessageIsError(true);
+        }
+      };
 
       const handleDownloadCV = () => window.print();
 
       const certList = [
-        { title: "Certified Village Development Planner", issuer: "PT Esas Edukasi Indonesia", year: "2024", skills: ["Perencanaan Pembangunan Desa", "APBDes & Governance"] },
-        { title: "Manajemen Risiko Berbasis ISO 31000:2018", issuer: "PT Mega Harapan Mulia (Kelas.com)", year: "2025", skills: ["Mitigasi Risiko Keuangan", "ISO 31000 Framework"] },
-        { title: "Fundamental Akuntansi", issuer: "PT Mega Harapan Mulia (Kelas.com)", year: "2025", skills: ["Laporan Keuangan PSAK/SAP", "Audit & Jurnal"] },
-        { title: "Essential Competencies for Office Administrators", issuer: "PT Mega Harapan Mulia (Kelas.com)", year: "2026", skills: ["Administrasi Perkantoran Modern", "Typing Speed & Kearsipan"] },
-        { title: "Certified Completion Soft Skill", issuer: "Politeknik Negeri Lhokseumawe & PT Tandaseru Consulting", year: "2024", skills: ["Komunikasi Publik", "Kerja Sama Tim Cross-functional"] }
+        { title: "Certified Village Development Planner", issuer: "PT Esas Edukasi Indonesia", year: "2024", category: "certification", file: "Sertifikat Certified Village Development Planner - Jemeli.pdf", skills: ["Perencanaan Pembangunan Desa", "APBDes & Governance"] },
+        { title: "Manajemen Risiko Berbasis ISO 31000:2018", issuer: "PT Mega Harapan Mulia (Kelas.com)", year: "2025", category: "training", skills: ["Mitigasi Risiko Keuangan", "ISO 31000 Framework"] },
+        { title: "Fundamental Akuntansi", issuer: "PT Mega Harapan Mulia (Kelas.com)", year: "2025", category: "training", skills: ["Laporan Keuangan PSAK/SAP", "Audit & Jurnal"] },
+        { title: "Essential Competencies for Office Administrators", issuer: "PT Mega Harapan Mulia (Kelas.com)", year: "2026", category: "training", skills: ["Administrasi Perkantoran Modern", "Typing Speed & Kearsipan"] },
+        { title: "Sertifikat Soft Skill Resmi SKKNI", issuer: "Politeknik Negeri Lhokseumawe & PT Tandaseru Consulting", year: "2024", category: "certification", file: "Sertifikat Soft Skill Resmi SKKNI - Jemeli.pdf", skills: ["Komunikasi Publik", "Kerja Sama Tim Cross-functional"] }
       ];
 
       // EXACT 58 COURSES RECORDED IN OFFICIAL TRANSCRIPT (ALL 8 SEMESTERS)
@@ -1215,6 +1520,112 @@
                         </div>
                       </div>
 
+                      <section className="mt-7 border-t border-slate-800 pt-5" aria-labelledby="internship-gallery-title">
+                        <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                          <div>
+                            <h3 id="internship-gallery-title" className="text-xs font-mono text-cyan-400 uppercase tracking-widest font-semibold">
+                              Galeri Dokumentasi Magang
+                            </h3>
+                            <p className="mt-1 text-xs text-slate-400">Pilih foto untuk melihat ukuran lebih besar.</p>
+                          </div>
+                          <button
+                            type="button"
+                            aria-expanded={isManagingInternshipPhotos}
+                            aria-controls="internship-photo-manager"
+                            onClick={() => {
+                              setIsManagingInternshipPhotos((current) => !current);
+                              setInternshipPhotoMessage("");
+                            }}
+                            className="inline-flex items-center justify-center gap-2 self-start rounded-xl border border-cyan-500/30 bg-cyan-500/10 px-4 py-2 text-xs font-semibold text-cyan-200 transition hover:bg-cyan-500/20 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-cyan-300 sm:self-auto"
+                          >
+                            {isManagingInternshipPhotos ? "Selesai Mengelola" : "Kelola Foto"}
+                          </button>
+                        </div>
+                        <div
+                          id="internship-photo-manager"
+                          hidden={!isManagingInternshipPhotos}
+                          className="mb-4 rounded-xl border border-cyan-500/20 bg-navy-950/70 p-4"
+                        >
+                          <p className="text-xs leading-relaxed text-slate-300">
+                            Unggah gambar (maksimal 20 MB) untuk mengganti foto. Perubahan tersimpan hanya di browser ini dan tidak mengubah file situs untuk pengunjung lain.
+                          </p>
+                          {internshipPhotoMessage && (
+                            <p
+                              role={internshipPhotoMessageIsError ? "alert" : "status"}
+                              className={`mt-2 text-xs ${internshipPhotoMessageIsError ? "text-rose-300" : "text-emerald-300"}`}
+                            >
+                              {internshipPhotoMessage}
+                            </p>
+                          )}
+                        </div>
+                        <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+                          {INTERNSHIP_PHOTOS.map((photo, index) => (
+                            <div
+                              key={photo.src}
+                              className="overflow-hidden rounded-xl border border-cyan-500/20 bg-navy-950/70 transition hover:border-cyan-300/50"
+                            >
+                              <button
+                                type="button"
+                                onClick={(event) => {
+                                  internshipPhotoTriggerRef.current = event.currentTarget;
+                                  setSelectedInternshipPhoto({
+                                    ...photo,
+                                    src: internshipPhotoOverrides[photo.src] || photo.src
+                                  });
+                                }}
+                                aria-label={`Perbesar foto ${index + 1}: ${photo.caption}`}
+                                className="group block w-full text-left focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-inset focus-visible:ring-cyan-300"
+                              >
+                                <img
+                                  src={internshipPhotoOverrides[photo.src] || photo.src}
+                                  alt={photo.alt}
+                                  loading="lazy"
+                                  className="aspect-[4/3] w-full object-cover transition duration-300 group-hover:scale-105"
+                                />
+                                <span className="block min-h-12 p-2.5 text-[10px] leading-relaxed text-slate-300 sm:text-xs">
+                                  {photo.caption}
+                                </span>
+                              </button>
+                              {isManagingInternshipPhotos && (
+                                <div className="flex flex-wrap gap-2 border-t border-slate-800 p-2.5">
+                                  <label className="inline-flex cursor-pointer items-center rounded-lg border border-cyan-500/30 bg-cyan-500/10 px-3 py-2 text-[10px] font-semibold text-cyan-200 transition hover:bg-cyan-500/20 focus-within:ring-4 focus-within:ring-cyan-300 sm:text-xs">
+                                    Ganti Foto
+                                    <input
+                                      type="file"
+                                      accept="image/*"
+                                      aria-label={`Unggah foto pengganti ${index + 1}: ${photo.caption}`}
+                                      className="sr-only"
+                                      onChange={async (event) => {
+                                        const input = event.currentTarget;
+                                        const file = input.files?.[0];
+                                        if (file) await handleInternshipPhotoUpload(photo, file);
+                                        input.value = "";
+                                      }}
+                                    />
+                                  </label>
+                                  {internshipPhotoOverrides[photo.src] && (
+                                    <button
+                                      type="button"
+                                      onClick={() => handleRestoreInternshipPhoto(photo)}
+                                      aria-label={`Kembalikan foto asli ${index + 1}: ${photo.caption}`}
+                                      className="rounded-lg border border-slate-700 px-3 py-2 text-[10px] font-semibold text-slate-300 transition hover:border-rose-400/50 hover:text-rose-200 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-cyan-300 sm:text-xs"
+                                    >
+                                      Kembalikan Asli
+                                    </button>
+                                  )}
+                                </div>
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                        <aside className="mt-5 rounded-xl border border-amber-400/20 bg-amber-950/20 px-4 py-3 text-xs leading-relaxed text-slate-300">
+                          <strong className="font-semibold text-amber-200">Catatan Kerahasiaan &amp; Profesionalisme:</strong>{" "}
+                          <em>
+                            Dokumentasi di atas merupakan sebagian kecil dari aktivitas operasional harian selama masa magang. Guna menjaga kerahasiaan data nasabah dan kepatuhan terhadap prinsip profesionalisme industri perbankan, beberapa dokumen serta aktivitas yang bersifat sensitif tidak ditampilkan dalam portofolio ini.
+                          </em>
+                        </aside>
+                      </section>
+
                       {/* Verification: Internship Report & Position Activity */}
                       <div className="mt-6 border-t border-slate-800 pt-5">
                         <div className="text-xs font-mono text-cyan-400 uppercase tracking-widest font-semibold mb-3">Dokumen & Verifikasi Magang</div>
@@ -1268,18 +1679,94 @@
                     <div className="glass-panel rounded-3xl p-6 sm:p-10 border border-cyan-500/30">
                       <span className="text-xs font-mono text-cyan-400 uppercase tracking-widest font-semibold">SLIDE 07 — SERTIFIKASI RESMI</span>
                       <h2 className="text-2xl sm:text-4xl font-extrabold font-display text-white mt-1 mb-6">
-                        Lisensi Kompetensi Profesional
+                        Kumpulan Sertifikat & Pelatihan
                       </h2>
 
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        {certList.map((c, i) => (
-                          <div key={i} onClick={() => setSelectedCert(c)} className="glass-panel-interactive p-4 rounded-xl cursor-pointer">
-                            <span className="text-[10px] font-mono text-cyan-300 bg-cyan-950 px-2 py-0.5 rounded">{c.year}</span>
-                            <h3 className="text-sm font-bold text-white mt-2">{c.title}</h3>
-                            <p className="text-[11px] text-slate-400 mt-1">{c.issuer}</p>
-                            <div className="mt-3 text-[10px] text-cyan-400 font-semibold">Klik untuk detail →</div>
+                      <p className="mb-5 max-w-3xl text-xs leading-relaxed text-slate-300">
+                        Telusuri berkas sertifikasi dan pelatihan berdasarkan kategori. Pilih salah satu item untuk melihat rincian kompetensinya.
+                      </p>
+
+                      <div className="mb-5 flex flex-wrap gap-2" role="tablist" aria-label="Kategori berkas">
+                        {[
+                          { id: "certification", label: "Sertifikasi", icon: "🏅" },
+                          { id: "training", label: "Pelatihan", icon: "📘" }
+                        ].map((category) => {
+                          const count = certList.filter((item) => item.category === category.id).length;
+                          const isActive = activeCredentialCategory === category.id;
+                          return (
+                            <button
+                              key={category.id}
+                              type="button"
+                              role="tab"
+                              id={`credential-tab-${category.id}`}
+                              aria-selected={isActive}
+                              aria-controls={`credential-panel-${category.id}`}
+                              onClick={() => setActiveCredentialCategory(category.id)}
+                              className={`inline-flex items-center gap-2 rounded-xl border px-4 py-2.5 text-xs font-semibold transition focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-cyan-300 ${
+                                isActive
+                                  ? "border-cyan-300/60 bg-cyan-500/20 text-cyan-100 shadow-lg shadow-cyan-950/30"
+                                  : "border-slate-700 bg-navy-950/70 text-slate-300 hover:border-cyan-500/40 hover:text-white"
+                              }`}
+                            >
+                              <span aria-hidden="true">{category.icon}</span>
+                              {category.label}
+                              <span className="rounded-full bg-black/20 px-2 py-0.5 text-[10px]">{count}</span>
+                            </button>
+                          );
+                        })}
+                      </div>
+
+                      {["certification", "training"].map((categoryId) => {
+                        const entries = certList.filter((item) => item.category === categoryId);
+                        return (
+                          <div
+                            key={categoryId}
+                            id={`credential-panel-${categoryId}`}
+                            role="tabpanel"
+                            aria-labelledby={`credential-tab-${categoryId}`}
+                            hidden={activeCredentialCategory !== categoryId}
+                            className="grid grid-cols-1 gap-4 md:grid-cols-2"
+                          >
+                            {entries.map((credential) => (
+                              <article
+                                key={credential.title}
+                                className="glass-panel-interactive rounded-xl p-4"
+                              >
+                                <div className="flex items-start justify-between gap-3">
+                                  <span className="rounded bg-cyan-950 px-2 py-0.5 text-[10px] font-mono text-cyan-300">{credential.year}</span>
+                                  <span className="text-[10px] font-semibold uppercase tracking-wide text-cyan-400">
+                                    {categoryId === "certification" ? "Sertifikasi" : "Pelatihan"}
+                                  </span>
+                                </div>
+                                <h3 className="mt-2 text-sm font-bold text-white">{credential.title}</h3>
+                                <p className="mt-1 text-[11px] text-slate-400">{credential.issuer}</p>
+                                <div className="mt-3 flex flex-wrap gap-2">
+                                  <button
+                                    type="button"
+                                    onClick={() => setSelectedCert(credential)}
+                                    className="rounded-lg border border-slate-700 px-3 py-2 text-[10px] font-semibold text-cyan-300 transition hover:border-cyan-400/50 hover:bg-cyan-500/10 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-cyan-300"
+                                  >
+                                    Lihat rincian
+                                  </button>
+                                  {credential.file && (
+                                    <a
+                                      href={credential.file}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="rounded-lg border border-cyan-500/30 bg-cyan-500/10 px-3 py-2 text-[10px] font-semibold text-cyan-100 transition hover:bg-cyan-500/20 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-cyan-300"
+                                    >
+                                      Buka sertifikat ↗
+                                    </a>
+                                  )}
+                                </div>
+                              </article>
+                            ))}
                           </div>
-                        ))}
+                        );
+                      })}
+
+                      <div className="mt-5 rounded-xl border border-cyan-500/20 bg-navy-950/60 p-4 text-xs leading-relaxed text-slate-400">
+                        Berkas sertifikat dan pelatihan dapat ditambahkan ke kategori yang sesuai saat dokumennya diunggah.
                       </div>
                     </div>
                   )}
@@ -1486,6 +1973,13 @@
           </main>
 
           <CertModal cert={selectedCert} onClose={() => setSelectedCert(null)} />
+          {selectedInternshipPhoto && (
+            <InternshipPhotoLightbox
+              photo={selectedInternshipPhoto}
+              onClose={() => setSelectedInternshipPhoto(null)}
+              triggerRef={internshipPhotoTriggerRef}
+            />
+          )}
 
           <footer className="glass-panel border-t border-cyan-500/20 py-6 text-center text-xs text-slate-400 no-print">
             © 2026 JEMELI, S.Tr.M — Politeknik Negeri Lhokseumawe.
