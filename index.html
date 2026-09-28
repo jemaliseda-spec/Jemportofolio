@@ -154,37 +154,40 @@
       {
         src: "WhatsApp Image 2025-07-19 at 23.58.03.jpeg",
         alt: "Meninjau progres pembangunan perumahan di lokasi proyek",
-        caption: "Pengecekan Progres Pembangunan Perumahan"
+        caption: "Pengecekan Progres Pembangunan Perumahan KPR",
+        group: "kpr-progress"
       },
       {
         src: "WhatsApp Image 2025-07-19 at 23.58.03 (2).jpeg",
         alt: "Meninjau progres pembangunan perumahan KPR di lapangan",
-        caption: "Pengecekan progres pembangunan perumahan KPR"
+        caption: "Pengecekan Progres Pembangunan Perumahan KPR",
+        group: "kpr-progress"
       },
       {
         src: "WhatsApp Image 2025-07-19 at 23.56.16.jpeg",
-        alt: "Menyiapkan plat nomor perumahan KPR",
-        caption: "Penyiapan Plat Nomor Perumahan KPR"
+        alt: "Menelaah dokumen administrasi bersama rekan kerja di kantor BTN",
+        caption: "Penelaahan dokumen administrasi"
       },
       {
         src: "WhatsApp Image 2025-07-19 at 23.42.33.jpeg",
-        alt: "Meninjau berkas pembiayaan bersama tim dan mengarsipkan berkas",
-        caption: "Peninjauan berkas pembiayaan bersama tim dilanjutkan dengan pengarsipan berkas"
+        alt: "Mengoperasikan komputer di meja layanan kantor BTN",
+        caption: "Aktivitas di meja layanan BTN"
       },
       {
         src: "WhatsApp Image 2025-07-19 at 23.58.03 (1).jpeg",
-        alt: "Meninjau lokasi pembangunan rumah di lapangan",
-        caption: "Pengecekan Progres Pembangunan Perumahan KPR"
+        alt: "Membaca dan memeriksa dokumen administrasi di area kerja BTN",
+        caption: "Pemeriksaan dokumen administrasi"
       },
       {
         src: "WhatsApp Image 2025-07-19 at 23.42.13.jpeg",
-        alt: "Meninjau progres pembangunan rumah KPR yang telah memasuki tahap dinding",
-        caption: "Pemeriksaan Berkas"
+        alt: "Menelaah berkas dan formulir administrasi perbankan",
+        caption: "Pemeriksaan berkas administrasi"
       },
       {
         src: "WhatsApp Image 2025-07-19 at 23.41.03.jpeg",
-        alt: "Menyiapkan formulir pembukaan buku tabungan",
-        caption: "Penyiapan Formulir Pembukaan Buku Tabungan"
+        alt: "Memeriksa progres pembangunan rumah KPR bersama pekerja di lapangan",
+        caption: "Pengecekan Progres Pembangunan Perumahan KPR",
+        group: "kpr-progress"
       },
       {
         src: "Pembuatan Nomor CIF dan Rekening.jpg",
@@ -701,6 +704,60 @@
               {photo.caption}
             </p>
           </div>
+        </div>
+      );
+    }
+
+    function InternshipPhotoCard({ photo, index, photoOverride, isManaging, onOpen, onUpload, onRestore, showCaption = true }) {
+      return (
+        <div className="overflow-hidden rounded-xl border border-cyan-500/20 bg-navy-950/70 transition hover:border-cyan-300/50">
+          <button
+            type="button"
+            onClick={(event) => onOpen(photo, event.currentTarget)}
+            aria-label={`Perbesar foto ${index + 1}: ${photo.caption}`}
+            className="group block w-full text-left focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-inset focus-visible:ring-cyan-300"
+          >
+            <img
+              src={photoOverride || photo.src}
+              alt={photo.alt}
+              loading="lazy"
+              className="aspect-[4/3] w-full object-cover transition duration-300 group-hover:scale-105"
+            />
+            {showCaption && (
+              <span className="block min-h-12 p-2.5 text-[10px] leading-relaxed text-slate-300 sm:text-xs">
+                {photo.caption}
+              </span>
+            )}
+          </button>
+          {isManaging && (
+            <div className="flex flex-wrap gap-2 border-t border-slate-800 p-2.5">
+              <label className="inline-flex cursor-pointer items-center rounded-lg border border-cyan-500/30 bg-cyan-500/10 px-3 py-2 text-[10px] font-semibold text-cyan-200 transition hover:bg-cyan-500/20 focus-within:ring-4 focus-within:ring-cyan-300 sm:text-xs">
+                Ganti Foto
+                <input
+                  type="file"
+                  accept="image/*"
+                  aria-label={`Unggah foto pengganti ${index + 1}: ${photo.caption}`}
+                  className="sr-only"
+                  onChange={async (event) => {
+                    const input = event.currentTarget;
+                    const file = input.files?.[0];
+                    if (file) await onUpload(photo, file);
+                    input.value = "";
+                  }}
+                />
+              </label>
+              {photoOverride && (
+                <button
+                  type="button"
+                  onClick={() => onRestore(photo)}
+                  aria-label={`Kembalikan foto asli ${index + 1}: ${photo.caption}`}
+                  className="rounded-lg border border-slate-700 px-3 py-2 text-[10px] font-semibold text-slate-300 transition hover:border-rose-400/50 hover:text-rose-200 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-cyan-300 sm:text-xs"
+                >
+                  Kembalikan Asli
+                </button>
+              )}
+            </div>
+          )}
         </div>
       );
     }
@@ -1325,10 +1382,9 @@
                           </div>
 
                           <div className="mt-4 flex flex-col items-center gap-1.5">
-                            <span className="inline-flex items-center gap-1.5 text-xs px-3.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 font-semibold">
-                              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-                              Lulusan Resmi S.Tr.M (Cumlaude)
-                            </span>
+                            <p className="max-w-sm rounded-2xl border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-center text-xs font-medium italic leading-relaxed text-emerald-200 sm:text-sm">
+                              “Dididik oleh peluh ayah bundaku di sawah, aku berjanji untuk terus melangkah; memantaskan diri demi mengangkat derajat keluarga dan mengabdi pada instansi serta negeri.”
+                            </p>
                           </div>
                         </div>
 
@@ -1559,64 +1615,63 @@
                           )}
                         </div>
                         <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
-                          {INTERNSHIP_PHOTOS.map((photo, index) => (
-                            <div
-                              key={photo.src}
-                              className="overflow-hidden rounded-xl border border-cyan-500/20 bg-navy-950/70 transition hover:border-cyan-300/50"
-                            >
-                              <button
-                                type="button"
-                                onClick={(event) => {
-                                  internshipPhotoTriggerRef.current = event.currentTarget;
+                          {INTERNSHIP_PHOTOS.map((photo, index) => {
+                            if (photo.group === "kpr-progress") {
+                              const firstGroupIndex = INTERNSHIP_PHOTOS.findIndex((item) => item.group === photo.group);
+                              if (index !== firstGroupIndex) return null;
+
+                              return (
+                                <div key={photo.group} className="col-span-2 grid grid-cols-2 gap-3 rounded-xl border border-cyan-500/25 bg-navy-950/50 p-3 sm:grid-cols-3 lg:col-span-3 sm:p-4">
+                                  {INTERNSHIP_PHOTOS
+                                    .filter((item) => item.group === photo.group)
+                                    .map((groupPhoto) => {
+                                      const groupPhotoIndex = INTERNSHIP_PHOTOS.indexOf(groupPhoto);
+                                      return (
+                                        <InternshipPhotoCard
+                                          key={groupPhoto.src}
+                                          photo={groupPhoto}
+                                          index={groupPhotoIndex}
+                                          photoOverride={internshipPhotoOverrides[groupPhoto.src]}
+                                          isManaging={isManagingInternshipPhotos}
+                                          onOpen={(selectedPhoto, trigger) => {
+                                            internshipPhotoTriggerRef.current = trigger;
+                                            setSelectedInternshipPhoto({
+                                              ...selectedPhoto,
+                                              src: internshipPhotoOverrides[selectedPhoto.src] || selectedPhoto.src
+                                            });
+                                          }}
+                                          onUpload={handleInternshipPhotoUpload}
+                                          onRestore={handleRestoreInternshipPhoto}
+                                          showCaption={false}
+                                        />
+                                      );
+                                    })}
+                                  <p className="col-span-full text-center text-xs font-semibold leading-relaxed text-cyan-100 sm:text-sm">
+                                    {photo.caption}
+                                  </p>
+                                </div>
+                              );
+                            }
+
+                            return (
+                              <InternshipPhotoCard
+                                key={photo.src}
+                                photo={photo}
+                                index={index}
+                                photoOverride={internshipPhotoOverrides[photo.src]}
+                                isManaging={isManagingInternshipPhotos}
+                                onOpen={(selectedPhoto, trigger) => {
+                                  internshipPhotoTriggerRef.current = trigger;
                                   setSelectedInternshipPhoto({
-                                    ...photo,
-                                    src: internshipPhotoOverrides[photo.src] || photo.src
+                                    ...selectedPhoto,
+                                    src: internshipPhotoOverrides[selectedPhoto.src] || selectedPhoto.src
                                   });
                                 }}
-                                aria-label={`Perbesar foto ${index + 1}: ${photo.caption}`}
-                                className="group block w-full text-left focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-inset focus-visible:ring-cyan-300"
-                              >
-                                <img
-                                  src={internshipPhotoOverrides[photo.src] || photo.src}
-                                  alt={photo.alt}
-                                  loading="lazy"
-                                  className="aspect-[4/3] w-full object-cover transition duration-300 group-hover:scale-105"
-                                />
-                                <span className="block min-h-12 p-2.5 text-[10px] leading-relaxed text-slate-300 sm:text-xs">
-                                  {photo.caption}
-                                </span>
-                              </button>
-                              {isManagingInternshipPhotos && (
-                                <div className="flex flex-wrap gap-2 border-t border-slate-800 p-2.5">
-                                  <label className="inline-flex cursor-pointer items-center rounded-lg border border-cyan-500/30 bg-cyan-500/10 px-3 py-2 text-[10px] font-semibold text-cyan-200 transition hover:bg-cyan-500/20 focus-within:ring-4 focus-within:ring-cyan-300 sm:text-xs">
-                                    Ganti Foto
-                                    <input
-                                      type="file"
-                                      accept="image/*"
-                                      aria-label={`Unggah foto pengganti ${index + 1}: ${photo.caption}`}
-                                      className="sr-only"
-                                      onChange={async (event) => {
-                                        const input = event.currentTarget;
-                                        const file = input.files?.[0];
-                                        if (file) await handleInternshipPhotoUpload(photo, file);
-                                        input.value = "";
-                                      }}
-                                    />
-                                  </label>
-                                  {internshipPhotoOverrides[photo.src] && (
-                                    <button
-                                      type="button"
-                                      onClick={() => handleRestoreInternshipPhoto(photo)}
-                                      aria-label={`Kembalikan foto asli ${index + 1}: ${photo.caption}`}
-                                      className="rounded-lg border border-slate-700 px-3 py-2 text-[10px] font-semibold text-slate-300 transition hover:border-rose-400/50 hover:text-rose-200 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-cyan-300 sm:text-xs"
-                                    >
-                                      Kembalikan Asli
-                                    </button>
-                                  )}
-                                </div>
-                              )}
-                            </div>
-                          ))}
+                                onUpload={handleInternshipPhotoUpload}
+                                onRestore={handleRestoreInternshipPhoto}
+                              />
+                            );
+                          })}
                         </div>
                         <aside className="mt-5 rounded-xl border border-amber-400/20 bg-amber-950/20 px-4 py-3 text-xs leading-relaxed text-slate-300">
                           <strong className="font-semibold text-amber-200">Catatan Kerahasiaan &amp; Profesionalisme:</strong>{" "}
