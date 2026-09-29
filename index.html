@@ -1231,7 +1231,7 @@
         "Pendidikan",
         "Pengalaman magang",
         "Penelitian",
-        "Transkrip nilai",
+        "Riwayat pendidikan",
         "Sertifikasi dan pelatihan",
         "Kompetensi",
         "Kontak"
@@ -2004,23 +2004,130 @@
                   {/* SLIDE 5: EVIEWS SKRIPSI */}
                   {currentSlide === 4 && <SkripsiChart />}
 
-                  {/* SLIDE 6: INTERACTIVE SEMESTER TRANSCRIPT */}
+                  {/* SLIDE 6: EDUCATION HISTORY */}
                   {currentSlide === 5 && (
                     <div className="glass-panel rounded-3xl p-6 sm:p-8 border border-cyan-500/30 overflow-y-auto max-h-[75vh]">
-                      <div className="flex flex-col sm:flex-row justify-between items-start mb-6">
-                        <div>
-                          <span className="text-xs font-mono text-cyan-400 uppercase tracking-widest font-semibold">BAGIAN 06 — TRANSKRIP INTERAKTIF</span>
-                          <h2 className="text-2xl sm:text-4xl font-extrabold font-display text-white mt-1">
-                            Menu Semester & Transkrip Nilai
-                          </h2>
-                          <p className="text-xs text-slate-300 mt-1">Klik semester untuk melihat mata kuliah yang dipelajari beserta kompetensi yang diperoleh.</p>
-                        </div>
-                        <div className="mt-2 sm:mt-0 text-right shrink-0">
-                          <span className="text-2xl font-extrabold font-mono text-gradient-cyan">IPK 3,59</span>
-                          <div className="text-[11px] text-yellow-300 font-semibold">Cumlaude (148 SKS · 8 Semester)</div>
-                        </div>
+                      <div className="mb-6">
+                        <span className="text-xs font-mono text-cyan-400 uppercase tracking-widest font-semibold">BAGIAN 06 — RIWAYAT PENDIDIKAN</span>
+                        <h2 className="text-2xl sm:text-4xl font-extrabold font-display text-white mt-1">
+                          Riwayat Pendidikan
+                        </h2>
+                        <p className="text-xs text-slate-300 mt-1">
+                          Perjalanan pendidikan dari jenjang sekolah dasar hingga Sarjana Terapan.
+                        </p>
                       </div>
-                      <SemesterAccordion semestersData={officialSemestersData} />
+
+                      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                        {[
+                          {
+                            level: "D4 / Sarjana Terapan",
+                            institution: "Politeknik Negeri Lhokseumawe",
+                            program: "Manajemen Keuangan Sektor Publik (S.Tr.M)",
+                            detail: "IPK 3,59 · Cumlaude · 148 SKS",
+                            activities: [
+                              "Peserta Pelatihan Branding dan Packaging Produk Kewirausahaan di Hotel Diana, Kota Lhokseumawe.",
+                              "Peserta Kewirausahaan Bisnis Festival 2025 Politeknik Negeri Lhokseumawe."
+                            ]
+                          },
+                          {
+                            level: "Sekolah Menengah Kejuruan",
+                            institution: "SMK Negeri 1 Lokop",
+                            activities: [
+                              "Peserta Duta Sadar Hukum; masuk 10 besar dan menerima penghargaan/sertifikat.",
+                              "Peserta Debat Bahasa Indonesia tingkat kabupaten."
+                            ]
+                          },
+                          {
+                            level: "Sekolah Menengah Pertama",
+                            institution: "SMP Negeri 2 Lokop",
+                            activities: [
+                              "Peserta Musabaqah Tilawatil Qur'an tingkat kabupaten.",
+                              "Peserta Olimpiade Sains Nasional (OSN) 2018."
+                            ]
+                          },
+                          {
+                            level: "Sekolah Dasar",
+                            institution: "SD Negeri Bunin",
+                            activities: [
+                              "Juara 1 Vokal Solo tingkat kecamatan.",
+                              "Juara 2 Vokal Solo tingkat UPTD.",
+                              "Juara 3 Olimpiade Sains Nasional tingkat UPTD Ranto Peureulak (2013)."
+                            ]
+                          }
+                        ].map((education, index) => (
+                          <article
+                            key={education.institution}
+                            className="rounded-2xl border border-cyan-500/20 bg-navy-900/80 p-5"
+                          >
+                            <div className="flex items-start gap-3">
+                              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-cyan-500/30 bg-cyan-500/10 font-mono text-sm font-bold text-cyan-200">
+                                {String(index + 1).padStart(2, "0")}
+                              </span>
+                              <div>
+                                <p className="text-[10px] font-semibold uppercase tracking-widest text-cyan-400">{education.level}</p>
+                                <h3 className="mt-1 text-base font-bold text-white">{education.institution}</h3>
+                                {education.program && <p className="mt-1 text-xs text-slate-300">{education.program}</p>}
+                                {education.detail && <p className="mt-1 text-xs font-semibold text-emerald-300">{education.detail}</p>}
+                              </div>
+                            </div>
+                            <div className="mt-4 border-t border-slate-700/80 pt-3">
+                              <h4 className="text-xs font-semibold text-slate-200">Kegiatan dan Prestasi</h4>
+                              {education.activities ? (
+                                <ul className="mt-2 space-y-1.5 text-xs leading-relaxed text-slate-300">
+                                  {education.activities.map((activity) => (
+                                    <li key={activity} className="flex gap-2">
+                                      <span className="text-cyan-400" aria-hidden="true">•</span>
+                                      <span>{activity}</span>
+                                    </li>
+                                  ))}
+                                </ul>
+                              ) : (
+                                <p className="mt-1 text-xs text-slate-400">Informasi kegiatan dan prestasi akan ditambahkan.</p>
+                              )}
+                            </div>
+                            {education.institution === "SD Negeri Bunin" && (
+                              <section className="mt-4 border-t border-slate-700/80 pt-3" aria-labelledby="primary-school-gallery-title">
+                                <h4 id="primary-school-gallery-title" className="text-xs font-semibold text-slate-200">
+                                  Galeri Kegiatan SD
+                                </h4>
+                                <div className="mt-2 grid grid-cols-1 gap-3 sm:grid-cols-2">
+                                  <div className="flex min-h-24 flex-col justify-center rounded-xl border border-dashed border-slate-700 bg-navy-950/60 p-3 text-center">
+                                    <span className="text-lg" aria-hidden="true">🖼️</span>
+                                    <span className="mt-1 text-[11px] font-semibold text-cyan-200">Foto Kegiatan</span>
+                                    <span className="mt-1 text-[10px] leading-relaxed text-slate-400">Foto dokumentasi akan ditambahkan.</span>
+                                  </div>
+                                  <div className="rounded-xl border border-cyan-500/20 bg-navy-950/60 p-3">
+                                    <h5 className="mb-2 text-center text-[11px] font-semibold text-cyan-200">
+                                      Video Kegiatan Anak Lentera Indonesia
+                                    </h5>
+                                    <video
+                                      controls
+                                      preload="metadata"
+                                      playsInline
+                                      className="aspect-video w-full rounded-lg bg-black"
+                                    >
+                                      <source src="Video Kegiatan Anak Lentera Indonesia.mp4" type="video/mp4" />
+                                      Browser Anda tidak mendukung pemutaran video.
+                                    </video>
+                                  </div>
+                                  <div className="flex min-h-24 flex-col items-center justify-center rounded-xl border border-cyan-500/20 bg-navy-950/60 p-3 text-center sm:col-span-2">
+                                    <span className="text-lg" aria-hidden="true">🔗</span>
+                                    <span className="mt-1 text-[11px] font-semibold text-cyan-200">Video Lengkap</span>
+                                    <a
+                                      href="https://youtu.be/WUPvMOfGeNQ?si=9-dLtErcGmvodnuz"
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="mt-1 inline-flex items-center gap-1 text-[10px] font-semibold text-cyan-300 underline decoration-cyan-500/50 underline-offset-2 transition hover:text-cyan-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300"
+                                    >
+                                      Tonton di YouTube ↗
+                                    </a>
+                                  </div>
+                                </div>
+                              </section>
+                            )}
+                          </article>
+                        ))}
+                      </div>
                     </div>
                   )}
 
