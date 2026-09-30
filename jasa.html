@@ -67,36 +67,42 @@
       </div>
 
       <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        <article class="rounded-2xl border border-cyan-500/20 bg-navy-900/80 p-5 transition hover:-translate-y-1 hover:border-cyan-400/50">
+        <a href="buat.html?product=cv" aria-label="Pesan layanan Pembuatan CV" class="block rounded-2xl border border-cyan-500/20 bg-navy-900/80 p-5 transition hover:-translate-y-1 hover:border-cyan-400/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400">
           <span class="text-2xl" aria-hidden="true">📄</span>
           <h3 class="mt-4 text-lg font-bold text-white">Pembuatan CV</h3>
           <p class="mt-2 text-sm leading-6 text-slate-400">CV yang tersusun rapi dan menonjolkan pengalaman serta kompetensi Anda.</p>
-        </article>
-        <article class="rounded-2xl border border-cyan-500/20 bg-navy-900/80 p-5 transition hover:-translate-y-1 hover:border-cyan-400/50">
+          <span class="mt-4 inline-block text-sm font-bold text-cyan-300">Isi detail CV ATS →</span>
+        </a>
+        <a href="buat.html?product=cover-letter" aria-label="Pesan layanan Surat Lamaran" class="block rounded-2xl border border-cyan-500/20 bg-navy-900/80 p-5 transition hover:-translate-y-1 hover:border-cyan-400/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400">
           <span class="text-2xl" aria-hidden="true">✉️</span>
           <h3 class="mt-4 text-lg font-bold text-white">Surat Lamaran</h3>
           <p class="mt-2 text-sm leading-6 text-slate-400">Surat lamaran yang profesional dan disesuaikan dengan posisi yang dituju.</p>
-        </article>
-        <article class="rounded-2xl border border-cyan-500/20 bg-navy-900/80 p-5 transition hover:-translate-y-1 hover:border-cyan-400/50">
+          <span class="mt-4 inline-block text-sm font-bold text-cyan-300">Susun surat lamaran →</span>
+        </a>
+        <a href="buat.html?product=portfolio" aria-label="Pesan layanan Portofolio" class="block rounded-2xl border border-cyan-500/20 bg-navy-900/80 p-5 transition hover:-translate-y-1 hover:border-cyan-400/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400">
           <span class="text-2xl" aria-hidden="true">🗂️</span>
           <h3 class="mt-4 text-lg font-bold text-white">Portofolio</h3>
           <p class="mt-2 text-sm leading-6 text-slate-400">Penyusunan portofolio untuk memperkenalkan karya, pengalaman, dan pencapaian Anda.</p>
-        </article>
-        <article class="rounded-2xl border border-cyan-500/20 bg-navy-900/80 p-5 transition hover:-translate-y-1 hover:border-cyan-400/50">
+          <span class="mt-4 inline-block text-sm font-bold text-cyan-300">Susun studi kasus karya →</span>
+        </a>
+        <a href="buat.html?product=website" aria-label="Pesan layanan Pembuatan Website" class="block rounded-2xl border border-cyan-500/20 bg-navy-900/80 p-5 transition hover:-translate-y-1 hover:border-cyan-400/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400">
           <span class="text-2xl" aria-hidden="true">🌐</span>
           <h3 class="mt-4 text-lg font-bold text-white">Pembuatan Website</h3>
           <p class="mt-2 text-sm leading-6 text-slate-400">Website sederhana untuk profil, usaha, layanan, atau kebutuhan personal.</p>
-        </article>
-        <article class="rounded-2xl border border-cyan-500/20 bg-navy-900/80 p-5 transition hover:-translate-y-1 hover:border-cyan-400/50">
+          <span class="mt-4 inline-block text-sm font-bold text-cyan-300">Rancang isi website →</span>
+        </a>
+        <a href="jasa.html?service=Pembuatan%20Konten#request-form" aria-label="Diskusikan layanan Pembuatan Konten" class="block rounded-2xl border border-cyan-500/20 bg-navy-900/80 p-5 transition hover:-translate-y-1 hover:border-cyan-400/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400">
           <span class="text-2xl" aria-hidden="true">✍️</span>
           <h3 class="mt-4 text-lg font-bold text-white">Pembuatan Konten</h3>
           <p class="mt-2 text-sm leading-6 text-slate-400">Bantuan menyusun konten digital yang informatif dan sesuai dengan kebutuhan Anda.</p>
-        </article>
-        <article class="rounded-2xl border border-dashed border-slate-700 bg-slate-900/40 p-5">
+          <span class="mt-4 inline-block text-sm font-bold text-cyan-300">Diskusikan kebutuhan konten →</span>
+        </a>
+        <a href="jasa.html?service=Layanan%20Lainnya#request-form" aria-label="Diskusikan layanan lainnya" class="block rounded-2xl border border-dashed border-slate-700 bg-slate-900/40 p-5 transition hover:border-cyan-400/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400">
           <span class="text-2xl" aria-hidden="true">＋</span>
           <h3 class="mt-4 text-lg font-bold text-white">Layanan Lainnya</h3>
           <p class="mt-2 text-sm leading-6 text-slate-400">Punya kebutuhan lain? Silakan hubungi saya untuk mendiskusikan kemungkinan layanan yang sesuai.</p>
-        </article>
+          <span class="mt-4 inline-block text-sm font-bold text-cyan-300">Diskusikan layanan lain →</span>
+        </a>
       </div>
     </section>
 
@@ -259,6 +265,13 @@
       form.addEventListener("input", refreshMessagePreview);
       form.addEventListener("change", refreshMessagePreview);
       refreshMessagePreview();
+
+      const requestedService = new URLSearchParams(window.location.search).get("service");
+      const requestedOption = options.find((option) => option.dataset.service === requestedService);
+      if (requestedOption) {
+        requestedOption.querySelector('input[name="services"]').checked = true;
+        refreshMessagePreview();
+      }
 
       form.addEventListener("submit", (event) => {
         event.preventDefault();
