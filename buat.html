@@ -191,7 +191,7 @@
 
       <section class="rounded-3xl border border-slate-800 bg-navy-900/60 p-5 sm:p-8" aria-labelledby="profile-heading">
         <h2 id="profile-heading" class="text-xl font-bold text-white">3. Profil dan pengalaman</h2>
-        <p class="mb-5 mt-1 text-sm text-slate-400">Isi bagian yang relevan. Informasi tambahan membantu saya menyiapkan hasil yang lebih sesuai.</p>
+        <p class="mb-5 mt-1 text-sm text-slate-400">Isi bagian yang relevan. Untuk CV, urutkan pengalaman dari yang terbaru dan jelaskan tindakan serta hasil terukur bila ada.</p>
         <div class="grid gap-4 sm:grid-cols-2">
           <div class="sm:col-span-2">
             <label for="about" class="mb-1.5 block text-sm font-semibold text-slate-200">Tentang saya <span class="text-rose-400">*</span></label>
@@ -199,11 +199,11 @@
           </div>
           <div>
             <label for="experience" class="mb-1.5 block text-sm font-semibold text-slate-200">Pengalaman <span class="text-xs font-normal text-slate-500">(opsional)</span></label>
-            <textarea id="experience" name="experience" maxlength="2000" rows="4" class="form-field" placeholder="Nama posisi, tempat, periode, dan tanggung jawab/pencapaian."></textarea>
+            <textarea id="experience" name="experience" maxlength="4000" rows="5" class="form-field" placeholder="Urutkan terbaru ke terlama. Tiap pengalaman: Perusahaan | Posisi | Bulan/Tahun–Bulan/Tahun, lalu masalah/tugas, tindakan, dan hasil terukur (PAR). Pisahkan tiap pengalaman dengan baris kosong."></textarea>
           </div>
           <div>
             <label for="organizations" class="mb-1.5 block text-sm font-semibold text-slate-200">Organisasi <span class="text-xs font-normal text-slate-500">(opsional)</span></label>
-            <textarea id="organizations" name="organizations" maxlength="1500" rows="4" class="form-field" placeholder="Nama organisasi, jabatan, periode, dan kegiatan."></textarea>
+            <textarea id="organizations" name="organizations" maxlength="2500" rows="4" class="form-field" placeholder="Nama organisasi | peran/jabatan | periode, lalu kontribusi atau hasil. Urutkan terbaru ke terlama."></textarea>
           </div>
           <div>
             <label for="soft-skills" class="mb-1.5 block text-sm font-semibold text-slate-200">Soft skill <span class="text-xs font-normal text-slate-500">(opsional)</span></label>
@@ -215,7 +215,7 @@
           </div>
           <div>
             <label for="certificates" class="mb-1.5 block text-sm font-semibold text-slate-200">Sertifikasi dan pelatihan <span class="text-xs font-normal text-slate-500">(opsional)</span></label>
-            <textarea id="certificates" name="certificates" maxlength="1500" rows="3" class="form-field" placeholder="Nama sertifikat/pelatihan, penyelenggara, dan tahun."></textarea>
+            <textarea id="certificates" name="certificates" maxlength="2500" rows="3" class="form-field" placeholder="Nama sertifikat | lembaga penerbit | tahun terbit atau masa berlaku. Satu sertifikat per baris."></textarea>
           </div>
           <div>
             <label for="projects" class="mb-1.5 block text-sm font-semibold text-slate-200">Karya / proyek pilihan <span class="text-xs font-normal text-slate-500">(opsional)</span></label>
@@ -224,40 +224,33 @@
         </div>
       </section>
 
-      <section class="rounded-3xl border border-cyan-500/20 bg-navy-900/60 p-5 sm:p-8" aria-labelledby="cv-preview-heading">
+      <section class="rounded-3xl border border-cyan-500/20 bg-navy-900/60 p-5 sm:p-8" aria-labelledby="document-preview-heading">
         <div class="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
           <div>
-            <h2 id="cv-preview-heading" class="text-xl font-bold text-white">Pratinjau CV otomatis</h2>
-            <p class="mt-1 max-w-2xl text-sm leading-6 text-slate-400">Pilih layanan CV dan lengkapi biodata untuk melihat susunan CV berdasarkan informasi Anda. Ini hanya pratinjau; file final akan dikirim setelah pembayaran diverifikasi.</p>
+            <h2 id="document-preview-heading" class="text-xl font-bold text-white">Pratinjau hasil pesanan</h2>
+            <p class="mt-1 max-w-2xl text-sm leading-6 text-slate-400">Pilih layanan dan lengkapi formulir untuk melihat pratinjau CV, portofolio, surat lamaran, atau website profil. Setelah pembayaran diperiksa admin pada browser ini, unduhan hasil pesanan akan dibuka.</p>
           </div>
-          <button id="preview-cv-button" type="button" class="shrink-0 rounded-xl border border-cyan-400/40 bg-cyan-400/10 px-5 py-3 text-sm font-bold text-cyan-200 transition hover:bg-cyan-400/20">
-            Buat pratinjau CV
+          <button id="preview-document-button" type="button" class="shrink-0 rounded-xl border border-cyan-400/40 bg-cyan-400/10 px-5 py-3 text-sm font-bold text-cyan-200 transition hover:bg-cyan-400/20">
+            Buat pratinjau
           </button>
         </div>
-        <p id="cv-preview-feedback" class="mt-3 hidden rounded-xl border px-4 py-3 text-sm" role="alert"></p>
-        <div id="cv-preview" class="mt-6 hidden overflow-hidden rounded-xl border border-slate-300 bg-slate-200 p-2 sm:p-4" aria-live="polite">
-          <article id="cv-paper" class="mx-auto min-h-[900px] max-w-[800px] bg-white px-7 py-9 text-slate-800 shadow-xl sm:px-12 sm:py-12">
-            <header class="border-b-2 border-slate-800 pb-5">
-              <h3 id="cv-name" class="text-3xl font-extrabold uppercase tracking-wide text-slate-900"></h3>
-              <p id="cv-contact" class="mt-2 break-words text-sm leading-6 text-slate-600"></p>
-              <p id="cv-target" class="mt-3 text-xs font-bold uppercase tracking-[0.15em] text-slate-500"></p>
-            </header>
-            <div id="cv-sections" class="space-y-6 pt-6"></div>
-          </article>
+        <p id="document-preview-feedback" class="mt-3 hidden rounded-xl border px-4 py-3 text-sm" role="alert"></p>
+        <div id="document-preview" class="mt-6 hidden overflow-hidden rounded-xl border border-slate-300 bg-slate-200 p-2 sm:p-4" aria-live="polite">
+          <iframe id="document-preview-frame" title="Pratinjau hasil pesanan" sandbox="allow-scripts" class="h-[720px] w-full rounded-lg bg-white sm:h-[900px]"></iframe>
         </div>
-        <p id="cv-download-status" class="mt-4 rounded-xl border border-amber-400/25 bg-amber-500/10 px-4 py-3 text-sm text-amber-100">
-          CV terkunci. Setelah pembayaran diverifikasi melalui panel admin pada browser ini, tombol unduh akan aktif.
+        <p id="document-download-status" class="mt-4 rounded-xl border border-amber-400/25 bg-amber-500/10 px-4 py-3 text-sm text-amber-100">
+          Unduhan terkunci. Setelah pembayaran diperiksa dan dikonfirmasi admin di browser ini, tombol unduh untuk layanan yang dipilih akan aktif.
         </p>
-        <button id="download-cv-button" type="button" disabled
+        <button id="download-document-button" type="button" disabled
           class="mt-3 hidden w-full cursor-not-allowed rounded-xl bg-slate-700 px-5 py-3 text-sm font-extrabold text-slate-400 opacity-60 sm:w-auto">
-          Unduh CV (HTML)
+          Unduh hasil pesanan (HTML)
         </button>
         <p class="mt-2 text-xs leading-5 text-slate-500">File HTML dapat dibuka di browser dan dicetak atau disimpan sebagai PDF. Data draf hanya disimpan di perangkat jika Anda menyetujuinya.</p>
 
-        <details class="mt-6 rounded-2xl border border-slate-700 bg-slate-950/50 p-4">
+        <details id="admin-panel" class="mt-6 rounded-2xl border border-slate-700 bg-slate-950/50 p-4">
           <summary class="cursor-pointer select-none text-sm font-bold text-slate-300">Admin / Konfirmasi Pembayaran</summary>
           <div class="mt-4 space-y-4">
-            <p class="text-xs leading-5 text-amber-200">Panel lokal untuk demo. PIN di halaman statis dapat dilihat dari kode situs dan status konfirmasi hanya tersimpan di browser ini. Jangan gunakan sebagai verifikasi pembayaran aman atau untuk membuka unduhan di perangkat pelanggan.</p>
+            <p class="text-xs leading-5 text-amber-200">Panel lokal untuk demo. PIN di halaman statis dapat dilihat dari kode situs dan status konfirmasi hanya tersimpan di browser ini. Ini bukan verifikasi pembayaran aman; unduhan hanya terbuka dari browser yang sama, bukan perangkat pelanggan lain.</p>
             <div id="admin-pin-area" class="flex flex-col gap-3 sm:flex-row">
               <label for="admin-pin" class="sr-only">PIN admin</label>
               <input id="admin-pin" type="password" inputmode="numeric" autocomplete="off" maxlength="20"
@@ -273,7 +266,7 @@
                 <span>Saya sudah memeriksa transaksi pada aplikasi bank/DANA dan memastikan dana benar-benar diterima.</span>
               </label>
               <button id="confirm-payment-button" type="button" disabled class="cursor-not-allowed rounded-xl bg-emerald-500/40 px-5 py-3 text-sm font-extrabold text-emerald-950/70">
-                Konfirmasi pembayaran & unduh CV
+                Konfirmasi pembayaran & buka unduhan
               </button>
             </div>
           </div>
@@ -281,25 +274,166 @@
       </section>
 
       <section id="extra-questions" class="hidden rounded-3xl border border-slate-800 bg-navy-900/60 p-5 sm:p-8" aria-labelledby="extra-heading">
-        <h2 id="extra-heading" class="text-xl font-bold text-white">4. Detail tambahan layanan</h2>
-        <div id="letter-fields" class="mt-4 hidden grid gap-4 sm:grid-cols-2">
+        <h2 id="extra-heading" class="text-xl font-bold text-white">4. Detail khusus layanan</h2>
+        <p class="mb-5 mt-1 text-sm leading-6 text-slate-400">Bagian yang tampil menyesuaikan layanan pilihan. Isian tambahan tidak wajib kecuali ditandai.</p>
+        <div id="cv-fields" class="hidden grid gap-4 sm:grid-cols-2">
           <div>
-            <label for="job-title" class="mb-1.5 block text-sm font-semibold text-slate-200">Posisi yang dilamar</label>
-            <input id="job-title" name="jobTitle" maxlength="120" class="form-field" placeholder="Nama posisi">
+            <label for="cv-title" class="mb-1.5 block text-sm font-semibold text-slate-200">Jabatan / professional title</label>
+            <input id="cv-title" name="cvTitle" maxlength="120" class="form-field" placeholder="Contoh: Staf Administrasi Keuangan">
           </div>
           <div>
-            <label for="company" class="mb-1.5 block text-sm font-semibold text-slate-200">Perusahaan / instansi tujuan</label>
-            <input id="company" name="company" maxlength="150" class="form-field" placeholder="Nama perusahaan atau instansi">
+            <label for="cv-location" class="mb-1.5 block text-sm font-semibold text-slate-200">Kota dan provinsi</label>
+            <input id="cv-location" name="cvLocation" maxlength="120" class="form-field" placeholder="Contoh: Makassar, Sulawesi Selatan">
+          </div>
+          <div>
+            <label for="cv-years" class="mb-1.5 block text-sm font-semibold text-slate-200">Lama pengalaman relevan</label>
+            <input id="cv-years" name="cvYears" maxlength="80" class="form-field" placeholder="Contoh: 2 tahun atau Fresh Graduate">
+          </div>
+          <div>
+            <label for="cv-linkedin" class="mb-1.5 block text-sm font-semibold text-slate-200">Tautan LinkedIn</label>
+            <input id="cv-linkedin" name="cvLinkedin" type="url" maxlength="300" class="form-field" placeholder="https://linkedin.com/in/...">
+          </div>
+          <div>
+            <label for="cv-portfolio-link" class="mb-1.5 block text-sm font-semibold text-slate-200">Tautan portofolio / website</label>
+            <input id="cv-portfolio-link" name="cvPortfolioLink" type="url" maxlength="300" class="form-field" placeholder="https://...">
+          </div>
+          <div>
+            <label for="cv-school" class="mb-1.5 block text-sm font-semibold text-slate-200">Nama sekolah / perguruan tinggi</label>
+            <input id="cv-school" name="cvSchool" maxlength="160" class="form-field" placeholder="Nama institusi pendidikan">
+          </div>
+          <div>
+            <label for="cv-graduation" class="mb-1.5 block text-sm font-semibold text-slate-200">Tahun lulus</label>
+            <input id="cv-graduation" name="cvGraduation" maxlength="40" class="form-field" placeholder="Contoh: 2025">
+          </div>
+          <div>
+            <label for="cv-gpa" class="mb-1.5 block text-sm font-semibold text-slate-200">IPK / nilai (opsional)</label>
+            <input id="cv-gpa" name="cvGpa" maxlength="30" class="form-field" placeholder="Contoh: 3,75/4,00">
+          </div>
+          <div class="sm:col-span-2">
+            <label for="cv-thesis" class="mb-1.5 block text-sm font-semibold text-slate-200">Judul skripsi / tugas akhir</label>
+            <input id="cv-thesis" name="cvThesis" maxlength="300" class="form-field" placeholder="Cantumkan jika relevan dengan posisi yang dilamar">
+          </div>
+          <div>
+            <label for="cv-languages" class="mb-1.5 block text-sm font-semibold text-slate-200">Bahasa dan tingkat kemahiran</label>
+            <textarea id="cv-languages" name="cvLanguages" maxlength="1000" rows="3" class="form-field" placeholder="Contoh: Indonesia — Native; English — Professional Working"></textarea>
+          </div>
+          <div>
+            <label for="cv-summary" class="mb-1.5 block text-sm font-semibold text-slate-200">Ringkasan profesional khusus</label>
+            <textarea id="cv-summary" name="cvSummary" maxlength="1000" rows="3" class="form-field" placeholder="3–4 kalimat: latar belakang/pengalaman, keahlian inti, pencapaian, dan kontribusi yang dituju. Kosongkan untuk memakai Tentang Saya."></textarea>
           </div>
         </div>
-        <div id="website-fields" class="mt-4 hidden">
-          <label for="website-purpose" class="mb-1.5 block text-sm font-semibold text-slate-200">Tujuan dan isi website yang diinginkan</label>
-          <textarea id="website-purpose" name="websitePurpose" maxlength="1500" rows="3" class="form-field" placeholder="Contoh: website profil usaha, halaman yang diperlukan, dan gaya desain yang disukai."></textarea>
+        <div id="letter-fields" class="hidden space-y-4">
+          <div class="grid gap-4 sm:grid-cols-2">
+            <div>
+              <label for="job-title" class="mb-1.5 block text-sm font-semibold text-slate-200">Posisi yang dilamar <span class="text-rose-400">*</span></label>
+              <input id="job-title" name="jobTitle" maxlength="120" class="form-field" placeholder="Nama posisi">
+            </div>
+            <div>
+              <label for="company" class="mb-1.5 block text-sm font-semibold text-slate-200">Perusahaan / instansi <span class="text-rose-400">*</span></label>
+              <input id="company" name="company" maxlength="150" class="form-field" placeholder="Nama perusahaan atau instansi">
+            </div>
+            <div>
+              <label for="letter-recipient" class="mb-1.5 block text-sm font-semibold text-slate-200">Nama / jabatan penerima</label>
+              <input id="letter-recipient" name="letterRecipient" maxlength="150" class="form-field" placeholder="Contoh: Yth. Ibu Rina, HR Manager">
+            </div>
+            <div>
+              <label for="letter-company-address" class="mb-1.5 block text-sm font-semibold text-slate-200">Alamat / kota perusahaan</label>
+              <input id="letter-company-address" name="letterCompanyAddress" maxlength="200" class="form-field" placeholder="Alamat atau kota tujuan surat">
+            </div>
+            <div>
+              <label for="letter-date" class="mb-1.5 block text-sm font-semibold text-slate-200">Tanggal surat</label>
+              <input id="letter-date" name="letterDate" type="date" class="form-field">
+            </div>
+            <div>
+              <label for="letter-attachments" class="mb-1.5 block text-sm font-semibold text-slate-200">Lampiran</label>
+              <input id="letter-attachments" name="letterAttachments" maxlength="120" class="form-field" placeholder="Contoh: CV dan portofolio">
+            </div>
+            <div>
+              <label for="letter-source" class="mb-1.5 block text-sm font-semibold text-slate-200">Sumber informasi lowongan</label>
+              <input id="letter-source" name="letterSource" maxlength="200" class="form-field" placeholder="Contoh: LinkedIn, situs perusahaan">
+            </div>
+            <div>
+              <label for="letter-hook" class="mb-1.5 block text-sm font-semibold text-slate-200">Alasan tertarik / kalimat pembuka</label>
+              <textarea id="letter-hook" name="letterHook" maxlength="700" rows="3" class="form-field" placeholder="Hal spesifik yang membuat Anda tertarik pada posisi ini."></textarea>
+            </div>
+            <div>
+              <label for="letter-achievement" class="mb-1.5 block text-sm font-semibold text-slate-200">Pencapaian yang paling relevan</label>
+              <textarea id="letter-achievement" name="letterAchievement" maxlength="900" rows="3" class="form-field" placeholder="Ceritakan 1–2 hasil konkret yang relevan dengan kualifikasi posisi."></textarea>
+            </div>
+            <div>
+              <label for="letter-alignment" class="mb-1.5 block text-sm font-semibold text-slate-200">Nilai tambah dan keselarasan dengan perusahaan</label>
+              <textarea id="letter-alignment" name="letterAlignment" maxlength="700" rows="3" class="form-field" placeholder="Nilai/proyek perusahaan yang Anda ketahui dan kontribusi yang dapat Anda berikan."></textarea>
+            </div>
+          </div>
+        </div>
+        <div id="portfolio-fields" class="hidden grid gap-4 sm:grid-cols-2">
+          <div>
+            <label for="portfolio-title" class="mb-1.5 block text-sm font-semibold text-slate-200">Judul / bidang portofolio</label>
+            <input id="portfolio-title" name="portfolioTitle" maxlength="150" class="form-field" placeholder="Contoh: Portofolio Analisis Keuangan">
+          </div>
+          <div>
+            <label for="portfolio-professional-title" class="mb-1.5 block text-sm font-semibold text-slate-200">Jabatan / spesialisasi profesional</label>
+            <input id="portfolio-professional-title" name="portfolioProfessionalTitle" maxlength="120" class="form-field" placeholder="Contoh: Analis Keuangan Junior">
+          </div>
+          <div class="sm:col-span-2">
+            <label for="portfolio-case-studies" class="mb-1.5 block text-sm font-semibold text-slate-200">Studi kasus proyek (ideal 3–5 proyek)</label>
+            <textarea id="portfolio-case-studies" name="portfolioCaseStudies" maxlength="6000" rows="8" class="form-field" placeholder="Untuk tiap proyek (3–5 proyek), isi: Judul, Klien/Perusahaan, Peran, Durasi, Tools, Situasi & tugas (masalah dan target), Aksi (riset/proses/solusi), Hasil (dampak/metrik), Bukti visual/tautan demo. Satu proyek per blok; pisahkan blok dengan baris kosong."></textarea>
+          </div>
+          <div>
+            <label for="portfolio-testimonials" class="mb-1.5 block text-sm font-semibold text-slate-200">Testimoni / bukti sosial</label>
+            <textarea id="portfolio-testimonials" name="portfolioTestimonials" maxlength="1500" rows="4" class="form-field" placeholder="Kutipan, nama, dan jabatan pemberi testimoni. Hanya cantumkan testimoni yang benar dan diizinkan."></textarea>
+          </div>
+          <div>
+            <label for="portfolio-links" class="mb-1.5 block text-sm font-semibold text-slate-200">Tautan karya, LinkedIn, atau website</label>
+            <textarea id="portfolio-links" name="portfolioLinks" maxlength="1000" rows="4" class="form-field" placeholder="Tempel tautan yang dapat dibuka. Pisahkan satu tautan per baris."></textarea>
+          </div>
+        </div>
+        <div id="website-fields" class="hidden grid gap-4 sm:grid-cols-2">
+          <div>
+            <label for="website-purpose" class="mb-1.5 block text-sm font-semibold text-slate-200">Tujuan dan isi website <span class="text-rose-400">*</span></label>
+            <textarea id="website-purpose" name="websitePurpose" maxlength="1500" rows="3" class="form-field" placeholder="Profil personal/usaha, tujuan situs, halaman dan kebutuhan khusus."></textarea>
+          </div>
+          <div>
+            <label for="website-headline" class="mb-1.5 block text-sm font-semibold text-slate-200">Headline dan spesialisasi</label>
+            <textarea id="website-headline" name="websiteHeadline" maxlength="400" rows="3" class="form-field" placeholder="Judul kuat di beranda dan spesialisasi singkat."></textarea>
+          </div>
+          <div>
+            <label for="website-services" class="mb-1.5 block text-sm font-semibold text-slate-200">Layanan / kompetensi utama</label>
+            <textarea id="website-services" name="websiteServices" maxlength="1200" rows="3" class="form-field" placeholder="Tuliskan 3–4 layanan atau kompetensi utama."></textarea>
+          </div>
+          <div>
+            <label for="website-featured-projects" class="mb-1.5 block text-sm font-semibold text-slate-200">Proyek unggulan</label>
+            <textarea id="website-featured-projects" name="websiteFeaturedProjects" maxlength="2500" rows="3" class="form-field" placeholder="Satu proyek per baris: Kategori | Judul | Deskripsi ringkas | URL detail (opsional)."></textarea>
+          </div>
+          <div>
+            <label for="website-story" class="mb-1.5 block text-sm font-semibold text-slate-200">Cerita perjalanan dan filosofi kerja</label>
+            <textarea id="website-story" name="websiteStory" maxlength="1600" rows="4" class="form-field" placeholder="Perjalanan karier, pendekatan memecahkan masalah, pengalaman dan pendidikan."></textarea>
+          </div>
+          <div>
+            <label for="website-tools" class="mb-1.5 block text-sm font-semibold text-slate-200">Software / tools yang dikuasai</label>
+            <textarea id="website-tools" name="websiteTools" maxlength="800" rows="3" class="form-field" placeholder="Satu tools atau keterampilan per baris."></textarea>
+          </div>
+          <div>
+            <label for="website-categories" class="mb-1.5 block text-sm font-semibold text-slate-200">Kategori karya untuk filter</label>
+            <textarea id="website-categories" name="websiteCategories" maxlength="500" rows="3" class="form-field" placeholder="Contoh: Analisis Keuangan, Administrasi, Konten. Pisahkan dengan koma."></textarea>
+          </div>
+          <div>
+            <label for="website-testimonials" class="mb-1.5 block text-sm font-semibold text-slate-200">Testimoni / bukti sosial</label>
+            <textarea id="website-testimonials" name="websiteTestimonials" maxlength="1200" rows="3" class="form-field" placeholder="Kutipan dan nama/jabatan pemberi testimoni (dengan izin)."></textarea>
+          </div>
+          <div>
+            <label for="website-location" class="mb-1.5 block text-sm font-semibold text-slate-200">Domisili dan ketersediaan</label>
+            <input id="website-location" name="websiteLocation" maxlength="140" class="form-field" placeholder="Contoh: Makassar · Terbuka untuk freelance">
+          </div>
+          <div>
+            <label for="website-social-links" class="mb-1.5 block text-sm font-semibold text-slate-200">Tautan LinkedIn / GitHub / Behance</label>
+            <textarea id="website-social-links" name="websiteSocialLinks" maxlength="900" rows="3" class="form-field" placeholder="Satu tautan per baris."></textarea>
+          </div>
         </div>
       </section>
 
       <div class="rounded-2xl border border-amber-400/25 bg-amber-500/10 p-4 text-sm leading-6 text-amber-100/90">
-        <strong>Alur pembayaran manual:</strong> setelah membuat ringkasan, lakukan transfer ke rekening BSI yang tertera. Kirim ringkasan pesanan dan bukti pembayaran melalui WhatsApp atau email. Pesanan akan diproses dan hasil dikirim setelah pembayaran diverifikasi. Situs ini belum memverifikasi pembayaran atau membuka unduhan secara otomatis.
+        <strong>Alur pembayaran manual:</strong> setelah membuat ringkasan, lakukan pembayaran lalu kirim ringkasan pesanan dan bukti pembayaran melalui WhatsApp atau email. Admin harus memeriksa pembayaran secara manual. Konfirmasi lokal hanya dapat membuka unduhan pada browser yang sama dan bukan sistem pembayaran aman atau pengiriman hasil lintas perangkat.
       </div>
 
       <button type="submit" class="w-full rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 px-5 py-4 text-sm font-extrabold text-navy-950 shadow-lg shadow-cyan-950/30 transition hover:brightness-110">
@@ -416,25 +550,30 @@
       const result = document.getElementById("order-result");
       const summary = document.getElementById("order-summary");
       const qrisPanel = document.getElementById("qris-panel");
-      const cvPreview = document.getElementById("cv-preview");
-      const cvPreviewFeedback = document.getElementById("cv-preview-feedback");
-      const cvDownloadStatus = document.getElementById("cv-download-status");
-      const downloadCvButton = document.getElementById("download-cv-button");
+      const documentPreview = document.getElementById("document-preview");
+      const documentPreviewFrame = document.getElementById("document-preview-frame");
+      const documentPreviewFeedback = document.getElementById("document-preview-feedback");
+      const documentDownloadStatus = document.getElementById("document-download-status");
+      const downloadDocumentButton = document.getElementById("download-document-button");
       const adminFeedback = document.getElementById("admin-feedback");
       const ADMIN_PIN = "140131";
       const CV_DRAFT_KEY = "jemeli.cv-order-draft";
       const CV_APPROVAL_KEY = "jemeli.cv-approved-order";
+      const ORDER_APPROVAL_KEY = "jemeli.approved-order";
       const draftConsent = document.getElementById("save-draft-consent");
       const draftStorageStatus = document.getElementById("draft-storage-status");
       const extraQuestions = document.getElementById("extra-questions");
+      const cvFields = document.getElementById("cv-fields");
       const letterFields = document.getElementById("letter-fields");
+      const portfolioFields = document.getElementById("portfolio-fields");
       const websiteFields = document.getElementById("website-fields");
       let currentMessage = "";
       let currentSubject = "";
       let currentOrder = [];
       let currentProduct = null;
-      let currentCvData = null;
-      let currentCvFingerprint = "";
+      let currentDocumentData = null;
+      let currentDocumentProduct = "";
+      let currentDocumentFingerprint = "";
 
       document.querySelectorAll('input[name="payment-method"]').forEach((radio) => {
         radio.addEventListener("change", () => {
@@ -444,13 +583,30 @@
 
       document.querySelectorAll('input[name="product"]').forEach((radio) => {
         radio.addEventListener("change", () => {
-          const isLetter = radio.value === "cover-letter" && radio.checked;
-          const isWebsite = radio.value === "website" && radio.checked;
-          letterFields.classList.toggle("hidden", !isLetter);
-          websiteFields.classList.toggle("hidden", !isWebsite);
-          extraQuestions.classList.toggle("hidden", !isLetter && !isWebsite);
+          if (radio.checked) setProductFields(radio.value);
         });
       });
+
+      const setProductFields = (product) => {
+        const groups = [
+          [cvFields, product === "cv"],
+          [letterFields, product === "cover-letter"],
+          [portfolioFields, product === "portfolio"],
+          [websiteFields, product === "website"]
+        ];
+        groups.forEach(([group, visible]) => {
+          group.classList.toggle("hidden", !visible);
+          group.querySelectorAll("input, select, textarea").forEach((field) => {
+            field.disabled = !visible;
+          });
+        });
+        extraQuestions.classList.toggle("hidden", !product);
+        document.getElementById("job-title").required = product === "cover-letter";
+        document.getElementById("company").required = product === "cover-letter";
+        document.getElementById("website-purpose").required = product === "website";
+      };
+
+      setProductFields("");
 
       const formFieldClass = "form-field w-full rounded-xl border border-slate-700 bg-slate-950/80 px-4 py-3 text-sm text-white outline-none transition placeholder:text-slate-600 focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20";
       document.querySelectorAll(".form-field").forEach((field) => {
@@ -461,20 +617,6 @@
       const formatRupiah = (amount) => new Intl.NumberFormat("id-ID", {
         style: "currency", currency: "IDR", maximumFractionDigits: 0
       }).format(amount);
-
-      const appendCvSection = (container, title, value) => {
-        const content = value.trim();
-        if (!content) return;
-        const section = document.createElement("section");
-        const heading = document.createElement("h4");
-        heading.className = "mb-2 border-b border-slate-200 pb-1.5 text-sm font-extrabold uppercase tracking-wider text-slate-800";
-        heading.textContent = title;
-        const paragraph = document.createElement("p");
-        paragraph.className = "whitespace-pre-line text-sm leading-6 text-slate-700";
-        paragraph.textContent = content;
-        section.append(heading, paragraph);
-        container.appendChild(section);
-      };
 
       const getCvDataFromForm = () => ({
         name: document.getElementById("full-name").value.trim(),
@@ -492,6 +634,46 @@
         projects: document.getElementById("projects").value.trim()
       });
 
+      const getDocumentDataFromForm = () => ({
+        ...getCvDataFromForm(),
+        cvTitle: document.getElementById("cv-title").value.trim(),
+        cvLocation: document.getElementById("cv-location").value.trim(),
+        cvYears: document.getElementById("cv-years").value.trim(),
+        cvLinkedin: document.getElementById("cv-linkedin").value.trim(),
+        cvPortfolioLink: document.getElementById("cv-portfolio-link").value.trim(),
+        cvSchool: document.getElementById("cv-school").value.trim(),
+        cvGraduation: document.getElementById("cv-graduation").value.trim(),
+        cvGpa: document.getElementById("cv-gpa").value.trim(),
+        cvThesis: document.getElementById("cv-thesis").value.trim(),
+        cvLanguages: document.getElementById("cv-languages").value.trim(),
+        cvSummary: document.getElementById("cv-summary").value.trim(),
+        jobTitle: document.getElementById("job-title").value.trim(),
+        company: document.getElementById("company").value.trim(),
+        letterRecipient: document.getElementById("letter-recipient").value.trim(),
+        letterCompanyAddress: document.getElementById("letter-company-address").value.trim(),
+        letterDate: document.getElementById("letter-date").value,
+        letterAttachments: document.getElementById("letter-attachments").value.trim(),
+        letterSource: document.getElementById("letter-source").value.trim(),
+        letterHook: document.getElementById("letter-hook").value.trim(),
+        letterAchievement: document.getElementById("letter-achievement").value.trim(),
+        letterAlignment: document.getElementById("letter-alignment").value.trim(),
+        portfolioTitle: document.getElementById("portfolio-title").value.trim(),
+        portfolioProfessionalTitle: document.getElementById("portfolio-professional-title").value.trim(),
+        portfolioCaseStudies: document.getElementById("portfolio-case-studies").value.trim(),
+        portfolioTestimonials: document.getElementById("portfolio-testimonials").value.trim(),
+        portfolioLinks: document.getElementById("portfolio-links").value.trim(),
+        websitePurpose: document.getElementById("website-purpose").value.trim(),
+        websiteHeadline: document.getElementById("website-headline").value.trim(),
+        websiteServices: document.getElementById("website-services").value.trim(),
+        websiteFeaturedProjects: document.getElementById("website-featured-projects").value.trim(),
+        websiteStory: document.getElementById("website-story").value.trim(),
+        websiteTools: document.getElementById("website-tools").value.trim(),
+        websiteCategories: document.getElementById("website-categories").value.trim(),
+        websiteTestimonials: document.getElementById("website-testimonials").value.trim(),
+        websiteLocation: document.getElementById("website-location").value.trim(),
+        websiteSocialLinks: document.getElementById("website-social-links").value.trim()
+      });
+
       const setDraftStorageStatus = (message, isError = false) => {
         draftStorageStatus.textContent = message;
         draftStorageStatus.className = isError
@@ -500,9 +682,12 @@
       };
 
       const hasDraftContent = () => Array.from(form.querySelectorAll("input, select, textarea"))
-        .some((field) => field.type === "radio" || field.type === "checkbox"
-          ? field.checked
-          : field.value.trim() !== "");
+        .filter((field) => !field.closest("#admin-panel"))
+        .some((field) => {
+          if (field.type === "radio") return field.name === "product" && field.checked;
+          if (field.type === "checkbox") return field !== draftConsent && field.checked;
+          return field.value.trim() !== "";
+        });
 
       const saveFormDraft = () => {
         if (!draftConsent.checked) return;
@@ -515,6 +700,7 @@
         try {
           const values = {};
           form.querySelectorAll("input, select, textarea").forEach((field) => {
+            if (field.closest("#admin-panel")) return;
             const key = field.id || (field.type === "radio" ? `${field.name}:${field.value}` : "");
             if (!key) return;
             values[key] = field.type === "radio" || field.type === "checkbox"
@@ -543,20 +729,48 @@
         return (hash >>> 0).toString(36);
       };
 
-      const setCvDownloadUnlocked = (unlocked) => {
-        downloadCvButton.disabled = !unlocked;
-        downloadCvButton.classList.toggle("hidden", !unlocked);
-        downloadCvButton.classList.toggle("cursor-not-allowed", !unlocked);
-        downloadCvButton.classList.toggle("opacity-60", !unlocked);
-        downloadCvButton.classList.toggle("bg-slate-700", !unlocked);
-        downloadCvButton.classList.toggle("text-slate-400", !unlocked);
-        downloadCvButton.classList.toggle("bg-emerald-400", unlocked);
-        downloadCvButton.classList.toggle("text-emerald-950", unlocked);
-        downloadCvButton.classList.toggle("hover:bg-emerald-300", unlocked);
-        cvDownloadStatus.textContent = unlocked
-          ? "Pembayaran telah dikonfirmasi di browser ini. CV siap diunduh."
-          : "CV terkunci. Setelah pembayaran diverifikasi melalui panel admin pada browser ini, tombol unduh akan aktif.";
-        cvDownloadStatus.className = unlocked
+      const fingerprintDocument = (product, data) => fingerprintCv({ product, data });
+
+      const getInvalidDocumentField = (product) => {
+        const requiredFields = ["full-name", "email", "phone", "education", "major", "target-field", "about"];
+        if (product === "cover-letter") requiredFields.push("job-title", "company");
+        if (product === "website") requiredFields.push("website-purpose");
+        const requiredInvalid = requiredFields.map((id) => document.getElementById(id))
+          .find((field) => !field.value.trim() || !field.checkValidity());
+        if (requiredInvalid) return requiredInvalid;
+        const optionalUrlFields = product === "cv" ? ["cv-linkedin", "cv-portfolio-link"] : [];
+        return optionalUrlFields.map((id) => document.getElementById(id))
+          .find((field) => field.value.trim() && !field.checkValidity());
+      };
+
+      const isCurrentDocumentApproved = () => {
+        if (!currentDocumentData || !currentDocumentFingerprint) return false;
+        try {
+          return localStorage.getItem(ORDER_APPROVAL_KEY) === currentDocumentFingerprint
+            || (currentDocumentProduct === "cv"
+              && localStorage.getItem(CV_APPROVAL_KEY) === fingerprintCv(getCvDataFromForm()));
+        } catch (error) {
+          adminFeedback.textContent = "Status konfirmasi tidak dapat dibaca. Periksa izin penyimpanan browser ini.";
+          adminFeedback.className = "rounded-xl border border-rose-400/30 bg-rose-500/10 px-4 py-3 text-sm text-rose-100";
+          adminFeedback.classList.remove("hidden");
+          return false;
+        }
+      };
+
+      const setDocumentDownloadUnlocked = (unlocked) => {
+        downloadDocumentButton.disabled = !unlocked;
+        downloadDocumentButton.classList.toggle("hidden", !unlocked);
+        downloadDocumentButton.classList.toggle("cursor-not-allowed", !unlocked);
+        downloadDocumentButton.classList.toggle("opacity-60", !unlocked);
+        downloadDocumentButton.classList.toggle("bg-slate-700", !unlocked);
+        downloadDocumentButton.classList.toggle("text-slate-400", !unlocked);
+        downloadDocumentButton.classList.toggle("bg-emerald-400", unlocked);
+        downloadDocumentButton.classList.toggle("text-emerald-950", unlocked);
+        downloadDocumentButton.classList.toggle("hover:bg-emerald-300", unlocked);
+        documentDownloadStatus.textContent = unlocked
+          ? `Pembayaran ${prices[currentDocumentProduct].label} telah dikonfirmasi di browser ini. Hasil pesanan siap diunduh.`
+          : "Unduhan terkunci. Setelah pembayaran diperiksa dan dikonfirmasi admin di browser ini, tombol unduh untuk layanan yang dipilih akan aktif.";
+        documentDownloadStatus.className = unlocked
           ? "mt-4 rounded-xl border border-emerald-400/25 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-100"
           : "mt-4 rounded-xl border border-amber-400/25 bg-amber-500/10 px-4 py-3 text-sm text-amber-100";
       };
@@ -565,45 +779,248 @@
         "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
       })[character]);
 
+      const createExternalLink = (url, label) => {
+        try {
+          const parsedUrl = new URL(url);
+          if (parsedUrl.protocol !== "http:" && parsedUrl.protocol !== "https:") return escapeHtml(label);
+          return `<a href="${escapeHtml(parsedUrl.href)}" target="_blank" rel="noopener noreferrer">${escapeHtml(label)}</a>`;
+        } catch (error) {
+          return escapeHtml(label);
+        }
+      };
+
+      const renderLinkedText = (value) => value.split(/(https?:\/\/[^\s<>"']+)/gi)
+        .map((part) => /^https?:\/\//i.test(part) ? createExternalLink(part, part) : escapeHtml(part))
+        .join("");
+
       const createCvHtml = (cvData) => {
+        const safeName = escapeHtml(cvData.name);
+        const title = cvData.cvTitle || cvData.targetField;
+        const professionalSummary = cvData.cvSummary || cvData.about;
         const sections = [
-          ["Profil Profesional", cvData.about],
-          ["Pendidikan", `${cvData.education} - ${cvData.major}\nBidang yang dituju: ${cvData.targetField}`],
+          ["Ringkasan Profesional", professionalSummary],
+          ["Pendidikan", [
+            `${cvData.cvSchool || cvData.education} | ${cvData.major}`,
+            cvData.cvGraduation && `Tahun lulus: ${cvData.cvGraduation}`,
+            cvData.cvGpa && `IPK/Nilai: ${cvData.cvGpa}`,
+            cvData.cvThesis && `Tugas akhir: ${cvData.cvThesis}`
+          ].filter(Boolean).join("\n")],
           ["Pengalaman", cvData.experience],
-          ["Organisasi", cvData.organizations],
-          ["Soft Skills", cvData.softSkills],
-          ["Hard Skills", cvData.hardSkills],
+          ["Keahlian", [
+            cvData.hardSkills && `Hard / technical skills: ${cvData.hardSkills}`,
+            cvData.softSkills && `Soft skills: ${cvData.softSkills}`,
+            cvData.cvLanguages && `Bahasa: ${cvData.cvLanguages}`
+          ].filter(Boolean).join("\n")],
           ["Sertifikasi dan Pelatihan", cvData.certificates],
+          ["Organisasi dan Sukarelawan", cvData.organizations],
           ["Proyek dan Pencapaian", cvData.projects]
         ].filter(([, content]) => content.trim());
         const sectionHtml = sections.map(([heading, content]) =>
           `<section><h2>${escapeHtml(heading)}</h2><p>${escapeHtml(content)}</p></section>`
         ).join("\n");
-        const safeName = escapeHtml(cvData.name);
-        const contact = [cvData.email, cvData.phone].map(escapeHtml).join(" | ");
-        const target = escapeHtml(`${cvData.targetField} | ${cvData.education} ${cvData.major}`);
+        const contact = [cvData.email, cvData.phone, cvData.cvLocation].filter(Boolean).map(escapeHtml).join(" | ");
+        const links = [
+          cvData.cvLinkedin && createExternalLink(cvData.cvLinkedin, "LinkedIn"),
+          cvData.cvPortfolioLink && createExternalLink(cvData.cvPortfolioLink, "Portofolio / Website")
+        ].filter(Boolean).join(" · ");
+        const target = escapeHtml(title);
+        const experienceLine = cvData.cvYears ? `<p>${escapeHtml(cvData.cvYears)} pengalaman relevan</p>` : "";
         return `<!DOCTYPE html>
 <html lang="id"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CV - ${safeName}</title><style>
-*{box-sizing:border-box}body{margin:0;background:#eef2f7;color:#1e293b;font:15px/1.6 Arial,sans-serif}.cv{max-width:800px;min-height:1050px;margin:32px auto;padding:56px;background:#fff;box-shadow:0 8px 32px #0f172a22}header{border-bottom:2px solid #1e293b;padding-bottom:20px}h1{margin:0;font-size:30px;letter-spacing:.04em;text-transform:uppercase}header p{margin:8px 0 0;color:#475569;overflow-wrap:anywhere}.target{font-size:12px;font-weight:bold;letter-spacing:.12em;text-transform:uppercase}section{margin-top:26px}h2{margin:0 0 8px;padding-bottom:5px;border-bottom:1px solid #cbd5e1;font-size:14px;letter-spacing:.1em;text-transform:uppercase}section p{margin:0;white-space:pre-line;overflow-wrap:anywhere}@media print{body{background:white}.cv{max-width:none;min-height:0;margin:0;padding:18mm;box-shadow:none}@page{size:A4;margin:0}}
-</style></head><body><main class="cv"><header><h1>${safeName}</h1><p>${contact}</p><p class="target">${target}</p></header>${sectionHtml}</main></body></html>`;
+*{box-sizing:border-box}body{margin:0;background:#eef2f7;color:#1e293b;font:15px/1.6 Arial,sans-serif}.cv{max-width:800px;min-height:1050px;margin:32px auto;padding:56px;background:#fff;box-shadow:0 8px 32px #0f172a22}header{border-bottom:2px solid #1e293b;padding-bottom:20px}h1{margin:0;font-size:30px;letter-spacing:.04em;text-transform:uppercase}header p{margin:8px 0 0;color:#475569;overflow-wrap:anywhere}.target{font-size:12px;font-weight:bold;letter-spacing:.12em;text-transform:uppercase}a{color:#0e7490;text-decoration:none}section{margin-top:26px}h2{margin:0 0 8px;padding-bottom:5px;border-bottom:1px solid #cbd5e1;font-size:14px;letter-spacing:.1em;text-transform:uppercase}section p{margin:0;white-space:pre-line;overflow-wrap:anywhere}@media print{body{background:white}.cv{max-width:none;min-height:0;margin:0;padding:18mm;box-shadow:none}@page{size:A4;margin:0}}
+</style></head><body><main class="cv"><header><h1>${safeName}</h1><p class="target">${target}</p>${experienceLine}<p>${contact}</p>${links ? `<p>${links}</p>` : ""}</header>${sectionHtml}</main></body></html>`;
       };
 
-      const downloadCustomerCv = () => {
-        if (!currentCvData || localStorage.getItem(CV_APPROVAL_KEY) !== currentCvFingerprint) return;
-        const blob = new Blob([createCvHtml(currentCvData)], { type: "text/html;charset=utf-8" });
+      const createPortfolioHtml = (data) => {
+        const safeName = escapeHtml(data.name);
+        const projectBlocks = data.portfolioCaseStudies.split(/\n\s*\n/).map((project) => project.trim()).filter(Boolean);
+        const projects = projectBlocks.length ? projectBlocks : data.projects.split(/\n\s*\n/).map((project) => project.trim()).filter(Boolean);
+        const projectSections = projects.map((project, index) => {
+          const images = [...project.matchAll(/https?:\/\/[^\s<>"']+/gi)].map(([url]) => {
+            try {
+              const parsedUrl = new URL(url);
+              return /\.(?:jpe?g|png|webp|gif)$/i.test(parsedUrl.pathname)
+                ? `<img src="${escapeHtml(parsedUrl.href)}" alt="Bukti visual untuk proyek ${index + 1}" loading="lazy">`
+                : "";
+            } catch (error) {
+              return "";
+            }
+          }).join("");
+          return `<article id="project-${index + 1}" class="project"><span class="eyebrow">Studi Kasus ${String(index + 1).padStart(2, "0")}</span><p>${renderLinkedText(project)}</p>${images}</article>`;
+        }).join("");
+        const projectNav = projects.map((project, index) =>
+          `<li><a href="#project-${index + 1}">${escapeHtml(project.split(/\r?\n/, 1)[0].slice(0, 90))}</a></li>`
+        ).join("");
+        const links = data.portfolioLinks.split(/\r?\n/).map((url) => url.trim()).filter(Boolean)
+          .map((url) => `<li>${createExternalLink(url, url)}</li>`).join("");
+        const skills = [data.hardSkills && `Hard skills: ${data.hardSkills}`, data.softSkills && `Soft skills: ${data.softSkills}`].filter(Boolean).join("\n");
+        const sections = [
+          ["Profil", data.about],
+          ["Pendidikan", `${data.cvSchool || data.education} | ${data.major}${data.cvGraduation ? ` | ${data.cvGraduation}` : ""}`],
+          ["Pengalaman", data.experience],
+          ["Keahlian", skills],
+          ["Sertifikasi", data.certificates],
+          ["Organisasi dan Sukarelawan", data.organizations]
+        ].filter(([, content]) => content.trim()).map(([heading, content]) =>
+          `<section><h2>${escapeHtml(heading)}</h2><p>${escapeHtml(content)}</p></section>`
+        ).join("");
+        const title = escapeHtml(data.portfolioTitle || `Portofolio ${data.targetField}`);
+        const professionalTitle = escapeHtml(data.portfolioProfessionalTitle || data.cvTitle || data.targetField);
+        const testimonial = data.portfolioTestimonials
+          ? `<section><h2>Testimoni</h2><blockquote>${escapeHtml(data.portfolioTestimonials)}</blockquote></section>` : "";
+        const projectNavHtml = projectNav ? `<section class="toc"><h2>Daftar Isi Proyek</h2><ol>${projectNav}</ol></section>` : "";
+        const projectHtml = projectSections
+          ? `<section id="karya"><h2>Studi Kasus Proyek</h2>${projectSections}</section>` : "";
+        const linksHtml = links ? `<section><h2>Karya dan Profil Lainnya</h2><ul>${links}</ul></section>` : "";
+        return `<!DOCTYPE html><html lang="id"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>${title} - ${safeName}</title>
+<style>*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:#eef2f7;color:#172554;font:16px/1.7 Arial,sans-serif}.page{max-width:900px;margin:32px auto;padding:clamp(24px,7vw,72px);background:white;box-shadow:0 10px 35px #0f172a20}.hero{padding:32px 0;border-bottom:3px solid #0891b2}.eyebrow{color:#0e7490;font-size:12px;font-weight:bold;letter-spacing:.18em;text-transform:uppercase}h1{margin:8px 0;font-size:clamp(32px,6vw,54px);line-height:1.1}.subtitle{font-weight:bold;color:#334155}p{white-space:pre-line;overflow-wrap:anywhere}.contact{color:#475569}section{margin-top:30px}h2{margin:0 0 8px;color:#0e7490;font-size:16px;letter-spacing:.12em;text-transform:uppercase}section p{margin:0}.project{margin:16px 0;padding:20px;border:1px solid #cbd5e1;border-radius:12px;break-inside:avoid}.project .eyebrow{display:block;margin-bottom:8px}.project img{display:block;width:100%;height:auto;margin-top:16px;border-radius:8px}.toc ol,ul{padding-left:22px}.toc a,a{color:#0e7490}.project p{margin:0}blockquote{margin:0;border-left:3px solid #0891b2;padding-left:18px;white-space:pre-line}@media print{body{background:white}.page{max-width:none;margin:0;box-shadow:none}@page{size:A4;margin:16mm}}</style></head><body><main class="page"><header class="hero"><span class="eyebrow">${title}</span><h1>${safeName}</h1><p class="subtitle">${professionalTitle}</p><p class="contact">${escapeHtml(data.email)}${data.phone ? ` · ${escapeHtml(data.phone)}` : ""}</p><p class="contact">${escapeHtml(data.cvLocation || "")}</p></header>${projectNavHtml}${projectHtml}${sections}${testimonial}${linksHtml}<footer class="contact"><h2>Mari bekerja sama</h2><p>${escapeHtml(data.email)}${data.phone ? ` · ${escapeHtml(data.phone)}` : ""}</p></footer></main></body></html>`;
+      };
+
+      const createCoverLetterHtml = (data) => {
+        const recipient = data.letterRecipient || "Tim Rekrutmen";
+        const today = new Date().toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" });
+        const date = data.letterDate
+          ? new Date(`${data.letterDate}T00:00:00`).toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" })
+          : today;
+        const opening = [
+          `Saya mengajukan lamaran untuk posisi ${data.jobTitle} di ${data.company}${data.letterSource ? `, setelah mengetahui lowongan ini melalui ${data.letterSource}` : ""}.`,
+          data.letterHook
+        ].filter(Boolean).join(" ");
+        const qualifications = [
+          `Saya merupakan lulusan ${data.education} ${data.major}. ${data.about}`,
+          data.letterAchievement
+        ].filter(Boolean).join("\n\n");
+        const alignment = data.letterAlignment
+          || `Pengalaman saya${data.experience ? `, termasuk ${data.experience}` : ""} serta keahlian ${[data.hardSkills, data.softSkills].filter(Boolean).join(" dan ") || "yang relevan"} dapat mendukung kebutuhan tim ${data.company}.`;
+        const paragraphs = [
+          `Dengan hormat,\n\n${opening}`,
+          qualifications,
+          alignment,
+          "Saya siap berdiskusi lebih lanjut melalui wawancara. Terima kasih atas perhatian Bapak/Ibu."
+        ].filter(Boolean);
+        const safeName = escapeHtml(data.name);
+        const body = paragraphs.map((paragraph) => `<p>${escapeHtml(paragraph)}</p>`).join("");
+        return `<!DOCTYPE html><html lang="id"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Surat Lamaran - ${safeName}</title>
+<style>*{box-sizing:border-box}body{margin:0;background:#eef2f7;color:#1e293b;font:15px/1.8 Arial,sans-serif}.letter{max-width:800px;min-height:1000px;margin:32px auto;padding:clamp(28px,8vw,76px);background:#fff;box-shadow:0 8px 32px #0f172a22}.sender{padding-bottom:20px;border-bottom:2px solid #1e293b}.sender h1{margin:0 0 6px;font-size:24px}.sender p,.letter p{white-space:pre-line;overflow-wrap:anywhere}.letter p{margin:24px 0}.meta{margin-top:28px}@media print{body{background:white}.letter{max-width:none;min-height:0;margin:0;padding:18mm;box-shadow:none}@page{size:A4;margin:0}}</style></head><body><main class="letter"><header class="sender"><h1>${safeName}</h1><p>${escapeHtml(data.email)}${data.phone ? ` · ${escapeHtml(data.phone)}` : ""}${data.cvLocation ? ` · ${escapeHtml(data.cvLocation)}` : ""}</p></header><p class="meta">${escapeHtml(data.letterCompanyAddress || data.company)}<br>${escapeHtml(date)}</p><p>Perihal: Lamaran Pekerjaan — ${escapeHtml(data.jobTitle)}<br>Lampiran: ${escapeHtml(data.letterAttachments || "CV")}</p><p>Yth. ${escapeHtml(recipient)}<br>${escapeHtml(data.company)}${data.letterCompanyAddress ? `\n${escapeHtml(data.letterCompanyAddress)}` : ""}</p>${body}<p>${escapeHtml(data.name)}<br>${escapeHtml(data.email)}${data.phone ? `<br>${escapeHtml(data.phone)}` : ""}</p></main></body></html>`;
+      };
+
+      const createWebsiteHtml = (data) => {
+        const safeName = escapeHtml(data.name);
+        const services = data.websiteServices.split(/\r?\n/).map((item) => item.trim()).filter(Boolean);
+        const tools = data.websiteTools.split(/\r?\n/).map((item) => item.trim()).filter(Boolean);
+        const categories = data.websiteCategories.split(",").map((item) => item.trim()).filter(Boolean);
+        const featuredProjects = data.websiteFeaturedProjects.split(/\r?\n/).map((line) => {
+          const [category = "Proyek", title = "", summary = "", link = ""] = line.split("|").map((item) => item.trim());
+          return { category, title: title || category, summary, link };
+        }).filter((project) => project.title || project.summary);
+        const filters = [...new Set(["Semua", ...categories, ...featuredProjects.map((project) => project.category)])];
+        const filterButtons = filters.map((category, index) =>
+          `<button type="button" class="filter${index === 0 ? " active" : ""}" data-filter="${index === 0 ? "*" : escapeHtml(category)}">${escapeHtml(category)}</button>`
+        ).join("");
+        const projectCards = featuredProjects.map((project, index) =>
+          `<article class="project-card" data-category="${escapeHtml(project.category)}"><span class="badge">${escapeHtml(project.category)}</span><h3>${escapeHtml(project.title || `Proyek ${index + 1}`)}</h3><p>${escapeHtml(project.summary)}</p>${project.link ? `<p>${createExternalLink(project.link, "Lihat detail proyek ↗")}</p>` : ""}</article>`
+        ).join("");
+        const serviceCards = services.map((service) =>
+          `<li>${escapeHtml(service)}</li>`
+        ).join("");
+        const toolBadges = tools.map((tool) => `<span class="badge">${escapeHtml(tool)}</span>`).join("");
+        const timeline = [
+          data.cvSchool && `${data.cvSchool} — ${data.education} ${data.major}${data.cvGraduation ? ` (${data.cvGraduation})` : ""}`,
+          data.experience
+        ].filter(Boolean).join("\n\n");
+        const skills = [data.hardSkills && `Hard skills: ${data.hardSkills}`, data.softSkills && `Soft skills: ${data.softSkills}`].filter(Boolean).join("\n");
+        const resumeSections = [
+          ["Pendidikan", `${data.cvSchool || data.education} — ${data.major}${data.cvGraduation ? ` (${data.cvGraduation})` : ""}`],
+          ["Pengalaman", data.experience],
+          ["Keahlian", skills],
+          ["Sertifikasi", data.certificates],
+          ["Organisasi dan Sukarelawan", data.organizations]
+        ].filter(([, content]) => content.trim()).map(([heading, content]) =>
+          `<article><h3>${escapeHtml(heading)}</h3><p>${escapeHtml(content)}</p></article>`
+        ).join("");
+        const socialLinks = data.websiteSocialLinks.split(/\r?\n/).map((line) => line.trim()).filter(Boolean)
+          .map((line) => {
+            const [url, label] = line.split("|").map((item) => item.trim());
+            return `<li>${createExternalLink(url, label || url)}</li>`;
+          }).join("");
+        const testimonial = data.websiteTestimonials
+          ? `<blockquote>${escapeHtml(data.websiteTestimonials)}</blockquote>` : "";
+        const projectDetail = data.projects || data.websiteFeaturedProjects;
+        const location = data.websiteLocation || data.cvLocation;
+        const safeEmail = escapeHtml(data.email);
+        const contactForm = `<form id="contact-form"><label>Nama<input name="name" maxlength="100" required></label><label>Email<input name="email" type="email" maxlength="254" required></label><label>Subjek<input name="subject" maxlength="160" required></label><label>Pesan<textarea name="message" rows="5" maxlength="2000" required></textarea></label><button class="button" type="submit">Siapkan email</button></form>`;
+        const headline = data.websiteHeadline.split(/\r?\n/).map((line) => line.trim()).filter(Boolean);
+        const title = headline[0] || data.cvTitle || data.targetField || "Profil Profesional";
+        const subtitle = headline.slice(1).join(" · ") || data.targetField;
+        const story = data.websiteStory || data.about;
+        const year = new Date().getFullYear();
+        const websiteScript = `<script>
+          document.querySelectorAll("[data-filter]").forEach((button) => button.addEventListener("click", () => {
+            document.querySelectorAll("[data-filter]").forEach((item) => item.classList.remove("active"));
+            button.classList.add("active");
+            document.querySelectorAll(".project-card").forEach((card) => {
+              card.hidden = button.dataset.filter !== "*" && card.dataset.category !== button.dataset.filter;
+            });
+          }));
+          document.getElementById("contact-form").addEventListener("submit", (event) => {
+            event.preventDefault();
+            const form = new FormData(event.currentTarget);
+            const body = "Nama: " + form.get("name") + "\\nEmail: " + form.get("email") + "\\n\\n" + form.get("message");
+            window.location.href = "mailto:${safeEmail}?subject=" + encodeURIComponent(form.get("subject")) + "&body=" + encodeURIComponent(body);
+          });
+        </scr` + `ipt>`;
+        return `<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="${escapeHtml(data.about.slice(0, 155))}">
+  <title>${safeName} | ${escapeHtml(title)}</title>
+  <style>
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:#07111f;color:#e2e8f0;font:16px/1.7 Arial,sans-serif}.wrap{max-width:1100px;margin:auto;padding:24px}.nav{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:18px 0}.nav ul{display:flex;flex-wrap:wrap;gap:16px;padding:0;list-style:none}.brand,.nav a,.contact a{color:#67e8f9;text-decoration:none}.brand{font-weight:bold}.hero{padding:clamp(56px,12vw,130px) 0 72px}.eyebrow{color:#67e8f9;font-size:12px;font-weight:bold;letter-spacing:.2em;text-transform:uppercase}h1{margin:12px 0;font-size:clamp(42px,8vw,76px);line-height:1.05}h2{margin:0 0 16px;color:#67e8f9;font-size:24px}h3{margin:12px 0 8px}p{white-space:pre-line;overflow-wrap:anywhere}.intro{max-width:720px;color:#cbd5e1}.button{display:inline-block;margin-top:16px;padding:11px 18px;border:0;border-radius:10px;background:#67e8f9;color:#07111f;font-weight:bold;text-decoration:none;cursor:pointer}section{margin:20px 0;padding:28px;border:1px solid #1e293b;border-radius:18px;background:#0b1728}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}.project-card,section article{padding:18px;border:1px solid #1e293b;border-radius:14px;background:#07111f}.badge{display:inline-block;margin:4px;padding:5px 10px;border-radius:999px;background:#164e63;color:#a5f3fc;font-size:13px}.filter{margin:4px;padding:7px 12px;border:1px solid #334155;border-radius:999px;background:#07111f;color:#cbd5e1;cursor:pointer}.filter.active{background:#67e8f9;color:#07111f}.contact{padding:30px 0;border-top:1px solid #1e293b}form label{display:block;margin:12px 0;font-weight:bold}form input,form textarea{display:block;width:100%;margin-top:5px;padding:10px;border:1px solid #334155;border-radius:8px;background:#07111f;color:#e2e8f0}blockquote{margin:0;padding-left:18px;border-left:3px solid #67e8f9;white-space:pre-line}footer{padding:30px 0;color:#94a3b8}@media(max-width:600px){.nav{align-items:flex-start}.nav ul{gap:8px;font-size:13px}}@media print{body{background:#fff;color:#172033}.wrap{max-width:none}.nav,form,.filter{display:none}.hero{padding:20px 0}section,.project-card,section article{break-inside:avoid;background:#fff;border-color:#cbd5e1;color:#172033}.intro{color:#334155}@page{size:A4;margin:14mm}}
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <nav class="nav"><a class="brand" href="#beranda">${safeName}</a><ul><li><a href="#tentang">Tentang</a></li><li><a href="#karya">Karya</a></li><li><a href="#cv">CV</a></li><li><a href="#kontak">Kontak</a></li></ul></nav>
+    <header id="beranda" class="hero"><span class="eyebrow">Profil Profesional</span><h1>${escapeHtml(title)}</h1><h2>${escapeHtml(safeName)} · ${escapeHtml(subtitle)}</h2><p class="intro">${escapeHtml(data.about)}</p><a class="button" href="#karya">Lihat karya saya</a> <a class="button" href="mailto:${safeEmail}">Hubungi saya</a></header>
+    <section id="tentang"><h2>Tentang Saya</h2><p>${escapeHtml(story)}</p>${timeline ? `<h3>Perjalanan dan Pendidikan</h3><p>${escapeHtml(timeline)}</p>` : ""}${toolBadges ? `<h3>Software dan Tools</h3><div>${toolBadges}</div>` : ""}</section>
+    ${serviceCards ? `<section><h2>Layanan dan Kompetensi</h2><div class="grid">${services.map((service) => `<article>${escapeHtml(service)}</article>`).join("")}</div></section>` : ""}
+    <section id="karya"><h2>Proyek Unggulan</h2>${filterButtons ? `<div aria-label="Filter kategori karya">${filterButtons}</div>` : ""}<div class="grid">${projectCards || `<article class="project-card"><p>${escapeHtml(projectDetail || "Proyek unggulan belum diisi.")}</p></article>`}</div>${data.websiteCategories ? `<h3>Kategori karya</h3><p>${escapeHtml(data.websiteCategories)}</p>` : ""}</section>
+    ${testimonial ? `<section><h2>Testimoni</h2><blockquote>${testimonial}</blockquote></section>` : ""}
+    <section id="cv"><h2>Resume / CV</h2><div class="grid">${resumeSections}</div><a class="button" href="data:text/html;charset=utf-8,${encodeURIComponent(createCvHtml(data))}" download="CV-${safeName}.html">Unduh CV (HTML) · dapat dicetak ke PDF</a></section>
+    <section id="kontak"><h2>Mari Bekerja Sama</h2><p>${location ? `${escapeHtml(location)}\n` : ""}${escapeHtml(data.websitePurpose)}</p><p><a href="mailto:${safeEmail}">${safeEmail}</a>${data.phone ? ` · ${escapeHtml(data.phone)}` : ""}</p>${socialLinks ? `<ul>${socialLinks}</ul>` : ""}${contactForm}</section>
+    <footer>© ${year} ${safeName}. Hak cipta dilindungi.</footer>
+  </main>
+  ${websiteScript}
+</body>
+</html>`;
+      };
+
+      const createOrderHtml = (product, data) => {
+        if (product === "cv") return createCvHtml(data);
+        if (product === "portfolio") return createPortfolioHtml(data);
+        if (product === "cover-letter") return createCoverLetterHtml(data);
+        if (product === "website") return createWebsiteHtml(data);
+        throw new Error("Jenis layanan tidak dikenal.");
+      };
+
+      const downloadCustomerDocument = () => {
+        if (!isCurrentDocumentApproved()) return;
+        const blob = new Blob([createOrderHtml(currentDocumentProduct, currentDocumentData)], { type: "text/html;charset=utf-8" });
         const url = URL.createObjectURL(blob);
         const link = document.createElement("a");
-        const filename = currentCvData.name.trim().replace(/[^a-z0-9_-]+/gi, "-").replace(/^-|-$/g, "") || "pelanggan";
+        const filename = currentDocumentData.name.trim().replace(/[^a-z0-9_-]+/gi, "-").replace(/^-|-$/g, "") || "pelanggan";
         link.href = url;
-        link.download = `CV-${filename}.html`;
+        link.download = `${currentDocumentProduct}-${filename}.html`;
         document.body.appendChild(link);
         link.click();
         link.remove();
         window.setTimeout(() => URL.revokeObjectURL(url), 1000);
       };
 
-      const restoreCvDraft = () => {
+      const restoreOrderDraft = () => {
         try {
           const savedDraft = localStorage.getItem(CV_DRAFT_KEY);
           if (!savedDraft) return;
@@ -612,7 +1029,7 @@
           draftConsent.checked = true;
           Object.entries(draft.values).forEach(([id, savedValue]) => {
             const field = document.getElementById(id) || form.querySelector(`input[type="radio"][name="${CSS.escape(id.split(":")[0])}"][value="${CSS.escape(id.split(":").slice(1).join(":"))}"]`);
-            if (!field || id === "save-draft-consent") return;
+            if (!field || id === "save-draft-consent" || field.closest("#admin-panel")) return;
             if (field.type === "radio" || field.type === "checkbox") {
               field.checked = Boolean(savedValue.checked);
             } else {
@@ -622,65 +1039,47 @@
           form.querySelectorAll('input[name="product"]:checked').forEach((field) => {
             field.dispatchEvent(new Event("change", { bubbles: true }));
           });
+          saveFormDraft();
           const savedAt = new Date(draft.savedAt);
           setDraftStorageStatus(`Draf dipulihkan dari perangkat ini${Number.isNaN(savedAt.getTime()) ? "." : ` (tersimpan ${savedAt.toLocaleString("id-ID")}).`}`);
           const selectedProduct = form.querySelector('input[name="product"]:checked');
-          if (selectedProduct && selectedProduct.value === "cv") {
-            currentCvData = getCvDataFromForm();
-            if (currentCvData.name && currentCvData.email && currentCvData.about) {
-              currentCvFingerprint = fingerprintCv(currentCvData);
-              renderCvPreview(currentCvData);
-              const approved = localStorage.getItem(CV_APPROVAL_KEY) === currentCvFingerprint;
-              setCvDownloadUnlocked(approved);
-            }
+          if (selectedProduct && !getInvalidDocumentField(selectedProduct.value)) {
+            prepareDocumentPreview(selectedProduct.value);
           }
         } catch (error) {
           setDraftStorageStatus("Draf tersimpan tidak dapat dipulihkan. Hapus draf lalu isi formulir kembali.", true);
         }
       };
 
-      const renderCvPreview = (cvData) => {
-        document.getElementById("cv-name").textContent = cvData.name;
-        document.getElementById("cv-contact").textContent = [cvData.email, cvData.phone].join("  |  ");
-        document.getElementById("cv-target").textContent = `${cvData.targetField}  |  ${cvData.education} ${cvData.major}`;
-        const sections = document.getElementById("cv-sections");
-        sections.replaceChildren();
-        appendCvSection(sections, "Profil Profesional", cvData.about);
-        appendCvSection(sections, "Pendidikan", `${cvData.education} - ${cvData.major}\nBidang yang dituju: ${cvData.targetField}`);
-        appendCvSection(sections, "Pengalaman", cvData.experience);
-        appendCvSection(sections, "Organisasi", cvData.organizations);
-        appendCvSection(sections, "Soft Skills", cvData.softSkills);
-        appendCvSection(sections, "Hard Skills", cvData.hardSkills);
-        appendCvSection(sections, "Sertifikasi dan Pelatihan", cvData.certificates);
-        appendCvSection(sections, "Proyek dan Pencapaian", cvData.projects);
-        cvPreview.classList.remove("hidden");
+      const prepareDocumentPreview = (product) => {
+        currentDocumentProduct = product;
+        currentDocumentData = getDocumentDataFromForm();
+        currentDocumentFingerprint = fingerprintDocument(product, currentDocumentData);
+        documentPreviewFrame.srcdoc = createOrderHtml(product, currentDocumentData);
+        documentPreview.classList.remove("hidden");
+        setDocumentDownloadUnlocked(isCurrentDocumentApproved());
       };
 
-      document.getElementById("preview-cv-button").addEventListener("click", () => {
-        cvPreviewFeedback.classList.add("hidden");
+      document.getElementById("preview-document-button").addEventListener("click", () => {
+        documentPreviewFeedback.classList.add("hidden");
         const selectedProduct = form.querySelector('input[name="product"]:checked');
-        if (!selectedProduct || selectedProduct.value !== "cv") {
-          cvPreviewFeedback.textContent = "Pilih layanan CV Profesional terlebih dahulu untuk membuat pratinjau CV.";
-          cvPreviewFeedback.className = "mt-3 rounded-xl border border-amber-400/30 bg-amber-500/10 px-4 py-3 text-sm text-amber-100";
-          form.querySelector('input[name="product"][value="cv"]').focus();
+        if (!selectedProduct) {
+          documentPreviewFeedback.textContent = "Pilih salah satu layanan terlebih dahulu untuk membuat pratinjau.";
+          documentPreviewFeedback.className = "mt-3 rounded-xl border border-amber-400/30 bg-amber-500/10 px-4 py-3 text-sm text-amber-100";
+          form.querySelector('input[name="product"]').focus();
           return;
         }
 
-        const requiredFields = ["full-name", "email", "phone", "education", "major", "target-field", "about"];
-        const firstInvalid = requiredFields.map((id) => document.getElementById(id)).find((field) => !field.value.trim());
+        const firstInvalid = getInvalidDocumentField(selectedProduct.value);
         if (firstInvalid) {
           firstInvalid.reportValidity();
           firstInvalid.focus();
           return;
         }
 
-        currentCvData = getCvDataFromForm();
-        currentCvFingerprint = fingerprintCv(currentCvData);
+        prepareDocumentPreview(selectedProduct.value);
         saveFormDraft();
-        renderCvPreview(currentCvData);
-        const approved = localStorage.getItem(CV_APPROVAL_KEY) === currentCvFingerprint;
-        setCvDownloadUnlocked(approved);
-        cvPreview.scrollIntoView({ behavior: "smooth", block: "start" });
+        documentPreview.scrollIntoView({ behavior: "smooth", block: "start" });
       });
 
       document.getElementById("admin-unlock-button").addEventListener("click", () => {
@@ -690,8 +1089,8 @@
           adminFeedback.className = "rounded-xl border border-rose-400/30 bg-rose-500/10 px-4 py-3 text-sm text-rose-100";
           return;
         }
-        if (!currentCvData) {
-          adminFeedback.textContent = "Buat pratinjau CV terlebih dahulu pada tab ini sebelum mengonfirmasi pembayaran.";
+        if (!currentDocumentData || !currentDocumentProduct) {
+          adminFeedback.textContent = "Buat pratinjau layanan terlebih dahulu sebelum mengonfirmasi pembayaran.";
           adminFeedback.className = "rounded-xl border border-amber-400/30 bg-amber-500/10 px-4 py-3 text-sm text-amber-100";
           return;
         }
@@ -710,14 +1109,17 @@
       });
 
       document.getElementById("confirm-payment-button").addEventListener("click", () => {
-        if (!currentCvData || !document.getElementById("payment-verified-checkbox").checked) return;
+        if (!currentDocumentData || !currentDocumentProduct || !document.getElementById("payment-verified-checkbox").checked) return;
         try {
-          localStorage.setItem(CV_APPROVAL_KEY, currentCvFingerprint);
-          setCvDownloadUnlocked(true);
-          adminFeedback.textContent = "Pembayaran ditandai terkonfirmasi pada browser ini. CV sedang diunduh.";
+          localStorage.setItem(ORDER_APPROVAL_KEY, currentDocumentFingerprint);
+          if (currentDocumentProduct === "cv") {
+            localStorage.setItem(CV_APPROVAL_KEY, fingerprintCv(getCvDataFromForm()));
+          }
+          setDocumentDownloadUnlocked(true);
+          adminFeedback.textContent = `Pembayaran ${prices[currentDocumentProduct].label} ditandai terkonfirmasi pada browser ini. Unduhan hasil pesanan sedang dimulai.`;
           adminFeedback.className = "rounded-xl border border-emerald-400/30 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-100";
           adminFeedback.classList.remove("hidden");
-          downloadCustomerCv();
+          downloadCustomerDocument();
         } catch (error) {
           adminFeedback.textContent = "Konfirmasi lokal gagal disimpan. Browser mungkin memblokir localStorage.";
           adminFeedback.className = "rounded-xl border border-rose-400/30 bg-rose-500/10 px-4 py-3 text-sm text-rose-100";
@@ -725,9 +1127,18 @@
         }
       });
 
-      downloadCvButton.addEventListener("click", downloadCustomerCv);
+      downloadDocumentButton.addEventListener("click", downloadCustomerDocument);
 
-      restoreCvDraft();
+      restoreOrderDraft();
+
+      const requestedProduct = new URLSearchParams(window.location.search).get("product");
+      const requestedProductOption = requestedProduct
+        && form.querySelector(`input[name="product"][value="${CSS.escape(requestedProduct)}"]`);
+      if (requestedProductOption) {
+        requestedProductOption.checked = true;
+        requestedProductOption.dispatchEvent(new Event("change", { bubbles: true }));
+        document.getElementById("bio-heading").scrollIntoView({ block: "start" });
+      }
 
       draftConsent.addEventListener("change", () => {
         if (draftConsent.checked) {
@@ -742,20 +1153,47 @@
         }
       });
 
-      form.addEventListener("input", saveFormDraft);
-      form.addEventListener("change", saveFormDraft);
+      const invalidateDocumentPreview = () => {
+        if (!currentDocumentData) return;
+        currentDocumentData = null;
+        currentDocumentProduct = "";
+        currentDocumentFingerprint = "";
+        documentPreview.classList.add("hidden");
+        documentPreviewFrame.srcdoc = "";
+        setDocumentDownloadUnlocked(false);
+        document.getElementById("admin-confirm-area").classList.add("hidden");
+        document.getElementById("payment-verified-checkbox").checked = false;
+        document.getElementById("confirm-payment-button").disabled = true;
+        setProductFields("");
+      };
+
+      const handleFormEdit = (event) => {
+        if (event.target === draftConsent || event.target.closest("#admin-panel")) {
+          return;
+        }
+        saveFormDraft();
+        invalidateDocumentPreview();
+      };
+
+      form.addEventListener("input", handleFormEdit);
+      form.addEventListener("change", handleFormEdit);
 
       document.getElementById("delete-saved-draft").addEventListener("click", () => {
         try {
           localStorage.removeItem(CV_DRAFT_KEY);
           localStorage.removeItem(CV_APPROVAL_KEY);
+          localStorage.removeItem(ORDER_APPROVAL_KEY);
           form.reset();
           draftConsent.checked = false;
-          currentCvData = null;
-          currentCvFingerprint = "";
-          cvPreview.classList.add("hidden");
-          setCvDownloadUnlocked(false);
+          currentDocumentData = null;
+          currentDocumentProduct = "";
+          currentDocumentFingerprint = "";
+          documentPreview.classList.add("hidden");
+          documentPreviewFrame.srcdoc = "";
+          setDocumentDownloadUnlocked(false);
           document.getElementById("admin-confirm-area").classList.add("hidden");
+          document.getElementById("payment-verified-checkbox").checked = false;
+          document.getElementById("confirm-payment-button").disabled = true;
           result.classList.add("hidden");
           setDraftStorageStatus("Draf lokal dan status konfirmasi pada browser ini sudah dihapus.");
         } catch (error) {
@@ -792,9 +1230,45 @@
         if (data.get("product") === "cover-letter") {
           currentOrder.push(["Posisi yang dilamar", fieldValue(data, "jobTitle")]);
           currentOrder.push(["Perusahaan/instansi tujuan", fieldValue(data, "company")]);
+          currentOrder.push(["Penerima surat", fieldValue(data, "letterRecipient")]);
+          currentOrder.push(["Alamat perusahaan", fieldValue(data, "letterCompanyAddress")]);
+          currentOrder.push(["Sumber lowongan", fieldValue(data, "letterSource")]);
+          currentOrder.push(["Alasan melamar", fieldValue(data, "letterHook")]);
+          currentOrder.push(["Pencapaian relevan", fieldValue(data, "letterAchievement")]);
+          currentOrder.push(["Keselarasan dan nilai tambah", fieldValue(data, "letterAlignment")]);
+          currentOrder.push(["Tanggal surat", fieldValue(data, "letterDate")]);
+          currentOrder.push(["Lampiran surat", fieldValue(data, "letterAttachments")]);
+        }
+        if (data.get("product") === "cv") {
+          currentOrder.push(["Jabatan profesional", fieldValue(data, "cvTitle")]);
+          currentOrder.push(["Lokasi", fieldValue(data, "cvLocation")]);
+          currentOrder.push(["Ringkasan profesional", fieldValue(data, "cvSummary")]);
+          currentOrder.push(["Pendidikan terperinci", [
+            fieldValue(data, "cvSchool"),
+            fieldValue(data, "cvGraduation"),
+            fieldValue(data, "cvGpa"),
+            fieldValue(data, "cvThesis")
+          ].filter((value) => value !== "Belum diisi").join(" | ") || "Belum diisi"]);
+          currentOrder.push(["Bahasa", fieldValue(data, "cvLanguages")]);
+        }
+        if (data.get("product") === "portfolio") {
+          currentOrder.push(["Judul portofolio", fieldValue(data, "portfolioTitle")]);
+          currentOrder.push(["Jabatan profesional", fieldValue(data, "portfolioProfessionalTitle")]);
+          currentOrder.push(["Studi kasus proyek", fieldValue(data, "portfolioCaseStudies")]);
+          currentOrder.push(["Testimoni", fieldValue(data, "portfolioTestimonials")]);
+          currentOrder.push(["Tautan karya", fieldValue(data, "portfolioLinks")]);
         }
         if (data.get("product") === "website") {
           currentOrder.push(["Tujuan/isi website", fieldValue(data, "websitePurpose")]);
+          currentOrder.push(["Headline dan spesialisasi", fieldValue(data, "websiteHeadline")]);
+          currentOrder.push(["Layanan utama", fieldValue(data, "websiteServices")]);
+          currentOrder.push(["Proyek unggulan", fieldValue(data, "websiteFeaturedProjects")]);
+          currentOrder.push(["Cerita dan filosofi kerja", fieldValue(data, "websiteStory")]);
+          currentOrder.push(["Tools", fieldValue(data, "websiteTools")]);
+          currentOrder.push(["Kategori karya", fieldValue(data, "websiteCategories")]);
+          currentOrder.push(["Testimoni", fieldValue(data, "websiteTestimonials")]);
+          currentOrder.push(["Lokasi dan ketersediaan", fieldValue(data, "websiteLocation")]);
+          currentOrder.push(["Tautan profesional", fieldValue(data, "websiteSocialLinks")]);
         }
 
         summary.replaceChildren();
