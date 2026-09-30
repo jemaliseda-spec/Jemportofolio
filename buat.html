@@ -46,6 +46,21 @@
     </section>
 
     <form id="order-form" class="space-y-8" novalidate>
+      <section class="rounded-2xl border border-cyan-500/20 bg-navy-900/60 p-5" aria-labelledby="draft-storage-heading">
+        <h2 id="draft-storage-heading" class="text-base font-bold text-white">Simpan draf di perangkat ini</h2>
+        <p class="mt-1 text-sm leading-6 text-slate-400">Dengan persetujuan Anda, data formulir disimpan di browser pada ponsel/perangkat ini agar bisa dilanjutkan setelah halaman ditutup. Data tidak tersinkron ke perangkat lain. Hindari mengaktifkan ini pada perangkat bersama.</p>
+        <label class="mt-4 flex cursor-pointer items-start gap-3 text-sm leading-6 text-slate-200">
+          <input id="save-draft-consent" type="checkbox" class="mt-1 h-4 w-4 accent-cyan-400">
+          <span>Saya setuju menyimpan draf formulir ini di perangkat saya.</span>
+        </label>
+        <div class="mt-3 flex flex-col items-start gap-3 sm:flex-row sm:items-center">
+          <button id="delete-saved-draft" type="button" class="rounded-lg border border-rose-400/30 px-3 py-2 text-xs font-bold text-rose-200 transition hover:bg-rose-500/10">
+            Hapus draf tersimpan
+          </button>
+          <p id="draft-storage-status" class="text-xs text-slate-400" role="status" aria-live="polite">Penyimpanan draf belum diaktifkan.</p>
+        </div>
+      </section>
+
       <section class="rounded-3xl border border-cyan-500/20 bg-navy-900/70 p-5 sm:p-8" aria-labelledby="product-heading">
         <h2 id="product-heading" class="text-xl font-bold text-white">1. Pilih hasil yang ingin dibuat</h2>
         <p class="mb-4 mt-1 text-sm text-slate-400">Pilih satu layanan untuk setiap pesanan.</p>
@@ -237,7 +252,7 @@
           class="mt-3 hidden w-full cursor-not-allowed rounded-xl bg-slate-700 px-5 py-3 text-sm font-extrabold text-slate-400 opacity-60 sm:w-auto">
           Unduh CV (HTML)
         </button>
-        <p class="mt-2 text-xs leading-5 text-slate-500">File HTML dapat dibuka di browser dan dicetak atau disimpan sebagai PDF. Data draf disimpan sementara di tab ini.</p>
+        <p class="mt-2 text-xs leading-5 text-slate-500">File HTML dapat dibuka di browser dan dicetak atau disimpan sebagai PDF. Data draf hanya disimpan di perangkat jika Anda menyetujuinya.</p>
 
         <details class="mt-6 rounded-2xl border border-slate-700 bg-slate-950/50 p-4">
           <summary class="cursor-pointer select-none text-sm font-bold text-slate-300">Admin / Konfirmasi Pembayaran</summary>
@@ -409,6 +424,8 @@
       const ADMIN_PIN = "140131";
       const CV_DRAFT_KEY = "jemeli.cv-order-draft";
       const CV_APPROVAL_KEY = "jemeli.cv-approved-order";
+      const draftConsent = document.getElementById("save-draft-consent");
+      const draftStorageStatus = document.getElementById("draft-storage-status");
       const extraQuestions = document.getElementById("extra-questions");
       const letterFields = document.getElementById("letter-fields");
       const websiteFields = document.getElementById("website-fields");
@@ -474,6 +491,47 @@
         certificates: document.getElementById("certificates").value.trim(),
         projects: document.getElementById("projects").value.trim()
       });
+
+      const setDraftStorageStatus = (message, isError = false) => {
+        draftStorageStatus.textContent = message;
+        draftStorageStatus.className = isError
+          ? "text-xs text-rose-300"
+          : "text-xs text-emerald-300";
+      };
+
+      const hasDraftContent = () => Array.from(form.querySelectorAll("input, select, textarea"))
+        .some((field) => field.type === "radio" || field.type === "checkbox"
+          ? field.checked
+          : field.value.trim() !== "");
+
+      const saveFormDraft = () => {
+        if (!draftConsent.checked) return;
+        if (!hasDraftContent()) {
+          localStorage.removeItem(CV_DRAFT_KEY);
+          setDraftStorageStatus("Belum ada data formulir untuk disimpan.");
+          return;
+        }
+
+        try {
+          const values = {};
+          form.querySelectorAll("input, select, textarea").forEach((field) => {
+            const key = field.id || (field.type === "radio" ? `${field.name}:${field.value}` : "");
+            if (!key) return;
+            values[key] = field.type === "radio" || field.type === "checkbox"
+              ? { checked: field.checked }
+              : { value: field.value };
+          });
+          localStorage.setItem(CV_DRAFT_KEY, JSON.stringify({
+            version: 1,
+            consent: true,
+            savedAt: new Date().toISOString(),
+            values
+          }));
+          setDraftStorageStatus(`Draf tersimpan di perangkat ini pada ${new Date().toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" })}.`);
+        } catch (error) {
+          setDraftStorageStatus("Draf tidak dapat disimpan. Periksa ruang dan izin penyimpanan browser.", true);
+        }
+      };
 
       const fingerprintCv = (cvData) => {
         const serialized = JSON.stringify(cvData);
@@ -547,29 +605,37 @@
 
       const restoreCvDraft = () => {
         try {
-          const savedDraft = sessionStorage.getItem(CV_DRAFT_KEY);
+          const savedDraft = localStorage.getItem(CV_DRAFT_KEY);
           if (!savedDraft) return;
-          currentCvData = JSON.parse(savedDraft);
-          if (!currentCvData || !currentCvData.name || !currentCvData.email) return;
-          currentCvFingerprint = fingerprintCv(currentCvData);
-          const fields = {
-            "full-name": currentCvData.name, email: currentCvData.email, phone: currentCvData.phone,
-            education: currentCvData.education, major: currentCvData.major, "target-field": currentCvData.targetField,
-            about: currentCvData.about, experience: currentCvData.experience, organizations: currentCvData.organizations,
-            "soft-skills": currentCvData.softSkills, "hard-skills": currentCvData.hardSkills,
-            certificates: currentCvData.certificates, projects: currentCvData.projects
-          };
-          Object.entries(fields).forEach(([id, value]) => {
-            const field = document.getElementById(id);
-            if (field) field.value = value || "";
+          const draft = JSON.parse(savedDraft);
+          if (!draft || draft.version !== 1 || draft.consent !== true || !draft.values) return;
+          draftConsent.checked = true;
+          Object.entries(draft.values).forEach(([id, savedValue]) => {
+            const field = document.getElementById(id) || form.querySelector(`input[type="radio"][name="${CSS.escape(id.split(":")[0])}"][value="${CSS.escape(id.split(":").slice(1).join(":"))}"]`);
+            if (!field || id === "save-draft-consent") return;
+            if (field.type === "radio" || field.type === "checkbox") {
+              field.checked = Boolean(savedValue.checked);
+            } else {
+              field.value = savedValue.value || "";
+            }
           });
-          document.querySelector('input[name="product"][value="cv"]').checked = true;
-          renderCvPreview(currentCvData);
-          const approved = localStorage.getItem(CV_APPROVAL_KEY) === currentCvFingerprint;
-          setCvDownloadUnlocked(approved);
+          form.querySelectorAll('input[name="product"]:checked').forEach((field) => {
+            field.dispatchEvent(new Event("change", { bubbles: true }));
+          });
+          const savedAt = new Date(draft.savedAt);
+          setDraftStorageStatus(`Draf dipulihkan dari perangkat ini${Number.isNaN(savedAt.getTime()) ? "." : ` (tersimpan ${savedAt.toLocaleString("id-ID")}).`}`);
+          const selectedProduct = form.querySelector('input[name="product"]:checked');
+          if (selectedProduct && selectedProduct.value === "cv") {
+            currentCvData = getCvDataFromForm();
+            if (currentCvData.name && currentCvData.email && currentCvData.about) {
+              currentCvFingerprint = fingerprintCv(currentCvData);
+              renderCvPreview(currentCvData);
+              const approved = localStorage.getItem(CV_APPROVAL_KEY) === currentCvFingerprint;
+              setCvDownloadUnlocked(approved);
+            }
+          }
         } catch (error) {
-          cvPreviewFeedback.textContent = "Draf CV lokal tidak dapat dibuka. Silakan isi ulang formulir.";
-          cvPreviewFeedback.className = "mt-3 rounded-xl border border-rose-400/30 bg-rose-500/10 px-4 py-3 text-sm text-rose-100";
+          setDraftStorageStatus("Draf tersimpan tidak dapat dipulihkan. Hapus draf lalu isi formulir kembali.", true);
         }
       };
 
@@ -610,13 +676,7 @@
 
         currentCvData = getCvDataFromForm();
         currentCvFingerprint = fingerprintCv(currentCvData);
-        try {
-          sessionStorage.setItem(CV_DRAFT_KEY, JSON.stringify(currentCvData));
-        } catch (error) {
-          cvPreviewFeedback.textContent = "Browser tidak dapat menyimpan draf CV sementara. Periksa pengaturan penyimpanan browser lalu coba lagi.";
-          cvPreviewFeedback.className = "mt-3 rounded-xl border border-rose-400/30 bg-rose-500/10 px-4 py-3 text-sm text-rose-100";
-          return;
-        }
+        saveFormDraft();
         renderCvPreview(currentCvData);
         const approved = localStorage.getItem(CV_APPROVAL_KEY) === currentCvFingerprint;
         setCvDownloadUnlocked(approved);
@@ -668,6 +728,40 @@
       downloadCvButton.addEventListener("click", downloadCustomerCv);
 
       restoreCvDraft();
+
+      draftConsent.addEventListener("change", () => {
+        if (draftConsent.checked) {
+          saveFormDraft();
+          return;
+        }
+        try {
+          localStorage.removeItem(CV_DRAFT_KEY);
+          setDraftStorageStatus("Persetujuan dibatalkan dan draf lokal sudah dihapus.");
+        } catch (error) {
+          setDraftStorageStatus("Draf tidak dapat dihapus dari browser.", true);
+        }
+      });
+
+      form.addEventListener("input", saveFormDraft);
+      form.addEventListener("change", saveFormDraft);
+
+      document.getElementById("delete-saved-draft").addEventListener("click", () => {
+        try {
+          localStorage.removeItem(CV_DRAFT_KEY);
+          localStorage.removeItem(CV_APPROVAL_KEY);
+          form.reset();
+          draftConsent.checked = false;
+          currentCvData = null;
+          currentCvFingerprint = "";
+          cvPreview.classList.add("hidden");
+          setCvDownloadUnlocked(false);
+          document.getElementById("admin-confirm-area").classList.add("hidden");
+          result.classList.add("hidden");
+          setDraftStorageStatus("Draf lokal dan status konfirmasi pada browser ini sudah dihapus.");
+        } catch (error) {
+          setDraftStorageStatus("Data lokal tidak dapat dihapus. Coba bersihkan data situs di pengaturan browser.", true);
+        }
+      });
 
       form.addEventListener("submit", (event) => {
         event.preventDefault();
