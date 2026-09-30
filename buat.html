@@ -1201,6 +1201,40 @@
         }
       });
 
+      draftConsent.addEventListener("change", () => {
+        if (draftConsent.checked) {
+          saveFormDraft();
+          return;
+        }
+        try {
+          localStorage.removeItem(CV_DRAFT_KEY);
+          setDraftStorageStatus("Persetujuan dibatalkan dan draf lokal sudah dihapus.");
+        } catch (error) {
+          setDraftStorageStatus("Draf tidak dapat dihapus dari browser.", true);
+        }
+      });
+
+      form.addEventListener("input", saveFormDraft);
+      form.addEventListener("change", saveFormDraft);
+
+      document.getElementById("delete-saved-draft").addEventListener("click", () => {
+        try {
+          localStorage.removeItem(CV_DRAFT_KEY);
+          localStorage.removeItem(CV_APPROVAL_KEY);
+          form.reset();
+          draftConsent.checked = false;
+          currentCvData = null;
+          currentCvFingerprint = "";
+          cvPreview.classList.add("hidden");
+          setCvDownloadUnlocked(false);
+          document.getElementById("admin-confirm-area").classList.add("hidden");
+          result.classList.add("hidden");
+          setDraftStorageStatus("Draf lokal dan status konfirmasi pada browser ini sudah dihapus.");
+        } catch (error) {
+          setDraftStorageStatus("Data lokal tidak dapat dihapus. Coba bersihkan data situs di pengaturan browser.", true);
+        }
+      });
+
       form.addEventListener("submit", (event) => {
         event.preventDefault();
         if (!form.reportValidity()) return;
