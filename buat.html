@@ -209,6 +209,62 @@
         </div>
       </section>
 
+      <section class="rounded-3xl border border-cyan-500/20 bg-navy-900/60 p-5 sm:p-8" aria-labelledby="cv-preview-heading">
+        <div class="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+          <div>
+            <h2 id="cv-preview-heading" class="text-xl font-bold text-white">Pratinjau CV otomatis</h2>
+            <p class="mt-1 max-w-2xl text-sm leading-6 text-slate-400">Pilih layanan CV dan lengkapi biodata untuk melihat susunan CV berdasarkan informasi Anda. Ini hanya pratinjau; file final akan dikirim setelah pembayaran diverifikasi.</p>
+          </div>
+          <button id="preview-cv-button" type="button" class="shrink-0 rounded-xl border border-cyan-400/40 bg-cyan-400/10 px-5 py-3 text-sm font-bold text-cyan-200 transition hover:bg-cyan-400/20">
+            Buat pratinjau CV
+          </button>
+        </div>
+        <p id="cv-preview-feedback" class="mt-3 hidden rounded-xl border px-4 py-3 text-sm" role="alert"></p>
+        <div id="cv-preview" class="mt-6 hidden overflow-hidden rounded-xl border border-slate-300 bg-slate-200 p-2 sm:p-4" aria-live="polite">
+          <article id="cv-paper" class="mx-auto min-h-[900px] max-w-[800px] bg-white px-7 py-9 text-slate-800 shadow-xl sm:px-12 sm:py-12">
+            <header class="border-b-2 border-slate-800 pb-5">
+              <h3 id="cv-name" class="text-3xl font-extrabold uppercase tracking-wide text-slate-900"></h3>
+              <p id="cv-contact" class="mt-2 break-words text-sm leading-6 text-slate-600"></p>
+              <p id="cv-target" class="mt-3 text-xs font-bold uppercase tracking-[0.15em] text-slate-500"></p>
+            </header>
+            <div id="cv-sections" class="space-y-6 pt-6"></div>
+          </article>
+        </div>
+        <p id="cv-download-status" class="mt-4 rounded-xl border border-amber-400/25 bg-amber-500/10 px-4 py-3 text-sm text-amber-100">
+          CV terkunci. Setelah pembayaran diverifikasi melalui panel admin pada browser ini, tombol unduh akan aktif.
+        </p>
+        <button id="download-cv-button" type="button" disabled
+          class="mt-3 hidden w-full cursor-not-allowed rounded-xl bg-slate-700 px-5 py-3 text-sm font-extrabold text-slate-400 opacity-60 sm:w-auto">
+          Unduh CV (HTML)
+        </button>
+        <p class="mt-2 text-xs leading-5 text-slate-500">File HTML dapat dibuka di browser dan dicetak atau disimpan sebagai PDF. Data draf disimpan sementara di tab ini.</p>
+
+        <details class="mt-6 rounded-2xl border border-slate-700 bg-slate-950/50 p-4">
+          <summary class="cursor-pointer select-none text-sm font-bold text-slate-300">Admin / Konfirmasi Pembayaran</summary>
+          <div class="mt-4 space-y-4">
+            <p class="text-xs leading-5 text-amber-200">Panel lokal untuk demo. PIN di halaman statis dapat dilihat dari kode situs dan status konfirmasi hanya tersimpan di browser ini. Jangan gunakan sebagai verifikasi pembayaran aman atau untuk membuka unduhan di perangkat pelanggan.</p>
+            <div id="admin-pin-area" class="flex flex-col gap-3 sm:flex-row">
+              <label for="admin-pin" class="sr-only">PIN admin</label>
+              <input id="admin-pin" type="password" inputmode="numeric" autocomplete="off" maxlength="20"
+                class="form-field sm:max-w-xs" placeholder="Masukkan PIN admin">
+              <button id="admin-unlock-button" type="button" class="rounded-xl border border-slate-600 px-4 py-3 text-sm font-bold text-slate-200 transition hover:border-cyan-400/50 hover:text-cyan-200">
+                Buka panel konfirmasi
+              </button>
+            </div>
+            <p id="admin-feedback" class="hidden rounded-xl border px-4 py-3 text-sm" role="alert"></p>
+            <div id="admin-confirm-area" class="hidden space-y-4 rounded-xl border border-emerald-400/20 bg-emerald-500/5 p-4">
+              <label class="flex cursor-pointer items-start gap-3 text-sm leading-6 text-slate-200">
+                <input id="payment-verified-checkbox" type="checkbox" class="mt-1 h-4 w-4 accent-emerald-400">
+                <span>Saya sudah memeriksa transaksi pada aplikasi bank/DANA dan memastikan dana benar-benar diterima.</span>
+              </label>
+              <button id="confirm-payment-button" type="button" disabled class="cursor-not-allowed rounded-xl bg-emerald-500/40 px-5 py-3 text-sm font-extrabold text-emerald-950/70">
+                Konfirmasi pembayaran & unduh CV
+              </button>
+            </div>
+          </div>
+        </details>
+      </section>
+
       <section id="extra-questions" class="hidden rounded-3xl border border-slate-800 bg-navy-900/60 p-5 sm:p-8" aria-labelledby="extra-heading">
         <h2 id="extra-heading" class="text-xl font-bold text-white">4. Detail tambahan layanan</h2>
         <div id="letter-fields" class="mt-4 hidden grid gap-4 sm:grid-cols-2">
@@ -345,6 +401,14 @@
       const result = document.getElementById("order-result");
       const summary = document.getElementById("order-summary");
       const qrisPanel = document.getElementById("qris-panel");
+      const cvPreview = document.getElementById("cv-preview");
+      const cvPreviewFeedback = document.getElementById("cv-preview-feedback");
+      const cvDownloadStatus = document.getElementById("cv-download-status");
+      const downloadCvButton = document.getElementById("download-cv-button");
+      const adminFeedback = document.getElementById("admin-feedback");
+      const ADMIN_PIN = "140131";
+      const CV_DRAFT_KEY = "jemeli.cv-order-draft";
+      const CV_APPROVAL_KEY = "jemeli.cv-approved-order";
       const extraQuestions = document.getElementById("extra-questions");
       const letterFields = document.getElementById("letter-fields");
       const websiteFields = document.getElementById("website-fields");
@@ -352,6 +416,8 @@
       let currentSubject = "";
       let currentOrder = [];
       let currentProduct = null;
+      let currentCvData = null;
+      let currentCvFingerprint = "";
 
       document.querySelectorAll('input[name="payment-method"]').forEach((radio) => {
         radio.addEventListener("change", () => {
@@ -378,6 +444,230 @@
       const formatRupiah = (amount) => new Intl.NumberFormat("id-ID", {
         style: "currency", currency: "IDR", maximumFractionDigits: 0
       }).format(amount);
+
+      const appendCvSection = (container, title, value) => {
+        const content = value.trim();
+        if (!content) return;
+        const section = document.createElement("section");
+        const heading = document.createElement("h4");
+        heading.className = "mb-2 border-b border-slate-200 pb-1.5 text-sm font-extrabold uppercase tracking-wider text-slate-800";
+        heading.textContent = title;
+        const paragraph = document.createElement("p");
+        paragraph.className = "whitespace-pre-line text-sm leading-6 text-slate-700";
+        paragraph.textContent = content;
+        section.append(heading, paragraph);
+        container.appendChild(section);
+      };
+
+      const getCvDataFromForm = () => ({
+        name: document.getElementById("full-name").value.trim(),
+        email: document.getElementById("email").value.trim(),
+        phone: document.getElementById("phone").value.trim(),
+        education: document.getElementById("education").value.trim(),
+        major: document.getElementById("major").value.trim(),
+        targetField: document.getElementById("target-field").value.trim(),
+        about: document.getElementById("about").value.trim(),
+        experience: document.getElementById("experience").value.trim(),
+        organizations: document.getElementById("organizations").value.trim(),
+        softSkills: document.getElementById("soft-skills").value.trim(),
+        hardSkills: document.getElementById("hard-skills").value.trim(),
+        certificates: document.getElementById("certificates").value.trim(),
+        projects: document.getElementById("projects").value.trim()
+      });
+
+      const fingerprintCv = (cvData) => {
+        const serialized = JSON.stringify(cvData);
+        let hash = 2166136261;
+        for (let index = 0; index < serialized.length; index += 1) {
+          hash ^= serialized.charCodeAt(index);
+          hash = Math.imul(hash, 16777619);
+        }
+        return (hash >>> 0).toString(36);
+      };
+
+      const setCvDownloadUnlocked = (unlocked) => {
+        downloadCvButton.disabled = !unlocked;
+        downloadCvButton.classList.toggle("hidden", !unlocked);
+        downloadCvButton.classList.toggle("cursor-not-allowed", !unlocked);
+        downloadCvButton.classList.toggle("opacity-60", !unlocked);
+        downloadCvButton.classList.toggle("bg-slate-700", !unlocked);
+        downloadCvButton.classList.toggle("text-slate-400", !unlocked);
+        downloadCvButton.classList.toggle("bg-emerald-400", unlocked);
+        downloadCvButton.classList.toggle("text-emerald-950", unlocked);
+        downloadCvButton.classList.toggle("hover:bg-emerald-300", unlocked);
+        cvDownloadStatus.textContent = unlocked
+          ? "Pembayaran telah dikonfirmasi di browser ini. CV siap diunduh."
+          : "CV terkunci. Setelah pembayaran diverifikasi melalui panel admin pada browser ini, tombol unduh akan aktif.";
+        cvDownloadStatus.className = unlocked
+          ? "mt-4 rounded-xl border border-emerald-400/25 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-100"
+          : "mt-4 rounded-xl border border-amber-400/25 bg-amber-500/10 px-4 py-3 text-sm text-amber-100";
+      };
+
+      const escapeHtml = (value) => value.replace(/[&<>"']/g, (character) => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+      })[character]);
+
+      const createCvHtml = (cvData) => {
+        const sections = [
+          ["Profil Profesional", cvData.about],
+          ["Pendidikan", `${cvData.education} - ${cvData.major}\nBidang yang dituju: ${cvData.targetField}`],
+          ["Pengalaman", cvData.experience],
+          ["Organisasi", cvData.organizations],
+          ["Soft Skills", cvData.softSkills],
+          ["Hard Skills", cvData.hardSkills],
+          ["Sertifikasi dan Pelatihan", cvData.certificates],
+          ["Proyek dan Pencapaian", cvData.projects]
+        ].filter(([, content]) => content.trim());
+        const sectionHtml = sections.map(([heading, content]) =>
+          `<section><h2>${escapeHtml(heading)}</h2><p>${escapeHtml(content)}</p></section>`
+        ).join("\n");
+        const safeName = escapeHtml(cvData.name);
+        const contact = [cvData.email, cvData.phone].map(escapeHtml).join(" | ");
+        const target = escapeHtml(`${cvData.targetField} | ${cvData.education} ${cvData.major}`);
+        return `<!DOCTYPE html>
+<html lang="id"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CV - ${safeName}</title><style>
+*{box-sizing:border-box}body{margin:0;background:#eef2f7;color:#1e293b;font:15px/1.6 Arial,sans-serif}.cv{max-width:800px;min-height:1050px;margin:32px auto;padding:56px;background:#fff;box-shadow:0 8px 32px #0f172a22}header{border-bottom:2px solid #1e293b;padding-bottom:20px}h1{margin:0;font-size:30px;letter-spacing:.04em;text-transform:uppercase}header p{margin:8px 0 0;color:#475569;overflow-wrap:anywhere}.target{font-size:12px;font-weight:bold;letter-spacing:.12em;text-transform:uppercase}section{margin-top:26px}h2{margin:0 0 8px;padding-bottom:5px;border-bottom:1px solid #cbd5e1;font-size:14px;letter-spacing:.1em;text-transform:uppercase}section p{margin:0;white-space:pre-line;overflow-wrap:anywhere}@media print{body{background:white}.cv{max-width:none;min-height:0;margin:0;padding:18mm;box-shadow:none}@page{size:A4;margin:0}}
+</style></head><body><main class="cv"><header><h1>${safeName}</h1><p>${contact}</p><p class="target">${target}</p></header>${sectionHtml}</main></body></html>`;
+      };
+
+      const downloadCustomerCv = () => {
+        if (!currentCvData || localStorage.getItem(CV_APPROVAL_KEY) !== currentCvFingerprint) return;
+        const blob = new Blob([createCvHtml(currentCvData)], { type: "text/html;charset=utf-8" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        const filename = currentCvData.name.trim().replace(/[^a-z0-9_-]+/gi, "-").replace(/^-|-$/g, "") || "pelanggan";
+        link.href = url;
+        link.download = `CV-${filename}.html`;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+      };
+
+      const restoreCvDraft = () => {
+        try {
+          const savedDraft = sessionStorage.getItem(CV_DRAFT_KEY);
+          if (!savedDraft) return;
+          currentCvData = JSON.parse(savedDraft);
+          if (!currentCvData || !currentCvData.name || !currentCvData.email) return;
+          currentCvFingerprint = fingerprintCv(currentCvData);
+          const fields = {
+            "full-name": currentCvData.name, email: currentCvData.email, phone: currentCvData.phone,
+            education: currentCvData.education, major: currentCvData.major, "target-field": currentCvData.targetField,
+            about: currentCvData.about, experience: currentCvData.experience, organizations: currentCvData.organizations,
+            "soft-skills": currentCvData.softSkills, "hard-skills": currentCvData.hardSkills,
+            certificates: currentCvData.certificates, projects: currentCvData.projects
+          };
+          Object.entries(fields).forEach(([id, value]) => {
+            const field = document.getElementById(id);
+            if (field) field.value = value || "";
+          });
+          document.querySelector('input[name="product"][value="cv"]').checked = true;
+          renderCvPreview(currentCvData);
+          const approved = localStorage.getItem(CV_APPROVAL_KEY) === currentCvFingerprint;
+          setCvDownloadUnlocked(approved);
+        } catch (error) {
+          cvPreviewFeedback.textContent = "Draf CV lokal tidak dapat dibuka. Silakan isi ulang formulir.";
+          cvPreviewFeedback.className = "mt-3 rounded-xl border border-rose-400/30 bg-rose-500/10 px-4 py-3 text-sm text-rose-100";
+        }
+      };
+
+      const renderCvPreview = (cvData) => {
+        document.getElementById("cv-name").textContent = cvData.name;
+        document.getElementById("cv-contact").textContent = [cvData.email, cvData.phone].join("  |  ");
+        document.getElementById("cv-target").textContent = `${cvData.targetField}  |  ${cvData.education} ${cvData.major}`;
+        const sections = document.getElementById("cv-sections");
+        sections.replaceChildren();
+        appendCvSection(sections, "Profil Profesional", cvData.about);
+        appendCvSection(sections, "Pendidikan", `${cvData.education} - ${cvData.major}\nBidang yang dituju: ${cvData.targetField}`);
+        appendCvSection(sections, "Pengalaman", cvData.experience);
+        appendCvSection(sections, "Organisasi", cvData.organizations);
+        appendCvSection(sections, "Soft Skills", cvData.softSkills);
+        appendCvSection(sections, "Hard Skills", cvData.hardSkills);
+        appendCvSection(sections, "Sertifikasi dan Pelatihan", cvData.certificates);
+        appendCvSection(sections, "Proyek dan Pencapaian", cvData.projects);
+        cvPreview.classList.remove("hidden");
+      };
+
+      document.getElementById("preview-cv-button").addEventListener("click", () => {
+        cvPreviewFeedback.classList.add("hidden");
+        const selectedProduct = form.querySelector('input[name="product"]:checked');
+        if (!selectedProduct || selectedProduct.value !== "cv") {
+          cvPreviewFeedback.textContent = "Pilih layanan CV Profesional terlebih dahulu untuk membuat pratinjau CV.";
+          cvPreviewFeedback.className = "mt-3 rounded-xl border border-amber-400/30 bg-amber-500/10 px-4 py-3 text-sm text-amber-100";
+          form.querySelector('input[name="product"][value="cv"]').focus();
+          return;
+        }
+
+        const requiredFields = ["full-name", "email", "phone", "education", "major", "target-field", "about"];
+        const firstInvalid = requiredFields.map((id) => document.getElementById(id)).find((field) => !field.value.trim());
+        if (firstInvalid) {
+          firstInvalid.reportValidity();
+          firstInvalid.focus();
+          return;
+        }
+
+        currentCvData = getCvDataFromForm();
+        currentCvFingerprint = fingerprintCv(currentCvData);
+        try {
+          sessionStorage.setItem(CV_DRAFT_KEY, JSON.stringify(currentCvData));
+        } catch (error) {
+          cvPreviewFeedback.textContent = "Browser tidak dapat menyimpan draf CV sementara. Periksa pengaturan penyimpanan browser lalu coba lagi.";
+          cvPreviewFeedback.className = "mt-3 rounded-xl border border-rose-400/30 bg-rose-500/10 px-4 py-3 text-sm text-rose-100";
+          return;
+        }
+        renderCvPreview(currentCvData);
+        const approved = localStorage.getItem(CV_APPROVAL_KEY) === currentCvFingerprint;
+        setCvDownloadUnlocked(approved);
+        cvPreview.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+
+      document.getElementById("admin-unlock-button").addEventListener("click", () => {
+        adminFeedback.classList.add("hidden");
+        if (document.getElementById("admin-pin").value !== ADMIN_PIN) {
+          adminFeedback.textContent = "PIN tidak sesuai.";
+          adminFeedback.className = "rounded-xl border border-rose-400/30 bg-rose-500/10 px-4 py-3 text-sm text-rose-100";
+          return;
+        }
+        if (!currentCvData) {
+          adminFeedback.textContent = "Buat pratinjau CV terlebih dahulu pada tab ini sebelum mengonfirmasi pembayaran.";
+          adminFeedback.className = "rounded-xl border border-amber-400/30 bg-amber-500/10 px-4 py-3 text-sm text-amber-100";
+          return;
+        }
+        document.getElementById("admin-confirm-area").classList.remove("hidden");
+      });
+
+      document.getElementById("payment-verified-checkbox").addEventListener("change", (event) => {
+        const button = document.getElementById("confirm-payment-button");
+        button.disabled = !event.target.checked;
+        button.classList.toggle("cursor-not-allowed", !event.target.checked);
+        button.classList.toggle("bg-emerald-500/40", !event.target.checked);
+        button.classList.toggle("text-emerald-950/70", !event.target.checked);
+        button.classList.toggle("bg-emerald-400", event.target.checked);
+        button.classList.toggle("text-emerald-950", event.target.checked);
+        button.classList.toggle("hover:bg-emerald-300", event.target.checked);
+      });
+
+      document.getElementById("confirm-payment-button").addEventListener("click", () => {
+        if (!currentCvData || !document.getElementById("payment-verified-checkbox").checked) return;
+        try {
+          localStorage.setItem(CV_APPROVAL_KEY, currentCvFingerprint);
+          setCvDownloadUnlocked(true);
+          adminFeedback.textContent = "Pembayaran ditandai terkonfirmasi pada browser ini. CV sedang diunduh.";
+          adminFeedback.className = "rounded-xl border border-emerald-400/30 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-100";
+          adminFeedback.classList.remove("hidden");
+          downloadCustomerCv();
+        } catch (error) {
+          adminFeedback.textContent = "Konfirmasi lokal gagal disimpan. Browser mungkin memblokir localStorage.";
+          adminFeedback.className = "rounded-xl border border-rose-400/30 bg-rose-500/10 px-4 py-3 text-sm text-rose-100";
+          adminFeedback.classList.remove("hidden");
+        }
+      });
+
+      downloadCvButton.addEventListener("click", downloadCustomerCv);
+
+      restoreCvDraft();
 
       form.addEventListener("submit", (event) => {
         event.preventDefault();
