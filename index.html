@@ -1606,13 +1606,14 @@
                   
                   {/* SLIDE 1: HERO PROFESIONAL */}
                   {currentSlide === 0 && (
-                    <div className="glass-panel rounded-3xl p-6 sm:p-10 sm:py-12 border border-cyan-500/30 relative overflow-hidden shadow-2xl">
-                      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
-                        <div className="lg:col-span-5 flex flex-col items-center text-center">
+                    <div className="glass-panel rounded-3xl p-5 sm:p-8 lg:p-10 border border-cyan-500/30 relative overflow-hidden shadow-2xl">
+                      <div className="absolute -top-24 -right-20 h-64 w-64 rounded-full bg-cyan-500/10 blur-3xl pointer-events-none" />
+                      <div className="grid grid-cols-1 lg:grid-cols-12 gap-7 lg:gap-10 items-center relative z-10">
+                        <div className="lg:col-span-5 flex flex-col items-center text-center order-2 lg:order-1">
                           <div className="relative group">
                             <div className="absolute -inset-1.5 rounded-3xl bg-gradient-to-r from-cyan-400 via-blue-500 to-indigo-500 opacity-80 blur transition duration-500 group-hover:opacity-100" />
                             
-                            <div className="relative w-56 h-72 sm:w-64 sm:h-80 rounded-3xl overflow-hidden bg-navy-950 border-2 border-cyan-400/50 shadow-2xl flex flex-col items-center">
+                            <div className="relative w-44 h-56 sm:w-56 sm:h-72 lg:w-64 lg:h-80 rounded-3xl overflow-hidden bg-navy-950 border-2 border-cyan-400/50 shadow-2xl flex flex-col items-center">
                               <img
                                 src="jemeli_profile.jpg"
                                 alt="JEMELI, S.Tr.M"
@@ -1621,68 +1622,76 @@
                             </div>
                           </div>
 
-                          <div className="mt-4 flex flex-col items-center gap-1.5">
-                            <p className="max-w-sm rounded-2xl border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-center text-xs font-medium italic leading-relaxed text-emerald-200 sm:text-sm">
-                              “Dididik oleh peluh ayah bundaku di sawah, aku berjanji untuk terus melangkah; memantaskan diri demi mengangkat derajat keluarga dan mengabdi pada instansi serta negeri.”
+                          <div className="mt-4 flex w-full max-w-sm flex-col items-center gap-3">
+                            <div className="inline-flex items-center gap-2 rounded-full border border-emerald-400/30 bg-emerald-400/10 px-3 py-1.5 text-xs font-semibold text-emerald-200">
+                              <span className="h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_10px_rgba(52,211,153,0.8)]" />
+                              Terbuka untuk peluang kerja
+                            </div>
+                            <p className="rounded-2xl border border-slate-700/80 bg-navy-900/80 px-4 py-3 text-center text-xs font-medium italic leading-relaxed text-slate-300 sm:text-sm">
+                              “Terus bertumbuh, bekerja dengan integritas, dan memberi kontribusi terbaik bagi keluarga, instansi, serta negeri.”
                             </p>
                           </div>
                         </div>
 
-                        <div className="lg:col-span-7 space-y-4">
-                          <div>
-                            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 text-xs font-semibold uppercase tracking-wider mb-2">
-                              <span>✨ Fresh Graduate | Terbuka untuk Bekerja Segera</span>
+                        <div className="lg:col-span-7 space-y-5 order-1 lg:order-2">
+                          <div className="space-y-2">
+                            <div className="inline-flex items-center gap-2 rounded-full border border-cyan-500/30 bg-cyan-500/10 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-cyan-300">
+                              <span>Fresh Graduate · Portofolio Profesional</span>
                             </div>
-                            <h1 className="text-3xl sm:text-5xl font-extrabold font-display text-white tracking-tight leading-tight">
+                            <p className="text-sm font-semibold text-slate-300">Halo, saya</p>
+                            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold font-display text-white tracking-tight leading-tight">
                               JEMELI, S.Tr.M
                             </h1>
-                            <h2 className="text-base sm:text-xl font-semibold text-gradient-cyan mt-1">
+                            <h2 className="text-base sm:text-xl font-semibold leading-relaxed text-gradient-cyan">
                               Manajemen Keuangan Sektor Publik · Akuntansi Pemerintahan
                             </h2>
                           </div>
 
-                          <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-                            Lulusan Sarjana Terapan Manajemen Keuangan Sektor Publik dari Politeknik Negeri Lhokseumawe dengan predikat <strong className="text-yellow-300 font-bold">cumlaude (IPK 3,59)</strong>. Memiliki pengalaman magang MBKM di PT Bank Tabungan Negara (Persero) Tbk pada administrasi pembiayaan dan layanan nasabah, serta pengalaman penelitian ekonometrika menggunakan EViews 12.
+                          <p className="max-w-3xl text-sm sm:text-base leading-relaxed text-slate-300">
+                            Saya lulusan Sarjana Terapan Manajemen Keuangan Sektor Publik dari Politeknik Negeri Lhokseumawe dengan predikat <strong className="font-bold text-yellow-300">cumlaude (IPK 3,59)</strong>. Melalui magang MBKM di PT Bank Tabungan Negara (Persero) Tbk, saya memperoleh pengalaman dalam administrasi pembiayaan dan layanan nasabah. Saya juga menyelesaikan penelitian ekonometrika menggunakan EViews 12.
                           </p>
 
-                          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-1">
-                            <div className="bg-navy-900/90 p-3 rounded-xl border border-cyan-500/20 text-center">
-                              <div className="text-[10px] text-slate-400">Gelar & IPK</div>
-                              <div className="text-base sm:text-lg font-bold font-mono text-cyan-300">S.Tr.M (3,59)</div>
-                            </div>
+                          <div className="flex flex-wrap gap-2" aria-label="Bidang minat">
+                            <span className="rounded-full border border-cyan-500/20 bg-navy-900/80 px-3 py-1.5 text-xs font-medium text-cyan-200">Akuntansi Pemerintahan</span>
+                            <span className="rounded-full border border-cyan-500/20 bg-navy-900/80 px-3 py-1.5 text-xs font-medium text-cyan-200">Administrasi Keuangan</span>
+                            <span className="rounded-full border border-cyan-500/20 bg-navy-900/80 px-3 py-1.5 text-xs font-medium text-cyan-200">Layanan Perbankan</span>
+                          </div>
 
-                            <a
-                              href={PDDIKTI_URL}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="bg-navy-900/90 p-3 rounded-xl border border-cyan-400/50 hover:border-cyan-300 text-center group transition-all shadow-md shadow-cyan-500/10"
-                              title="Klik untuk verifikasi kelulusan resmi NIM di PDDikti Kemdiktisaintek"
-                            >
-                              <div className="text-[10px] text-cyan-300 font-semibold flex items-center justify-center gap-1">
-                                NIM Mahasiswa <span>↗</span>
-                              </div>
-                              <div className="text-xs font-bold font-mono text-white group-hover:text-cyan-300 transition-colors">2022613120013</div>
-                              <div className="text-[9px] text-cyan-400 font-bold mt-0.5">🔍 Cek PDDikti</div>
-                            </a>
-
-                            <div className="bg-navy-900/90 p-3 rounded-xl border border-cyan-500/20 text-center">
-                              <div className="text-[10px] text-slate-400">Akreditasi Prodi</div>
-                              <div className="text-xs font-bold font-mono text-indigo-300">Baik Sekali</div>
+                          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-1">
+                            <div className="bg-navy-900/90 p-3.5 rounded-xl border border-cyan-500/20">
+                              <div className="text-[10px] uppercase tracking-wide text-slate-400">Pendidikan</div>
+                              <div className="mt-1 text-sm font-bold text-cyan-300">S.Tr.M · IPK 3,59</div>
+                              <div className="text-[10px] font-semibold text-yellow-300">Cumlaude</div>
                             </div>
-                            <div className="bg-navy-900/90 p-3 rounded-xl border border-cyan-500/20 text-center">
-                              <div className="text-[10px] text-slate-400">Magang & TA</div>
-                              <div className="text-base sm:text-lg font-bold font-mono text-emerald-300">Nilai A (IP 4,00)</div>
+                            <div className="bg-navy-900/90 p-3.5 rounded-xl border border-cyan-500/20">
+                              <div className="text-[10px] uppercase tracking-wide text-slate-400">Pengalaman</div>
+                              <div className="mt-1 text-sm font-bold text-emerald-300">Magang MBKM</div>
+                              <div className="text-[10px] text-slate-400">PT Bank Tabungan Negara</div>
+                            </div>
+                            <div className="bg-navy-900/90 p-3.5 rounded-xl border border-cyan-500/20">
+                              <div className="text-[10px] uppercase tracking-wide text-slate-400">Tugas Akhir</div>
+                              <div className="mt-1 text-sm font-bold text-indigo-300">Nilai A</div>
+                              <div className="text-[10px] text-slate-400">IP 4,00 · Prodi Baik Sekali</div>
                             </div>
                           </div>
 
-                          <div className="pt-2 flex flex-wrap items-center gap-3">
-                            <button onClick={nextSlide} className="px-6 py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-navy-950 font-extrabold text-xs uppercase tracking-wider shadow-lg">
-                              Jelajahi Slide Presentasi →
+                          <div className="flex flex-wrap items-center gap-3 pt-1">
+                            <button onClick={nextSlide} className="px-5 py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-navy-950 font-extrabold text-xs uppercase tracking-wider shadow-lg transition-colors">
+                              Lihat Pengalaman & Karya
                             </button>
-                            <button onClick={handleDownloadCV} className="px-5 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 border border-cyan-500/30 text-cyan-300 text-xs font-semibold">
+                            <button onClick={() => setCurrentSlide(8)} className="px-5 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-200 text-xs font-semibold transition-colors">
+                              Hubungi Saya
+                            </button>
+                            <a href="jasa.html" className="px-5 py-3 rounded-xl bg-gradient-to-r from-violet-500 to-fuchsia-600 hover:from-violet-400 hover:to-fuchsia-500 text-white text-xs font-bold shadow-lg shadow-fuchsia-950/30 transition-colors">
+                              ✦ Lihat Jasa Saya
+                            </a>
+                            <button onClick={handleDownloadCV} className="px-5 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 border border-cyan-500/30 text-cyan-300 text-xs font-semibold transition-colors">
                               Unduh CV ATS (PDF)
                             </button>
                           </div>
+                          <a href={PDDIKTI_URL} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-xs font-medium text-cyan-300 underline decoration-cyan-500/40 underline-offset-4 hover:text-cyan-200">
+                            Verifikasi data pendidikan di PDDikti <span aria-hidden="true">↗</span>
+                          </a>
                         </div>
                       </div>
                     </div>
