@@ -1224,6 +1224,7 @@
       const [selectedCert, setSelectedCert] = useState(null);
       const [activeCredentialCategory, setActiveCredentialCategory] = useState("certification");
       const [selectedInternshipPhoto, setSelectedInternshipPhoto] = useState(null);
+      const [selectedEducationCertificate, setSelectedEducationCertificate] = useState(null);
       const [internshipPhotoOverrides, setInternshipPhotoOverrides] = useState({});
       const [isManagingInternshipPhotos, setIsManagingInternshipPhotos] = useState(false);
       const [internshipPhotoMessage, setInternshipPhotoMessage] = useState("");
@@ -1244,6 +1245,7 @@
       const totalSlides = slideLabels.length;
       const audioRef = useRef(null);
       const internshipPhotoTriggerRef = useRef(null);
+      const educationCertificateTriggerRef = useRef(null);
       const internshipPhotoUrlsRef = useRef(new Set());
       const internshipPhotoOverrideUrlsRef = useRef({});
       const internshipPhotoEditsRef = useRef(new Set());
@@ -1282,7 +1284,7 @@
 
       useEffect(() => {
         const handleKeyDown = (e) => {
-          if (viewMode !== 'slides' || selectedInternshipPhoto) return;
+          if (viewMode !== 'slides' || selectedInternshipPhoto || selectedEducationCertificate) return;
           if (e.key === 'ArrowRight' || e.key === ' ') {
             e.preventDefault(); nextSlide();
           } else if (e.key === 'ArrowLeft') {
@@ -1291,7 +1293,7 @@
         };
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
-      }, [viewMode, selectedInternshipPhoto]);
+      }, [viewMode, selectedInternshipPhoto, selectedEducationCertificate]);
 
       useEffect(() => {
         if (currentSlide !== 3 || viewMode !== 'slides') {
@@ -2049,6 +2051,23 @@
                             activities: [
                               "Peserta Duta Sadar Hukum; masuk 10 besar dan menerima penghargaan/sertifikat.",
                               "Peserta Debat Bahasa Indonesia tingkat kabupaten."
+                            ],
+                            certificates: [
+                              {
+                                title: "Sertifikat Praktek Kerja Lapangan",
+                                issuer: "Balai Penyuluhan Kecamatan Serbajadi",
+                                year: "2021",
+                                detail: "Prakerin Agribisnis Tanaman Pangan dan Hortikultura · 23 Januari–20 April 2021",
+                                src: "Sertifikat Praktek Kerja Lapangan SMK.jpg",
+                                alt: "Sertifikat Praktek Kerja Lapangan Jemeli dari Balai Penyuluhan Kecamatan Serbajadi"
+                              },
+                              {
+                                title: "Peserta Seleksi Duta Sadar Hukum Antar SMA/SMK se-Kabupaten Aceh Timur",
+                                issuer: "Cabang Dinas Pendidikan Wilayah Aceh Timur",
+                                year: "2019",
+                                src: "Sertifikat Duta Sadar Hukum SMK.jpg",
+                                alt: "Sertifikat peserta Seleksi Duta Sadar Hukum Jemeli tahun 2019"
+                              }
                             ]
                           },
                           {
@@ -2099,6 +2118,43 @@
                                 <p className="mt-1 text-xs text-slate-400">Informasi kegiatan dan prestasi akan ditambahkan.</p>
                               )}
                             </div>
+                            {education.certificates && (
+                              <section className="mt-4 border-t border-slate-700/80 pt-3" aria-label={`Sertifikat ${education.institution}`}>
+                                <h4 className="text-xs font-semibold text-slate-200">Sertifikat</h4>
+                                <ul className="mt-2 space-y-2 text-xs leading-relaxed text-slate-300">
+                                  {education.certificates.map((certificate) => (
+                                    <li key={certificate.title} className="rounded-xl border border-amber-500/20 bg-amber-500/5 p-3">
+                                      <p className="font-semibold text-amber-200">{certificate.title} ({certificate.year})</p>
+                                      <p className="mt-0.5 text-slate-400">{certificate.issuer}</p>
+                                      {certificate.detail && <p className="mt-0.5 text-slate-400">{certificate.detail}</p>}
+                                      <button
+                                        type="button"
+                                        onClick={(event) => {
+                                          educationCertificateTriggerRef.current = event.currentTarget;
+                                          setSelectedEducationCertificate({
+                                            src: certificate.src,
+                                            alt: certificate.alt,
+                                            caption: `${certificate.title} · ${certificate.issuer} (${certificate.year})`
+                                          });
+                                        }}
+                                        className="mt-3 block w-full overflow-hidden rounded-lg border border-amber-500/20 bg-navy-950 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-amber-300"
+                                        aria-label={`Perbesar ${certificate.title}`}
+                                      >
+                                        <img
+                                          src={certificate.src}
+                                          alt={certificate.alt}
+                                          loading="lazy"
+                                          className="max-h-56 w-full object-contain transition duration-200 hover:scale-[1.02]"
+                                        />
+                                        <span className="block border-t border-slate-700/80 px-3 py-2 text-center text-[10px] font-semibold text-amber-200">
+                                          Klik foto untuk memperbesar
+                                        </span>
+                                      </button>
+                                    </li>
+                                  ))}
+                                </ul>
+                              </section>
+                            )}
                             {education.institution === "SD Negeri Bunin" && (
                               <section className="mt-4 border-t border-slate-700/80 pt-3" aria-labelledby="primary-school-gallery-title">
                                 <h4 id="primary-school-gallery-title" className="text-xs font-semibold text-slate-200">
@@ -2521,6 +2577,13 @@
               photo={selectedInternshipPhoto}
               onClose={() => setSelectedInternshipPhoto(null)}
               triggerRef={internshipPhotoTriggerRef}
+            />
+          )}
+          {selectedEducationCertificate && (
+            <InternshipPhotoLightbox
+              photo={selectedEducationCertificate}
+              onClose={() => setSelectedEducationCertificate(null)}
+              triggerRef={educationCertificateTriggerRef}
             />
           )}
 
