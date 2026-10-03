@@ -1283,9 +1283,13 @@
         try {
           context = new AudioContextConstructor();
           await context.resume();
+          if (context.state !== "running") {
+            throw new Error("AudioContext tidak berhasil masuk ke status running.");
+          }
+
           const masterGain = context.createGain();
           masterGain.gain.setValueAtTime(0, context.currentTime);
-          masterGain.gain.setTargetAtTime(0.16, context.currentTime, 0.8);
+          masterGain.gain.setTargetAtTime(0.32, context.currentTime, 0.8);
           masterGain.connect(context.destination);
 
           const progression = [
@@ -1300,7 +1304,7 @@
             oscillator.type = index === 3 ? "triangle" : "sine";
             oscillator.frequency.setValueAtTime(frequency, startTime);
             voiceGain.gain.setValueAtTime(0, startTime);
-            voiceGain.gain.linearRampToValueAtTime(index === 3 ? 0.045 : 0.09, startTime + 2.5);
+            voiceGain.gain.linearRampToValueAtTime(index === 3 ? 0.07 : 0.15, startTime + 1.5);
             oscillator.connect(voiceGain);
             voiceGain.connect(masterGain);
             oscillator.start(startTime);
