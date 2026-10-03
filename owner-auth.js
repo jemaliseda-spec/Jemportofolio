@@ -2,9 +2,8 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/fireba
 import {
   getAuth,
   GoogleAuthProvider,
-  getRedirectResult,
   onAuthStateChanged,
-  signInWithRedirect,
+  signInWithPopup,
   signOut
 } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
 import {
@@ -54,17 +53,17 @@ if (!isFirebaseConfigured) {
     provider.setCustomParameters({ prompt: "select_account" });
 
     signInButton.disabled = false;
-    setStatus("Siap masuk menggunakan akun Google yang sudah diizinkan.");
+    setStatus("Siap membuka login melalui jendela Google.");
 
     signInButton.addEventListener("click", async () => {
       signInButton.disabled = true;
       authErrorMessage = "";
-      setStatus("Membuka login Google...");
+      setStatus("Membuka jendela login Google...");
       try {
-        await signInWithRedirect(auth, provider);
+        await signInWithPopup(auth, provider);
       } catch (error) {
         signInButton.disabled = false;
-        authErrorMessage = errorWithCode("Login Google gagal. Periksa koneksi dan pengaturan Firebase.", error);
+        authErrorMessage = errorWithCode("Login Google gagal. Izinkan jendela pop-up dan periksa pengaturan Firebase.", error);
         showLogin(authErrorMessage, true);
       }
     });
@@ -113,11 +112,6 @@ if (!isFirebaseConfigured) {
         signInButton.disabled = false;
         showLogin(authErrorMessage, true);
       }
-    });
-
-    getRedirectResult(auth).catch((error) => {
-      authErrorMessage = errorWithCode("Login Google gagal. Pastikan provider Google aktif dan domain situs terdaftar di Firebase.", error);
-      showLogin(authErrorMessage, true);
     });
   } catch (error) {
     signInButton.disabled = true;
