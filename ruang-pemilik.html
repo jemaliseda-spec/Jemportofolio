@@ -47,7 +47,7 @@
       </div>
 
       <section class="rounded-2xl border border-amber-400/30 bg-amber-400/10 p-4 text-sm leading-6 text-amber-100">
-        Dashboard ini memakai login Google dan pemeriksaan akses Firestore. Situs portofolio tetap statis: pesanan pelanggan tidak tersimpan di sini. Simulator hanya memakai saldo virtual di browser ini; tidak terhubung ke AI, data harga pasar, broker, atau transaksi uang nyata.
+        Dashboard ini memakai login Google dan pemeriksaan akses Firestore. Situs portofolio tetap statis: pesanan pelanggan tidak tersimpan di sini. Simulator menggunakan grafik pasar publik untuk referensi, tetapi hanya mencatat transaksi virtual di browser ini; tidak terhubung ke broker, AI, atau transaksi uang nyata.
       </section>
 
       <section aria-labelledby="services-title" class="rounded-2xl border border-cyan-500/20 bg-slate-900 p-5 sm:p-7">
@@ -65,12 +65,31 @@
           <div>
             <p class="text-xs font-semibold uppercase tracking-[0.18em] text-indigo-300">Mode belajar | simulasi virtual</p>
             <h2 id="simulator-title" class="mt-1 text-2xl font-bold text-white">Simulator transaksi saham</h2>
-            <p class="mt-2 max-w-3xl text-sm leading-6 text-slate-400">Masukkan kode saham dan harga latihan sendiri untuk mencatat transaksi virtual. Harga tidak diambil dari pasar, biaya transaksi dan pajak tidak dihitung, dan hasil simulasi bukan rekomendasi atau jaminan profit. Data disimpan hanya di browser/perangkat ini.</p>
+            <p class="mt-2 max-w-3xl text-sm leading-6 text-slate-400">Gunakan grafik publik sebagai referensi, lalu masukkan harga yang terlihat untuk mencatat transaksi virtual. Data harga dapat tertunda atau tidak tersedia. Biaya transaksi dan pajak tidak dihitung; hasil simulasi bukan rekomendasi atau jaminan profit. Data simulasi tersimpan hanya di browser/perangkat ini.</p>
           </div>
           <button id="reset-simulator" type="button" class="rounded-lg border border-rose-400/40 px-3 py-2 text-xs font-semibold text-rose-200 hover:bg-rose-400/10">Reset simulasi</button>
         </div>
 
         <p id="simulator-status" class="mt-4 hidden rounded-lg border px-3 py-2 text-sm" role="status" aria-live="polite"></p>
+
+        <div class="mt-5 rounded-xl border border-slate-800 bg-slate-950 p-4">
+          <div class="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <h3 class="text-sm font-bold text-white">Grafik pasar saham Indonesia</h3>
+              <p class="mt-1 text-xs leading-5 text-slate-400">Data dari TradingView; ketersediaan dan waktu pembaruan bergantung pada sumber bursa. Salin harga dari grafik ke kolom simulasi.</p>
+            </div>
+            <a id="market-data-link" href="https://www.tradingview.com/symbols/IDX-BBRI/" target="_blank" rel="noopener noreferrer" class="rounded-lg border border-slate-700 px-3 py-2 text-xs font-semibold text-indigo-200 hover:border-indigo-400">Buka di TradingView ↗</a>
+          </div>
+          <div class="mt-3 flex flex-wrap gap-2" aria-label="Pilih saham populer">
+            <button type="button" data-market-symbol="BBRI" class="rounded-lg border border-indigo-400/50 bg-indigo-400/10 px-3 py-1.5 text-xs font-semibold text-indigo-100 hover:bg-indigo-400/20">BBRI</button>
+            <button type="button" data-market-symbol="BBCA" class="rounded-lg border border-slate-700 px-3 py-1.5 text-xs font-semibold text-slate-300 hover:border-indigo-400">BBCA</button>
+            <button type="button" data-market-symbol="BMRI" class="rounded-lg border border-slate-700 px-3 py-1.5 text-xs font-semibold text-slate-300 hover:border-indigo-400">BMRI</button>
+            <button type="button" data-market-symbol="TLKM" class="rounded-lg border border-slate-700 px-3 py-1.5 text-xs font-semibold text-slate-300 hover:border-indigo-400">TLKM</button>
+            <button type="button" data-market-symbol="ASII" class="rounded-lg border border-slate-700 px-3 py-1.5 text-xs font-semibold text-slate-300 hover:border-indigo-400">ASII</button>
+          </div>
+          <div id="market-chart" class="mt-3 h-[420px] overflow-hidden rounded-lg" aria-label="Grafik saham yang dipilih"></div>
+          <p id="market-chart-status" class="mt-2 text-xs text-slate-500" role="status" aria-live="polite">Grafik akan dimuat setelah akses pemilik diverifikasi.</p>
+        </div>
 
         <div class="mt-5 grid gap-3 sm:grid-cols-3">
           <article class="rounded-xl border border-slate-800 bg-slate-950 p-4">
@@ -89,9 +108,9 @@
 
         <form id="trade-form" class="mt-5 grid gap-3 rounded-xl border border-slate-800 bg-slate-950/70 p-4 sm:grid-cols-2 lg:grid-cols-5">
           <label class="text-xs font-semibold text-slate-300">Kode saham
-            <input id="ticker" maxlength="12" required autocomplete="off" placeholder="Contoh: BBRI" class="mt-1 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2.5 text-sm uppercase text-white outline-none focus:border-indigo-400">
+            <input id="ticker" maxlength="12" required autocomplete="off" value="BBRI" placeholder="Contoh: BBRI" class="mt-1 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2.5 text-sm uppercase text-white outline-none focus:border-indigo-400">
           </label>
-          <label class="text-xs font-semibold text-slate-300">Harga simulasi / lembar (Rp)
+          <label class="text-xs font-semibold text-slate-300">Harga dari grafik / lembar (Rp)
             <input id="price" type="number" min="1" step="1" required inputmode="numeric" class="mt-1 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2.5 text-sm text-white outline-none focus:border-indigo-400">
           </label>
           <label class="text-xs font-semibold text-slate-300">Jumlah lembar
@@ -105,6 +124,7 @@
           </label>
           <button class="self-end rounded-lg bg-indigo-400 px-4 py-2.5 text-sm font-bold text-slate-950 hover:bg-indigo-300" type="submit">Catat simulasi</button>
         </form>
+        <p class="mt-2 text-xs leading-5 text-slate-500">Pilih saham, baca harga pada grafik, lalu masukkan harganya di atas. Ini tidak mengirim order ke bursa.</p>
 
         <div class="mt-6 grid gap-5 lg:grid-cols-2">
           <div>
@@ -138,6 +158,11 @@
       document.addEventListener("owner-dashboard-authenticated", () => {
       const storageKey = "jemeli.paper-trading.v1";
       const initialState = () => ({ cash: 100000, positions: {}, history: [] });
+      const marketChartStatus = document.getElementById("market-chart-status");
+      const marketDataLink = document.getElementById("market-data-link");
+      const tickerInput = document.getElementById("ticker");
+      let chartScriptPromise;
+      let selectedChartSymbol;
       const formatRupiah = (amount) => new Intl.NumberFormat("id-ID", {
         style: "currency",
         currency: "IDR",
@@ -179,6 +204,77 @@
           return initialState();
         }
       };
+
+      const setMarketSymbol = (ticker) => {
+          const symbol = ticker.trim().toUpperCase();
+          if (!/^[A-Z0-9]{4,6}$/.test(symbol)) {
+            marketChartStatus.textContent = "Masukkan kode saham IDX 4-6 karakter untuk menampilkan grafik.";
+            return;
+          }
+
+          selectedChartSymbol = symbol;
+          marketDataLink.href = `https://www.tradingview.com/symbols/IDX-${encodeURIComponent(symbol)}/`;
+          marketChartStatus.textContent = `Memuat grafik IDX:${symbol} dari TradingView...`;
+          const renderChart = () => {
+            if (selectedChartSymbol !== symbol) return;
+            document.getElementById("market-chart").replaceChildren();
+            new window.TradingView.widget({
+              autosize: true,
+              symbol: `IDX:${symbol}`,
+              interval: "D",
+              timezone: "Asia/Jakarta",
+              theme: "dark",
+              style: "1",
+              locale: "id",
+              enable_publishing: false,
+              hide_top_toolbar: false,
+              hide_legend: false,
+              allow_symbol_change: false,
+              container_id: "market-chart",
+              withdateranges: true,
+              support_host: "https://www.tradingview.com"
+            });
+            marketChartStatus.textContent = "Grafik publik dari TradingView. Harga dapat tertunda; periksa sumber sebelum mencatat simulasi.";
+          };
+
+          if (window.TradingView && window.TradingView.widget) {
+            renderChart();
+            return;
+          }
+
+          if (!chartScriptPromise) {
+            chartScriptPromise = new Promise((resolve, reject) => {
+              const script = document.createElement("script");
+              script.src = "https://s3.tradingview.com/tv.js";
+              script.async = true;
+              script.onload = resolve;
+              script.onerror = () => reject(new Error("TradingView chart script failed to load."));
+              document.head.appendChild(script);
+            });
+          }
+
+          chartScriptPromise.then(renderChart).catch(() => {
+            chartScriptPromise = null;
+            marketChartStatus.textContent = "Grafik tidak dapat dimuat. Coba tautan TradingView atau periksa koneksi internet.";
+            showStatus("Sumber grafik pasar sedang tidak tersedia. Simulasi virtual tetap dapat digunakan dengan harga yang Anda masukkan.", true);
+          });
+        };
+
+        document.querySelectorAll("[data-market-symbol]").forEach((button) => {
+          button.addEventListener("click", () => {
+            const symbol = button.dataset.marketSymbol;
+            tickerInput.value = symbol;
+            setMarketSymbol(symbol);
+            document.querySelectorAll("[data-market-symbol]").forEach((item) => {
+              item.className = item === button
+                ? "rounded-lg border border-indigo-400/50 bg-indigo-400/10 px-3 py-1.5 text-xs font-semibold text-indigo-100 hover:bg-indigo-400/20"
+                : "rounded-lg border border-slate-700 px-3 py-1.5 text-xs font-semibold text-slate-300 hover:border-indigo-400";
+            });
+          });
+        });
+
+      tickerInput.addEventListener("change", () => setMarketSymbol(tickerInput.value));
+      setMarketSymbol(tickerInput.value);
 
       const render = () => {
         let marketValue = 0;
@@ -261,10 +357,14 @@
         }
         state.history.unshift({ ticker, price, quantity, action, at: new Date().toISOString() });
         state.history = state.history.slice(0, 20);
-        persist();
+        const saved = persist();
         render();
-        showStatus("Transaksi virtual dicatat. Tidak ada order atau uang sungguhan yang digunakan.");
+        showStatus(saved
+          ? "Transaksi virtual dicatat. Tidak ada order atau uang sungguhan yang digunakan."
+          : "Transaksi dicatat sementara, tetapi tidak tersimpan di browser. Tidak ada order atau uang sungguhan yang digunakan.",
+        !saved);
         event.target.reset();
+        tickerInput.value = ticker;
       });
 
       document.getElementById("reset-simulator").addEventListener("click", () => {
