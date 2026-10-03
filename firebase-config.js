@@ -2,7 +2,8 @@ export const firebaseConfig = {
   apiKey: "AIzaSyDyZozJRTST0M9875cY5WVNt8uXc1bn08s",
   authDomain: "jemeli-owner-dashboard-5b497.firebaseapp.com",
   projectId: "jemeli-owner-dashboard-5b497",
-  appId: "1:848593341263:web:4adf6f1708abb0c37b533a",:
+  appId: "1:848593341263:web:4adf6f1708abb0c37b533a",
+  messagingSenderId: "848593341263"
 };
 
 export const isFirebaseConfigured = Object.values(firebaseConfig).every((value) =>
