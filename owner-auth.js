@@ -20,6 +20,12 @@ const status = document.getElementById("auth-status");
 const signInButton = document.getElementById("google-sign-in");
 const signOutButton = document.getElementById("owner-sign-out");
 let accessCheck = 0;
+let authErrorMessage = "";
+
+const errorWithCode = (message, error) => {
+  const code = typeof error?.code === "string" ? error.code : "unknown";
+  return `${message} (Kode Firebase: ${code})`;
+};
 
 const setStatus = (message, isError = false) => {
   status.textContent = message;
@@ -52,12 +58,14 @@ if (!isFirebaseConfigured) {
 
     signInButton.addEventListener("click", async () => {
       signInButton.disabled = true;
+      authErrorMessage = "";
       setStatus("Membuka login Google...");
       try {
         await signInWithRedirect(auth, provider);
       } catch (error) {
         signInButton.disabled = false;
-        showLogin("Login Google gagal. Periksa koneksi dan pengaturan Authorized domains Firebase.", true);
+        authErrorMessage = errorWithCode("Login Google gagal. Periksa koneksi dan pengaturan Firebase.", error);
+        showLogin(authErrorMessage, true);
       }
     });
 
@@ -74,20 +82,22 @@ if (!isFirebaseConfigured) {
       const requestId = ++accessCheck;
       if (!user) {
         signInButton.disabled = false;
-        showLogin("Masuk dengan akun Google pemilik yang telah didaftarkan.");
+        showLogin(authErrorMessage || "Masuk dengan akun Google pemilik yang telah didaftarkan.", Boolean(authErrorMessage));
         return;
       }
 
+      authErrorMessage = "";
       signInButton.disabled = true;
       showLogin("Memeriksa akses pemilik...");
       try {
         const adminDocument = await getDoc(doc(firestore, "dashboardAdmins", user.uid));
         if (requestId !== accessCheck) return;
         if (!adminDocument.exists() || adminDocument.data().active !== true) {
+          authErrorMessage = "Login Google berhasil, tetapi akun ini belum diberi akses pemilik. Periksa UID dan dokumen dashboardAdmins di Firebase.";
           await signOut(auth);
           if (requestId === accessCheck) {
             signInButton.disabled = false;
-            showLogin("Akun Google ini belum diberi akses pemilik. Periksa UID dan dokumen dashboardAdmins di Firebase.", true);
+            showLogin(authErrorMessage, true);
           }
           return;
         }
@@ -98,14 +108,16 @@ if (!isFirebaseConfigured) {
         document.dispatchEvent(new Event("owner-dashboard-authenticated"));
       } catch (error) {
         if (requestId !== accessCheck) return;
+        authErrorMessage = errorWithCode("Login Google berhasil, tetapi akses Firestore tidak dapat diverifikasi. Periksa Firestore Rules dan koneksi internet.", error);
         await signOut(auth);
         signInButton.disabled = false;
-        showLogin("Akses tidak dapat diverifikasi. Periksa Firestore, aturan keamanannya, dan koneksi internet.", true);
+        showLogin(authErrorMessage, true);
       }
     });
 
-    getRedirectResult(auth).catch(() => {
-      showLogin("Login Google gagal. Pastikan provider Google aktif dan domain situs terdaftar di Firebase.", true);
+    getRedirectResult(auth).catch((error) => {
+      authErrorMessage = errorWithCode("Login Google gagal. Pastikan provider Google aktif dan domain situs terdaftar di Firebase.", error);
+      showLogin(authErrorMessage, true);
     });
   } catch (error) {
     signInButton.disabled = true;
