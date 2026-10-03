@@ -506,9 +506,6 @@
       });
     }
 
-    // YouTube Video ID for: Alan Walker - Different World
-    const YOUTUBE_VIDEO_ID = "dhYOPzcsbGM";
-
     // Interactive Blue Background Canvas
     function BlueBackgroundCanvas() {
       const canvasRef = useRef(null);
@@ -1230,6 +1227,8 @@
       const [isManagingInternshipPhotos, setIsManagingInternshipPhotos] = useState(false);
       const [internshipPhotoMessage, setInternshipPhotoMessage] = useState("");
       const [internshipPhotoMessageIsError, setInternshipPhotoMessageIsError] = useState(false);
+      const [isAmbientPlaying, setIsAmbientPlaying] = useState(false);
+      const [ambientSoundError, setAmbientSoundError] = useState("");
 
       const slideLabels = [
         "Profil",
@@ -1243,6 +1242,8 @@
         "Kontak"
       ];
       const totalSlides = slideLabels.length;
+      const ambientAudioRef = useRef(null);
+      const ambientStartRef = useRef(false);
       const internshipPhotoTriggerRef = useRef(null);
       const educationCertificateTriggerRef = useRef(null);
       const internshipPhotoUrlsRef = useRef(new Set());
@@ -1251,6 +1252,103 @@
 
       const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % totalSlides);
       const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + totalSlides) % totalSlides);
+
+      const toggleAmbientSound = async () => {
+        if (ambientAudioRef.current) {
+          const audio = ambientAudioRef.current;
+          clearInterval(audio.intervalId);
+          audio.masterGain.gain.cancelScheduledValues(audio.context.currentTime);
+          audio.masterGain.gain.setTargetAtTime(0, audio.context.currentTime, 0.25);
+          ambientAudioRef.current = null;
+          setIsAmbientPlaying(false);
+          setAmbientSoundError("");
+          window.setTimeout(() => {
+            audio.context.close().catch((error) => {
+              console.error("Gagal menutup suara ambient:", error);
+            });
+          }, 1200);
+          return;
+        }
+
+        if (ambientStartRef.current) return;
+
+        const AudioContextConstructor = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContextConstructor) {
+          setAmbientSoundError("Browser ini tidak mendukung pemutar audio ambient.");
+          return;
+        }
+
+        ambientStartRef.current = true;
+        let context;
+        try {
+          context = new AudioContextConstructor();
+          await context.resume();
+          const masterGain = context.createGain();
+          masterGain.gain.setValueAtTime(0, context.currentTime);
+          masterGain.gain.setTargetAtTime(0.16, context.currentTime, 0.8);
+          masterGain.connect(context.destination);
+
+          const progression = [
+            [130.81, 164.81, 196.00, 246.94],
+            [110.00, 130.81, 164.81, 196.00],
+            [87.31, 110.00, 130.81, 164.81],
+            [98.00, 123.47, 146.83, 196.00]
+          ];
+          const createChord = (frequencies, startTime) => frequencies.map((frequency, index) => {
+            const oscillator = context.createOscillator();
+            const voiceGain = context.createGain();
+            oscillator.type = index === 3 ? "triangle" : "sine";
+            oscillator.frequency.setValueAtTime(frequency, startTime);
+            voiceGain.gain.setValueAtTime(0, startTime);
+            voiceGain.gain.linearRampToValueAtTime(index === 3 ? 0.045 : 0.09, startTime + 2.5);
+            oscillator.connect(voiceGain);
+            voiceGain.connect(masterGain);
+            oscillator.start(startTime);
+            return { oscillator, gain: voiceGain };
+          });
+          const fadeChord = (voices, endTime) => voices.forEach(({ oscillator, gain }) => {
+            gain.gain.cancelScheduledValues(context.currentTime);
+            gain.gain.setTargetAtTime(0, context.currentTime, 0.8);
+            oscillator.stop(endTime);
+          });
+
+          let chordIndex = 0;
+          let voices = createChord(progression[chordIndex], context.currentTime);
+          const intervalId = window.setInterval(() => {
+            if (ambientAudioRef.current?.context !== context) return;
+            const now = context.currentTime;
+            fadeChord(voices, now + 3.5);
+            chordIndex = (chordIndex + 1) % progression.length;
+            voices = createChord(progression[chordIndex], now);
+          }, 10000);
+
+          ambientAudioRef.current = { context, masterGain, intervalId };
+          setIsAmbientPlaying(true);
+          setAmbientSoundError("");
+        } catch (error) {
+          if (context && context.state !== "closed") {
+            try {
+              await context.close();
+            } catch (closeError) {
+              console.error("Gagal menutup pemutar suara ambient:", closeError);
+            }
+          }
+          setIsAmbientPlaying(false);
+          setAmbientSoundError("Suara ambient gagal diputar. Periksa pengaturan audio browser lalu coba lagi.");
+          console.error("Gagal memulai suara ambient:", error);
+        } finally {
+          ambientStartRef.current = false;
+        }
+      };
+
+      useEffect(() => () => {
+        if (ambientAudioRef.current) {
+          clearInterval(ambientAudioRef.current.intervalId);
+          ambientAudioRef.current.context.close().catch((error) => {
+            console.error("Gagal menutup suara ambient:", error);
+          });
+        }
+      }, []);
 
       useEffect(() => {
         let interval = null;
@@ -1530,6 +1628,20 @@
 
               {/* Social Media Quick Links and CV */}
               <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={toggleAmbientSound}
+                  aria-pressed={isAmbientPlaying}
+                  title="Suara ambient orisinal, dibuat di browser, mati secara default"
+                  className={`rounded-xl border px-3 py-1.5 text-xs font-semibold transition-colors ${
+                    isAmbientPlaying
+                      ? "border-cyan-400/50 bg-cyan-400/15 text-cyan-200"
+                      : "border-slate-700 bg-slate-900 text-slate-300 hover:border-cyan-400/40 hover:text-cyan-200"
+                  }`}
+                >
+                  {ambientSoundError ? "Suara tidak tersedia" : isAmbientPlaying ? "♫ Suasana: Nyala" : "♫ Suasana: Mati"}
+                </button>
+
                 {/* Social Media Quick Links */}
                 <a
                   href={LINKEDIN_URL}
@@ -1560,6 +1672,9 @@
                   Unduh CV ATS
                 </button>
               </div>
+              {ambientSoundError && (
+                <p className="sr-only" role="status" aria-live="polite">{ambientSoundError}</p>
+              )}
             </div>
           </header>
 
