@@ -1219,7 +1219,7 @@
 
     // Main App Component
     function App() {
-      const [viewMode, setViewMode] = useState('slides'); // 'slides' | 'landing'
+      const [viewMode, setViewMode] = useState('landing'); // 'slides' | 'landing'
       const [currentSlide, setCurrentSlide] = useState(0);
       const [isPlaying, setIsPlaying] = useState(false);
       const [selectedCert, setSelectedCert] = useState(null);
@@ -2499,7 +2499,16 @@
                       <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
                         Lulusan Politeknik Negeri Lhokseumawe dengan pengalaman magang di bidang administrasi pembiayaan dan layanan nasabah di BTN. Memiliki dasar akademik dalam akuntansi pemerintahan, audit sektor publik, serta analisis data menggunakan EViews 12.
                       </p>
+                      <p className="text-xs sm:text-sm leading-relaxed text-cyan-100">
+                        Terbuka untuk peluang entry-level di administrasi keuangan, operasional perbankan, dan keuangan sektor publik.
+                      </p>
                       <div className="flex flex-wrap gap-2 pt-2">
+                        <a href="#scroll-featured-work" className="rounded-lg bg-gradient-to-r from-cyan-500 to-blue-600 px-3 py-2 text-xs font-bold text-navy-950 transition hover:from-cyan-400 hover:to-blue-500">
+                          Lihat karya pilihan
+                        </a>
+                        <button type="button" onClick={handleDownloadCV} className="rounded-lg border border-cyan-500/30 bg-cyan-500/10 px-3 py-2 text-xs font-semibold text-cyan-200 transition hover:bg-cyan-500/20">
+                          Unduh CV ATS
+                        </button>
                         <a href={PDDIKTI_URL} target="_blank" rel="noopener noreferrer" className="rounded-lg border border-cyan-500/30 bg-cyan-500/10 px-3 py-2 text-xs font-semibold text-cyan-200 transition hover:bg-cyan-500/20">
                           Verifikasi pendidikan ↗
                         </a>
@@ -2510,6 +2519,52 @@
                     </div>
                   </div>
                 </div>
+
+                <section id="scroll-featured-work" aria-labelledby="scroll-featured-work-title">
+                  <div className="mb-4 max-w-3xl">
+                    <p className="text-xs font-semibold uppercase tracking-widest text-cyan-400">Bukti kompetensi</p>
+                    <h2 id="scroll-featured-work-title" className="mt-1 text-2xl font-bold text-white sm:text-3xl">Karya dan pengalaman pilihan</h2>
+                    <p className="mt-2 text-sm leading-relaxed text-slate-400">
+                      Contoh di bawah berasal dari tugas akhir, magang MBKM, dan kegiatan kewirausahaan mahasiswa. Masing-masing diberi konteks agar peran dan sumber pengalamannya jelas.
+                    </p>
+                  </div>
+                  <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
+                    <article className="glass-panel rounded-3xl border border-indigo-500/20 p-6">
+                      <span className="inline-flex rounded-full border border-indigo-400/30 bg-indigo-400/10 px-3 py-1 text-[11px] font-semibold text-indigo-200">Proyek akademik · Tugas akhir</span>
+                      <h3 className="mt-4 text-lg font-bold text-white">Analisis belanja modal infrastruktur di Aceh</h3>
+                      <p className="mt-2 text-sm leading-relaxed text-slate-300">
+                        Menganalisis hubungan DAU, DAK Fisik, dan DOK dengan realisasi belanja modal infrastruktur menggunakan regresi data panel Fixed Effect Model (FEM) di EViews 12.
+                      </p>
+                      <p className="mt-3 text-xs leading-relaxed text-slate-400">Nilai tugas akhir: A. Hasil akademik ini bukan pengalaman kerja atau rekomendasi kebijakan.</p>
+                      <div className="mt-5 flex flex-wrap gap-2">
+                        <a href={PUBLIKASI_TA_URL} target="_blank" rel="noopener noreferrer" className="rounded-lg border border-indigo-400/30 px-3 py-2 text-xs font-semibold text-indigo-200 transition hover:bg-indigo-400/10">Lihat katalog tugas akhir ↗</a>
+                        <a href={JURNAL_PUBLIKASI_URL} target="_blank" rel="noopener noreferrer" className="rounded-lg border border-slate-700 px-3 py-2 text-xs font-semibold text-slate-200 transition hover:border-indigo-400/50">Buka publikasi ↗</a>
+                      </div>
+                    </article>
+
+                    <article className="glass-panel rounded-3xl border border-blue-500/20 p-6">
+                      <span className="inline-flex rounded-full border border-blue-400/30 bg-blue-400/10 px-3 py-1 text-[11px] font-semibold text-blue-200">Pengalaman magang · MBKM</span>
+                      <h3 className="mt-4 text-lg font-bold text-white">Administrasi pembiayaan dan layanan nasabah</h3>
+                      <p className="mt-2 text-sm leading-relaxed text-slate-300">PT Bank Tabungan Negara (Persero) Tbk · Februari–Juli 2025</p>
+                      <ul className="mt-3 space-y-2 text-xs leading-relaxed text-slate-300">
+                        <li>• Verifikasi dokumen KPR, pemeriksaan LPA, dan digitalisasi berkas.</li>
+                        <li>• Mendukung layanan nasabah serta proses rekening KIP Kuliah.</li>
+                        <li>• Membantu pengecekan progres fisik pembangunan perumahan.</li>
+                      </ul>
+                      <p className="mt-3 text-xs leading-relaxed text-slate-400">Ringkasan tugas magang; tidak memuat data nasabah atau dokumen internal.</p>
+                    </article>
+
+                    <article className="glass-panel rounded-3xl border border-emerald-500/20 p-6">
+                      <span className="inline-flex rounded-full border border-emerald-400/30 bg-emerald-400/10 px-3 py-1 text-[11px] font-semibold text-emerald-200">Kegiatan mahasiswa · Bisnis Fest 2025</span>
+                      <h3 className="mt-4 text-lg font-bold text-white">Promosi dan pemasaran produk kewirausahaan</h3>
+                      <p className="mt-2 text-sm leading-relaxed text-slate-300">
+                        Berpartisipasi dalam kegiatan mahasiswa yang memamerkan dan memasarkan produk Madu Uteun Aseuli Seuramoe Mekah.
+                      </p>
+                      <p className="mt-3 text-xs leading-relaxed text-slate-400">Pengalaman kegiatan kampus, bukan usaha atau pekerjaan profesional yang diklaim sebagai klien.</p>
+                      <a href="#scroll-skills-title" className="mt-5 inline-flex rounded-lg border border-emerald-400/30 px-3 py-2 text-xs font-semibold text-emerald-200 transition hover:bg-emerald-400/10">Lihat bidang kompetensi ↓</a>
+                    </article>
+                  </div>
+                </section>
 
                 <section aria-label="Pendidikan dan pengalaman" className="grid grid-cols-1 gap-6 md:grid-cols-2">
                   <article className="glass-panel rounded-3xl border border-cyan-500/20 p-6 sm:p-8">
@@ -2577,6 +2632,25 @@
                         </button>
                       </article>
                     ))}
+                  </div>
+                </section>
+
+                <section aria-labelledby="scroll-contact-title" className="glass-panel rounded-3xl border border-cyan-500/20 p-6 text-center sm:p-8">
+                  <p className="text-xs font-semibold uppercase tracking-widest text-cyan-400">Kontak</p>
+                  <h2 id="scroll-contact-title" className="mt-1 text-2xl font-bold text-white">Terbuka untuk peluang dan diskusi profesional</h2>
+                  <p className="mx-auto mt-2 max-w-2xl text-sm leading-relaxed text-slate-400">
+                    Silakan hubungi saya untuk kesempatan kerja, kolaborasi, atau informasi lebih lanjut mengenai pengalaman dan karya yang ditampilkan.
+                  </p>
+                  <div className="mt-5 flex flex-wrap justify-center gap-3">
+                    <a href="https://wa.me/6282210518976" target="_blank" rel="noopener noreferrer" className="rounded-lg bg-emerald-500 px-4 py-2.5 text-xs font-bold text-slate-950 transition hover:bg-emerald-400">
+                      Hubungi via WhatsApp
+                    </a>
+                    <a href={LINKEDIN_URL} target="_blank" rel="noopener noreferrer" className="rounded-lg border border-blue-400/30 px-4 py-2.5 text-xs font-semibold text-blue-200 transition hover:bg-blue-400/10">
+                      Buka LinkedIn ↗
+                    </a>
+                    <button type="button" onClick={handleDownloadCV} className="rounded-lg border border-cyan-400/30 px-4 py-2.5 text-xs font-semibold text-cyan-200 transition hover:bg-cyan-400/10">
+                      Unduh CV ATS
+                    </button>
                   </div>
                 </section>
               </div>
