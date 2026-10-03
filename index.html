@@ -1230,7 +1230,6 @@
       const [isManagingInternshipPhotos, setIsManagingInternshipPhotos] = useState(false);
       const [internshipPhotoMessage, setInternshipPhotoMessage] = useState("");
       const [internshipPhotoMessageIsError, setInternshipPhotoMessageIsError] = useState(false);
-      const [isMusicPlaying, setIsMusicPlaying] = useState(true);
 
       const slideLabels = [
         "Profil",
@@ -1244,7 +1243,6 @@
         "Kontak"
       ];
       const totalSlides = slideLabels.length;
-      const audioRef = useRef(null);
       const internshipPhotoTriggerRef = useRef(null);
       const educationCertificateTriggerRef = useRef(null);
       const internshipPhotoUrlsRef = useRef(new Set());
@@ -1261,27 +1259,6 @@
         }
         return () => clearInterval(interval);
       }, [isPlaying]);
-
-      const toggleMusic = () => {
-        if (audioRef.current) {
-          if (isMusicPlaying) {
-            audioRef.current.pause();
-            setIsMusicPlaying(false);
-          } else {
-            audioRef.current.play().then(() => setIsMusicPlaying(true)).catch(() => {});
-          }
-        }
-      };
-
-      useEffect(() => {
-        const playAudio = () => {
-          if (audioRef.current) {
-            audioRef.current.play().then(() => setIsMusicPlaying(true)).catch(() => {});
-          }
-        };
-        window.addEventListener('click', playAudio, { once: true });
-        return () => window.removeEventListener('keydown', handleKeyDown);
-      }, []);
 
       useEffect(() => {
         const handleKeyDown = (e) => {
@@ -1513,9 +1490,6 @@
           
           <BlueBackgroundCanvas />
 
-          {/* HTML5 AUDIO PLAYER: ALAN WALKER MP3 FILE */}
-          <audio ref={audioRef} id="localBgAudio" loop autoPlay src="bg_music.mp3" style={{ display: 'none' }}></audio>
-
           {/* NAVBAR */}
           <header className="fixed top-0 left-0 right-0 z-40 px-4 sm:px-8 py-3.5 no-print">
             <div className="max-w-7xl mx-auto glass-panel rounded-2xl px-4 sm:px-6 py-2.5 flex items-center justify-between border border-cyan-500/20 shadow-xl">
@@ -1554,20 +1528,8 @@
                 </button>
               </div>
 
-              {/* Actions & Alan Walker Music Controller */}
+              {/* Social Media Quick Links and CV */}
               <div className="flex items-center gap-2">
-                <button
-                  onClick={toggleMusic}
-                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-bold transition-all ${
-                    isMusicPlaying
-                      ? 'bg-cyan-500/20 border-cyan-400 text-cyan-300 shadow-md shadow-cyan-500/20 animate-pulse'
-                      : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-white'
-                  }`}
-                  title="Alan Walker - Different World"
-                >
-                  <span>{isMusicPlaying ? '🎵 Alan Walker: ON' : '🔇 Musik: OFF'}</span>
-                </button>
-
                 {/* Social Media Quick Links */}
                 <a
                   href={LINKEDIN_URL}
