@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Ruang Pemilik | Jemeli</title>
+  <script src="analytics.js" defer></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script type="module" src="owner-auth.js"></script>
+</head>
+<body class="min-h-screen bg-slate-950 text-slate-100">
+  <header class="border-b border-slate-800 bg-slate-900/80">
+    <div class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4">
+      <div>
+        <p class="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-400">Ruang Pemilik</p>
+        <h1 class="mt-1 text-xl font-bold text-white">Studio Jemeli</h1>
+      </div>
+      <a href="index.html" class="rounded-lg border border-slate-700 px-3 py-2 text-sm text-slate-300 hover:border-cyan-400 hover:text-white">Kembali ke portofolio</a>
+    </div>
+  </header>
+
+  <main class="mx-auto max-w-6xl space-y-6 px-4 py-8">
+    <section id="owner-login-panel" class="mx-auto max-w-xl rounded-2xl border border-cyan-500/20 bg-slate-900 p-6 shadow-xl sm:p-8">
+      <p class="text-xs font-semibold uppercase tracking-[0.18em] text-cyan-400">Login pemilik</p>
+      <h2 class="mt-1 text-2xl font-bold text-white">Masuk ke Ruang Pemilik</h2>
+      <p class="mt-2 text-sm leading-6 text-slate-400">Gunakan akun Google yang sudah diberi akses oleh pemilik Firebase. Tidak ada formulir pendaftaran publik.</p>
+      <p id="auth-status" class="mt-4 rounded-lg border border-amber-400/30 bg-amber-400/10 px-3 py-2 text-sm leading-6 text-amber-100" role="status" aria-live="polite">Memeriksa konfigurasi login...</p>
+      <button id="google-sign-in" type="button" disabled class="mt-4 w-full rounded-xl bg-cyan-400 px-4 py-3 text-sm font-bold text-slate-950 transition hover:bg-cyan-300 disabled:cursor-not-allowed disabled:opacity-50">
+        Masuk dengan Google
+      </button>
+      <details class="mt-5 rounded-xl border border-slate-800 bg-slate-950/70 p-4">
+        <summary class="cursor-pointer text-sm font-semibold text-slate-200">Petunjuk menyiapkan autentikasi</summary>
+        <ol class="mt-3 list-decimal space-y-2 pl-5 text-xs leading-5 text-slate-400">
+          <li>Buat proyek di <a class="text-cyan-300 underline" href="https://console.firebase.google.com/" target="_blank" rel="noopener noreferrer">Firebase Console</a>, tambahkan aplikasi Web, lalu salin konfigurasi web ke <code class="text-slate-200">firebase-config.js</code>. Nilai konfigurasi web bersifat publik; jangan menaruh service-account key atau rahasia server di file ini.</li>
+          <li>Aktifkan metode masuk Google di Authentication dan tambahkan domain <code class="text-slate-200">jemaliseda-spec.github.io</code> ke Authorized domains. Coba masuk sekali agar akun Google pemilik muncul di daftar Authentication; akses pertama akan ditolak sampai UID didaftarkan.</li>
+          <li>Buat Firestore Database, salin isi <code class="text-slate-200">firestore.rules</code> ke tab Rules lalu terbitkan. Di Firebase Console buat koleksi <code class="text-slate-200">dashboardAdmins</code> dengan ID dokumen sama persis dengan UID akun Google pemilik dan field Boolean <code class="text-slate-200">active: true</code>.</li>
+        </ol>
+      </details>
+      <p class="mt-4 text-xs leading-5 text-amber-200/80">Login ini mengunci tampilan dashboard untuk pengunjung biasa. Karena GitHub Pages menyajikan file statis yang tetap publik, jangan simpan informasi sensitif di halaman ini; data sungguhan harus dilindungi dengan aturan server.</p>
+    </section>
+
+    <section id="owner-dashboard" class="hidden space-y-6">
+      <div class="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-emerald-400/25 bg-emerald-400/5 px-4 py-3">
+        <p class="text-sm text-emerald-100">Login terverifikasi untuk <span id="owner-email" class="font-semibold"></span></p>
+        <button id="owner-sign-out" type="button" class="rounded-lg border border-slate-700 px-3 py-2 text-xs font-semibold text-slate-200 hover:border-rose-400 hover:text-rose-200">Keluar</button>
+      </div>
+
+      <section class="rounded-2xl border border-amber-400/30 bg-amber-400/10 p-4 text-sm leading-6 text-amber-100">
+        Dashboard ini memakai login Google dan pemeriksaan akses Firestore. Situs portofolio tetap statis: pesanan pelanggan tidak tersimpan di sini. Simulator hanya memakai saldo virtual di browser ini; tidak terhubung ke AI, data harga pasar, broker, atau transaksi uang nyata.
+      </section>
+
+      <section aria-labelledby="services-title" class="rounded-2xl border border-cyan-500/20 bg-slate-900 p-5 sm:p-7">
+        <p class="text-xs font-semibold uppercase tracking-[0.18em] text-cyan-400">Layanan kreatif</p>
+        <h2 id="services-title" class="mt-1 text-2xl font-bold text-white">Kelola layanan</h2>
+        <p class="mt-2 max-w-3xl text-sm leading-6 text-slate-400">Gunakan halaman jasa untuk melihat layanan yang ditawarkan dan formulir pesanan untuk meninjau alur pelanggan. Pesanan belum masuk ke dashboard karena website belum memiliki server atau basis data.</p>
+        <div class="mt-4 flex flex-wrap gap-3">
+          <a href="jasa.html" class="rounded-xl bg-cyan-400 px-4 py-2.5 text-sm font-bold text-slate-950 hover:bg-cyan-300">Lihat halaman jasa</a>
+          <a href="buat.html" class="rounded-xl border border-slate-700 px-4 py-2.5 text-sm font-semibold text-slate-200 hover:border-cyan-400">Buka formulir pesanan</a>
+        </div>
+      </section>
+
+      <section aria-labelledby="simulator-title" class="rounded-2xl border border-indigo-500/30 bg-slate-900 p-5 sm:p-7">
+        <div class="flex flex-wrap items-start justify-between gap-3">
+          <div>
+            <p class="text-xs font-semibold uppercase tracking-[0.18em] text-indigo-300">Mode belajar | simulasi virtual</p>
+            <h2 id="simulator-title" class="mt-1 text-2xl font-bold text-white">Simulator transaksi saham</h2>
+            <p class="mt-2 max-w-3xl text-sm leading-6 text-slate-400">Masukkan kode saham dan harga latihan sendiri untuk mencatat transaksi virtual. Harga tidak diambil dari pasar, biaya transaksi dan pajak tidak dihitung, dan hasil simulasi bukan rekomendasi atau jaminan profit. Data disimpan hanya di browser/perangkat ini.</p>
+          </div>
+          <button id="reset-simulator" type="button" class="rounded-lg border border-rose-400/40 px-3 py-2 text-xs font-semibold text-rose-200 hover:bg-rose-400/10">Reset simulasi</button>
+        </div>
+
+        <p id="simulator-status" class="mt-4 hidden rounded-lg border px-3 py-2 text-sm" role="status" aria-live="polite"></p>
+
+        <div class="mt-5 grid gap-3 sm:grid-cols-3">
+          <article class="rounded-xl border border-slate-800 bg-slate-950 p-4">
+            <p class="text-xs text-slate-400">Saldo virtual tersedia</p>
+            <p id="virtual-cash" class="mt-1 text-xl font-bold text-white">-</p>
+          </article>
+          <article class="rounded-xl border border-slate-800 bg-slate-950 p-4">
+            <p class="text-xs text-slate-400">Nilai posisi (harga simulasi)</p>
+            <p id="virtual-value" class="mt-1 text-xl font-bold text-white">-</p>
+          </article>
+          <article class="rounded-xl border border-slate-800 bg-slate-950 p-4">
+            <p class="text-xs text-slate-400">Untung/rugi belum terealisasi</p>
+            <p id="virtual-profit" class="mt-1 text-xl font-bold text-white">-</p>
+          </article>
+        </div>
+
+        <form id="trade-form" class="mt-5 grid gap-3 rounded-xl border border-slate-800 bg-slate-950/70 p-4 sm:grid-cols-2 lg:grid-cols-5">
+          <label class="text-xs font-semibold text-slate-300">Kode saham
+            <input id="ticker" maxlength="12" required autocomplete="off" placeholder="Contoh: BBRI" class="mt-1 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2.5 text-sm uppercase text-white outline-none focus:border-indigo-400">
+          </label>
+          <label class="text-xs font-semibold text-slate-300">Harga simulasi / lembar (Rp)
+            <input id="price" type="number" min="1" step="1" required inputmode="numeric" class="mt-1 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2.5 text-sm text-white outline-none focus:border-indigo-400">
+          </label>
+          <label class="text-xs font-semibold text-slate-300">Jumlah lembar
+            <input id="quantity" type="number" min="1" step="1" required inputmode="numeric" class="mt-1 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2.5 text-sm text-white outline-none focus:border-indigo-400">
+          </label>
+          <label class="text-xs font-semibold text-slate-300">Aksi virtual
+            <select id="action" class="mt-1 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2.5 text-sm text-white outline-none focus:border-indigo-400">
+              <option value="buy">Beli virtual</option>
+              <option value="sell">Jual virtual</option>
+            </select>
+          </label>
+          <button class="self-end rounded-lg bg-indigo-400 px-4 py-2.5 text-sm font-bold text-slate-950 hover:bg-indigo-300" type="submit">Catat simulasi</button>
+        </form>
+
+        <div class="mt-6 grid gap-5 lg:grid-cols-2">
+          <div>
+            <h3 class="text-sm font-bold text-white">Posisi virtual</h3>
+            <div class="mt-2 overflow-x-auto rounded-xl border border-slate-800">
+              <table class="w-full min-w-[520px] text-left text-xs">
+                <thead class="bg-slate-950 text-slate-400"><tr><th class="p-3">Kode</th><th class="p-3">Lembar</th><th class="p-3">Rata-rata</th><th class="p-3">Harga simulasi</th><th class="p-3">P/L</th></tr></thead>
+                <tbody id="positions-body" class="divide-y divide-slate-800 text-slate-200"></tbody>
+              </table>
+            </div>
+            <p id="empty-positions" class="mt-2 text-xs text-slate-500">Belum ada transaksi virtual.</p>
+          </div>
+          <div>
+            <h3 class="text-sm font-bold text-white">Aktivitas terakhir</h3>
+            <ol id="trade-history" class="mt-2 max-h-64 space-y-2 overflow-y-auto rounded-xl border border-slate-800 bg-slate-950 p-3 text-xs text-slate-300"></ol>
+            <p id="empty-history" class="mt-2 text-xs text-slate-500">Aktivitas simulasi akan muncul di sini.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="rounded-2xl border border-slate-800 bg-slate-900 p-5 sm:p-7">
+        <p class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">Mode nyata</p>
+        <h2 class="mt-1 text-xl font-bold text-white">Belum dihubungkan</h2>
+        <p class="mt-2 text-sm leading-6 text-slate-400">Belum ada sekuritas atau API resmi yang ditentukan. Dashboard ini tidak dapat menerima top-up, mengambil harga pasar, atau mengirim order sungguhan. Jangan masukkan kata sandi, token, atau API key di halaman statis ini.</p>
+      </section>
+    </section>
+  </main>
+
+  <script>
+    (() => {
+      document.addEventListener("owner-dashboard-authenticated", () => {
+      const storageKey = "jemeli.paper-trading.v1";
+      const initialState = () => ({ cash: 100000, positions: {}, history: [] });
+      const formatRupiah = (amount) => new Intl.NumberFormat("id-ID", {
+        style: "currency",
+        currency: "IDR",
+        maximumFractionDigits: 0
+      }).format(amount);
+      const status = document.getElementById("simulator-status");
+      const positionsBody = document.getElementById("positions-body");
+      const historyList = document.getElementById("trade-history");
+      let state;
+
+      const showStatus = (message, isError = false) => {
+        status.textContent = message;
+        status.className = `mt-4 rounded-lg border px-3 py-2 text-sm ${isError
+          ? "border-rose-400/30 bg-rose-400/10 text-rose-200"
+          : "border-emerald-400/30 bg-emerald-400/10 text-emerald-200"}`;
+      };
+
+      const persist = () => {
+        try {
+          localStorage.setItem(storageKey, JSON.stringify(state));
+          return true;
+        } catch (error) {
+          showStatus("Simulasi berubah di halaman ini, tetapi browser tidak dapat menyimpan datanya.", true);
+          return false;
+        }
+      };
+
+      const loadState = () => {
+        try {
+          const saved = localStorage.getItem(storageKey);
+          if (!saved) return initialState();
+          const parsed = JSON.parse(saved);
+          if (!parsed || typeof parsed.cash !== "number" || !parsed.positions || !Array.isArray(parsed.history)) {
+            throw new Error("Data simulasi tidak valid.");
+          }
+          return parsed;
+        } catch (error) {
+          showStatus("Data simulasi lokal tidak dapat dibaca. Gunakan Reset simulasi untuk memulai ulang.", true);
+          return initialState();
+        }
+      };
+
+      const render = () => {
+        let marketValue = 0;
+        let costBasis = 0;
+        positionsBody.replaceChildren();
+        Object.entries(state.positions).forEach(([ticker, position]) => {
+          if (!(position.quantity > 0)) return;
+          const value = position.quantity * position.lastPrice;
+          const cost = position.quantity * position.averagePrice;
+          const profit = value - cost;
+          marketValue += value;
+          costBasis += cost;
+          const row = document.createElement("tr");
+          [ticker, position.quantity.toLocaleString("id-ID"), formatRupiah(position.averagePrice), formatRupiah(position.lastPrice), formatRupiah(profit)].forEach((valueText, index) => {
+            const cell = document.createElement("td");
+            cell.className = `p-3 ${index === 4 ? (profit >= 0 ? "text-emerald-300" : "text-rose-300") : ""}`;
+            cell.textContent = valueText;
+            row.appendChild(cell);
+          });
+          positionsBody.appendChild(row);
+        });
+        document.getElementById("virtual-cash").textContent = formatRupiah(state.cash);
+        document.getElementById("virtual-value").textContent = formatRupiah(marketValue);
+        const totalProfit = marketValue - costBasis;
+        const profitElement = document.getElementById("virtual-profit");
+        profitElement.textContent = formatRupiah(totalProfit);
+        profitElement.className = `mt-1 text-xl font-bold ${totalProfit >= 0 ? "text-emerald-300" : "text-rose-300"}`;
+        document.getElementById("empty-positions").classList.toggle("hidden", positionsBody.childElementCount > 0);
+        historyList.replaceChildren();
+        state.history.slice(0, 20).forEach((entry) => {
+          const item = document.createElement("li");
+          item.className = "rounded-lg border border-slate-800 p-3";
+          item.textContent = `${new Date(entry.at).toLocaleString("id-ID")} · ${entry.action === "buy" ? "Beli" : "Jual"} ${entry.ticker} · ${entry.quantity} lembar × ${formatRupiah(entry.price)}`;
+          historyList.appendChild(item);
+        });
+        document.getElementById("empty-history").classList.toggle("hidden", state.history.length > 0);
+      };
+
+      state = loadState();
+      render();
+
+      document.getElementById("trade-form").addEventListener("submit", (event) => {
+        event.preventDefault();
+        const ticker = document.getElementById("ticker").value.trim().toUpperCase();
+        const price = Number(document.getElementById("price").value);
+        const quantity = Number(document.getElementById("quantity").value);
+        const action = document.getElementById("action").value;
+        if (!/^[A-Z0-9.-]{1,12}$/.test(ticker) || !Number.isSafeInteger(price) || price <= 0 || !Number.isSafeInteger(quantity) || quantity <= 0) {
+          showStatus("Isi kode saham, harga, dan jumlah dengan nilai yang valid.", true);
+          return;
+        }
+        const position = state.positions[ticker] || { quantity: 0, averagePrice: 0, lastPrice: price };
+        const total = price * quantity;
+        if (!Number.isSafeInteger(total)) {
+          showStatus("Nilai transaksi terlalu besar untuk simulasi.", true);
+          return;
+        }
+        if (action === "buy") {
+          if (total > state.cash) {
+            showStatus("Saldo virtual tidak cukup untuk transaksi ini.", true);
+            return;
+          }
+          const newQuantity = position.quantity + quantity;
+          position.averagePrice = ((position.quantity * position.averagePrice) + total) / newQuantity;
+          position.quantity = newQuantity;
+          state.cash -= total;
+        } else {
+          if (quantity > position.quantity) {
+            showStatus("Jumlah jual melebihi lembar yang dimiliki dalam simulasi.", true);
+            return;
+          }
+          position.quantity -= quantity;
+          state.cash += total;
+        }
+        position.lastPrice = price;
+        if (position.quantity === 0) {
+          delete state.positions[ticker];
+        } else {
+          state.positions[ticker] = position;
+        }
+        state.history.unshift({ ticker, price, quantity, action, at: new Date().toISOString() });
+        state.history = state.history.slice(0, 20);
+        persist();
+        render();
+        showStatus("Transaksi virtual dicatat. Tidak ada order atau uang sungguhan yang digunakan.");
+        event.target.reset();
+      });
+
+      document.getElementById("reset-simulator").addEventListener("click", () => {
+        if (!window.confirm("Hapus saldo, posisi, dan riwayat simulasi di browser ini?")) return;
+        state = initialState();
+        try {
+          localStorage.removeItem(storageKey);
+        } catch (error) {
+          showStatus("Data berhasil direset pada halaman ini, tetapi gagal dihapus dari penyimpanan browser.", true);
+          render();
+          return;
+        }
+        render();
+        showStatus("Simulasi direset ke saldo virtual Rp100.000.");
+      });
+      }, { once: true });
+    })();
+  </script>
+</body>
+</html>
