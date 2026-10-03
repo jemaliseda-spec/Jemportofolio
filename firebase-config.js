@@ -2,7 +2,7 @@ export const firebaseConfig = {
   apiKey: "AIzaSyDyZozJRTST0M9875cY5WVNt8uXc1bn08s",
   authDomain: "jemeli-owner-dashboard-5b497.firebaseapp.com",
   projectId: "jemeli-owner-dashboard-5b497",
-  appId: "jemeli-owner-dashboard-5b497.firebasestorage.app",
+  appId: "1:848593341263:web:4adf6f1708abb0c37b533a",
   messagingSenderId: "848593341263"
 };
 
