@@ -12,7 +12,7 @@
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -167,12 +167,25 @@
       transform-origin: left;
       animation: presentationBarIn 900ms cubic-bezier(0.16, 1, 0.3, 1) both;
     }
+    @keyframes letterOpen {
+      from { opacity: 0; transform: translateY(18px) scale(0.97); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .story-letter-paper {
+      animation: letterOpen 650ms cubic-bezier(0.16, 1, 0.3, 1) both;
+      background:
+        radial-gradient(ellipse at top left, rgba(212, 175, 55, 0.08), transparent 34%),
+        radial-gradient(ellipse at bottom right, rgba(212, 175, 55, 0.08), transparent 34%),
+        #fffdf7;
+      box-shadow: 0 30px 100px rgba(0, 0, 0, 0.55);
+    }
     @media (prefers-reduced-motion: reduce) {
       .presentation-text-in,
       .presentation-photo-drift,
       .presentation-gallery-photo-in,
       .presentation-collage-tile-in,
-      .presentation-bar-in {
+      .presentation-bar-in,
+      .story-letter-paper {
         animation-duration: 1ms;
       }
     }
@@ -1397,6 +1410,135 @@
       );
     }
 
+    function StoryLetterModal({ onClose, isMusicPlaying, musicError, onToggleMusic }) {
+      const [isFullStoryOpen, setIsFullStoryOpen] = useState(false);
+
+      useEffect(() => {
+        const handleKeyDown = (event) => {
+          if (event.key === "Escape") onClose();
+        };
+        window.addEventListener("keydown", handleKeyDown);
+        return () => window.removeEventListener("keydown", handleKeyDown);
+      }, [onClose]);
+
+      return (
+        <div
+          className="fixed inset-0 z-[80] flex items-center justify-center bg-[#100d08]/80 p-3 backdrop-blur-md sm:p-6"
+          onClick={onClose}
+        >
+          <section
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="story-letter-title"
+            className="story-letter-paper relative max-h-[92vh] w-full max-w-3xl overflow-y-auto rounded-[1.75rem] border border-amber-300/60 p-5 text-stone-800 sm:p-9"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div aria-hidden="true" className="pointer-events-none absolute inset-2 rounded-[1.3rem] border border-amber-500/35 sm:inset-3" />
+            <svg aria-hidden="true" className="pointer-events-none absolute left-4 top-4 h-16 w-16 text-amber-500/60 sm:left-6 sm:top-6 sm:h-20 sm:w-20" viewBox="0 0 80 80" fill="none">
+              <path d="M8 68C25 54 23 28 58 9M17 59C11 47 14 40 21 37C26 45 25 52 17 59ZM31 42C29 28 35 21 45 20C47 30 42 38 31 42ZM43 29C46 16 54 12 63 15C61 25 54 30 43 29ZM23 52C34 50 41 54 43 63C33 66 26 62 23 52Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+            <svg aria-hidden="true" className="pointer-events-none absolute bottom-4 right-4 h-16 w-16 rotate-180 text-amber-500/60 sm:bottom-6 sm:right-6 sm:h-20 sm:w-20" viewBox="0 0 80 80" fill="none">
+              <path d="M8 68C25 54 23 28 58 9M17 59C11 47 14 40 21 37C26 45 25 52 17 59ZM31 42C29 28 35 21 45 20C47 30 42 38 31 42ZM43 29C46 16 54 12 63 15C61 25 54 30 43 29ZM23 52C34 50 41 54 43 63C33 66 26 62 23 52Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+
+            <div className="relative mx-auto max-w-2xl px-1 py-3 sm:px-5 sm:py-5">
+              <div className="mb-3 flex items-center justify-between gap-3">
+                <span className="inline-flex items-center gap-2 rounded-full border border-amber-700/20 bg-amber-100/70 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-amber-900 sm:text-xs">
+                  <span aria-hidden="true">✦</span> Sepucuk kisah dari Jemeli
+                </span>
+                <button type="button" onClick={onClose} aria-label="Tutup kisah" className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-stone-300 bg-white/80 text-xl text-stone-600 transition hover:border-amber-500 hover:text-amber-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500">
+                  <span aria-hidden="true">×</span>
+                </button>
+              </div>
+              <div className="mb-3 flex flex-wrap items-center justify-center gap-2">
+                <button
+                  type="button"
+                  onClick={onToggleMusic}
+                  aria-pressed={isMusicPlaying}
+                  className="inline-flex h-9 items-center gap-1.5 rounded-full border border-amber-700/20 bg-white/80 px-3 text-[10px] font-semibold text-amber-900 transition hover:border-amber-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500"
+                >
+                  <span aria-hidden="true">{isMusicPlaying ? "Ⅱ" : "▶"}</span>
+                  {isMusicPlaying ? "Jeda musik" : "Putar musik"}
+                </button>
+              </div>
+              {musicError && <p role="status" aria-live="polite" className="mb-3 text-center text-xs text-rose-700">{musicError}</p>}
+
+              <p className="text-center text-xs font-semibold uppercase tracking-[0.28em] text-amber-800/75">Kisah di Balik Perjalanan</p>
+              <h2 id="story-letter-title" className="mt-2 text-center font-display text-3xl font-bold leading-tight text-stone-900 sm:text-5xl">
+                Sebuah langkah, sebuah doa
+              </h2>
+              <div aria-hidden="true" className="mx-auto mt-4 flex max-w-xs items-center gap-3 text-amber-600">
+                <span className="h-px flex-1 bg-gradient-to-r from-transparent to-amber-500/60" />
+                <span>❧</span>
+                <span className="h-px flex-1 bg-gradient-to-l from-transparent to-amber-500/60" />
+              </div>
+
+              <blockquote className="mt-6 border-y border-amber-700/20 py-6 text-center font-[Cormorant_Garamond,Georgia,serif] text-2xl font-semibold italic leading-snug text-amber-950 sm:mt-8 sm:py-8 sm:text-4xl">
+                “Di antara jutaan orang yang melangkah di jalan yang sama, saya tidak datang membawa kemewahan atau jalan pintas. Saya hadir membawa sisa-sisa peluh orang tua, ketulusan doa, dan tekad baja untuk mengubah nasib dengan kepala tegak.”
+              </blockquote>
+
+              <p className="mt-6 text-center font-[Cormorant_Garamond,Georgia,serif] text-xl leading-relaxed text-stone-700 sm:text-2xl">
+                Selamat datang di ruang paling jujur dalam portofolio saya. Jika Anda meluangkan waktu sejenak untuk membuka amplop ini, saya ingin mengajak Anda menyelami sebuah kisah tentang akar, perjuangan, dan cinta yang menjadi bahan bakar di setiap langkah saya.
+              </p>
+
+              {!isFullStoryOpen ? (
+                <div className="mt-7 flex justify-center">
+                  <button
+                    type="button"
+                    onClick={() => setIsFullStoryOpen(true)}
+                    className="inline-flex items-center gap-2 rounded-full border border-amber-700/20 bg-gradient-to-r from-amber-700 to-yellow-700 px-5 py-3 text-sm font-bold text-white shadow-lg shadow-amber-900/20 transition hover:-translate-y-0.5 hover:from-amber-800 hover:to-yellow-800 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-amber-500/30"
+                  >
+                    Buka kisah lengkap <span aria-hidden="true">↓</span>
+                  </button>
+                </div>
+              ) : (
+                <article className="mt-8 space-y-7 border-t border-amber-700/20 pt-7 text-sm leading-7 text-stone-700 sm:text-base">
+                  <section>
+                    <h3 className="font-display text-xl font-bold text-amber-900 sm:text-2xl">1. Peluh di Balik Langkah Saya (Akar Keluarga)</h3>
+                    <p className="mt-2">Saya lahir dan dibesarkan di sebuah sudut keluarga petani yang sangat sederhana. Ayah dan ibu saya adalah pahlawan tanpa tanda jasa dalam hidup saya—dua jiwa tangguh yang menghabiskan hari-harinya di atas tanah, bertaruh pada cuaca, demi menyambung hidup keluarga. Sebagai anak bungsu dari delapan bersaudara, mata saya telah lama terbuka dan menyaksikan betapa jujurnya kerja keras, betapa mahalnya sebutir nasi, dan betapa tulusnya pengorbanan mereka. Usia senja kini telah memeluk raga kedua orang tua saya, namun kerutan di wajah dan doa yang mereka bisikkan dalam sujud-sujud malam adalah kompas suci yang menuntun saya untuk tidak pernah menyerah pada keadaan.</p>
+                  </section>
+
+                  <section>
+                    <h3 className="font-display text-xl font-bold text-amber-900 sm:text-2xl">2. Menyala di Tengah Keterbatasan (Perjalanan Pendidikan)</h3>
+                    <p className="mt-2">Pernah ada masa di mana pintu kuliah terasa tertutup rapat karena himpitan ekonomi. Namun, dalam gelapnya keterbatasan itu, saya menolak untuk menyerah. Secara mandiri, malam demi malam saya mencari celah di internet hingga Tuhan membukakan jalan melalui beasiswa KIP Kuliah.</p>
+                    <p className="mt-3">Saya mendaftarkan diri pada program D-3 Perbankan Keuangan di Politeknik Negeri Lhokseumawe, berbekal secercah harapan bahwa program tersebut akan bertransformasi menjadi jenjang D-4. Dan benar, takdir baik menyambut ketulusan niat saya; kampus tersebut resmi mengonversinya menjadi D-4 Manajemen Keuangan Sektor Publik. Dengan air mata syukur dan kerja keras, saya merampungkan studi ini hingga lulus dengan predikat Cumlaude (IPK 3.59).</p>
+                  </section>
+
+                  <section>
+                    <h3 className="font-display text-xl font-bold text-amber-900 sm:text-2xl">3. Menempa Diri: Dari Panggung Kecil hingga Ruang Profesional</h3>
+                    <p className="mt-2">Perjalanan hidup saya dibentuk oleh proses yang panjang, di mana setiap tantangan adalah sekolah kehidupan:</p>
+                    <div className="mt-4 space-y-4 border-l-2 border-amber-500/40 pl-4">
+                      <div>
+                        <h4 className="font-bold text-stone-800">Masa Kanak-kanak & Sekolah (SD - SMK)</h4>
+                        <p>Sejak kecil, saya terbiasa melatih mental melalui berbagai ruang kompetisi. Saya pernah berdiri di panggung Olimpiade Sains Nasional (OSN) meraih Juara 3 UPTD Rantau Parlak, bernyanyi dengan sepenuh jiwa sebagai Juara 1 Vokal Solo tingkat Kecamatan, hingga membawa nama sekolah dalam Debat Bahasa Indonesia. Kepercayaan itu berlanjut saat saya dipercaya oleh Camat Serbajadi sebagai delegasi resmi kecamatan pada ajang Musabaqah Tilawatil Quran (MTQ) tingkat anak-anak se-Kabupaten Aceh Timur, serta diamanahkan sebagai Duta Sadar Hukum mewakili SMK Negeri 1 Lokop.</p>
+                      </div>
+                      <div>
+                        <h4 className="font-bold text-stone-800">Kewirausahaan & Kampus (Festival Bisnis 2025)</h4>
+                        <p>Darah pekerja keras dari orang tua mengalir menjadi jiwa kewirausahaan dalam diri saya. Melalui Festival Bisnis 2025, saya terjun langsung merancang produk, memikirkan branding dan packaging, hingga memasarkan serta menjualnya dengan tangan saya sendiri.</p>
+                      </div>
+                      <div>
+                        <h4 className="font-bold text-stone-800">Dunia Perbankan (Magang 6 Bulan)</h4>
+                        <p>Saya menguji mental profesional di PT Bank Tabungan Negara (Persero) Tbk Kantor Cabang Syariah Lhokseumawe lewat program MBKM. Berkeliling di unit Financial Administration dan pelayanan nasabah, saya belajar arti ketelitian angka, kepekaan melayani manusia, dan integritas tanpa kompromi.</p>
+                      </div>
+                    </div>
+                  </section>
+
+                  <section>
+                    <h3 className="font-display text-xl font-bold text-amber-900 sm:text-2xl">4. Niat Suci dan Komitmen Saya</h3>
+                    <p className="mt-2">Saya tahu, di luar sana ada jutaan pencari kerja dengan latar belakang yang jauh lebih beruntung. Saya tidak datang dengan gaya hidup yang tinggi, permintaan yang muluk-muluk, atau kepintaran yang menyilaukan.</p>
+                    <p className="mt-3">Saya hanya membawa satu hal yang murni: kejujuran, kerajinan yang tidak kenal lelah, integritas yang utuh, dan rasa ingin tahu yang besar untuk terus belajar.</p>
+                    <p className="mt-3">Lebih dari sekadar mencari penghidupan, niat terbesar dalam hidup saya adalah mempersembahkan karya dan mendedikasikan ilmu ini untuk mengangkat derajat keluarga—sebagai bentuk bakti yang tak terhingga kepada kedua orang tua saya yang telah berjuang setengah mati mencintai dan membesarkan saya.</p>
+                    <p className="mt-3">Jika diberi kesempatan, saya ingin mendedikasikan seluruh energi, loyalitas, dan ketulusan saya untuk bertumbuh bersama instansi atau perusahaan yang Anda pimpin. Terima kasih telah berkenan mengenal siapa saya di balik lembar-lembar portofolio ini.</p>
+                  </section>
+                </article>
+              )}
+              <p className="mt-8 text-center font-[Cormorant_Garamond,Georgia,serif] text-lg italic text-amber-900/70">Dengan hormat dan penuh harapan, Jemeli</p>
+            </div>
+          </section>
+        </div>
+      );
+    }
+
     // Main App Component
     function App() {
       const [viewMode, setViewMode] = useState('landing'); // 'slides' | 'landing'
@@ -1412,6 +1554,9 @@
       const [internshipPhotoMessageIsError, setInternshipPhotoMessageIsError] = useState(false);
       const [isAmbientPlaying, setIsAmbientPlaying] = useState(false);
       const [ambientSoundError, setAmbientSoundError] = useState("");
+      const [isStoryLetterOpen, setIsStoryLetterOpen] = useState(false);
+      const [isStoryAudioPlaying, setIsStoryAudioPlaying] = useState(false);
+      const [storyAudioError, setStoryAudioError] = useState("");
       const [videoPresentationSlide, setVideoPresentationSlide] = useState(0);
       const [videoPresentationMediaIndex, setVideoPresentationMediaIndex] = useState(0);
       const [videoSlideElapsed, setVideoSlideElapsed] = useState(0);
@@ -1442,6 +1587,7 @@
       ];
       const totalSlides = slideLabels.length;
       const ambientAudioRef = useRef(null);
+      const storyAudioRef = useRef(null);
       const ambientStartRef = useRef(false);
       const internshipPhotoTriggerRef = useRef(null);
       const educationCertificateTriggerRef = useRef(null);
@@ -1482,6 +1628,60 @@
         setVideoPresentationSlide((nextSlideIndex + videoPresentationSlides.length) % videoPresentationSlides.length);
         setVideoPresentationMediaIndex(0);
         setVideoSlideElapsed(0);
+      };
+
+      const playStoryAudio = async (restart = false) => {
+        let audio = storyAudioRef.current;
+        if (!audio) {
+          audio = new window.Audio("./story-thank-you-allah-cover.mp3");
+          audio.loop = true;
+          audio.volume = 0.45;
+          audio.onended = () => {
+            setIsStoryAudioPlaying(false);
+            storyAudioRef.current = null;
+          };
+          audio.onerror = () => {
+            setIsStoryAudioPlaying(false);
+            setStoryAudioError("Musik kisah tidak dapat dimuat. Periksa file audio lalu coba lagi.");
+          };
+          storyAudioRef.current = audio;
+        }
+
+        if (restart) audio.currentTime = 0;
+        try {
+          await audio.play();
+          setIsStoryAudioPlaying(true);
+          setStoryAudioError("");
+        } catch (error) {
+          setIsStoryAudioPlaying(false);
+          setStoryAudioError("Musik tidak dapat diputar. Coba tekan tombol Putar musik.");
+          console.error("Gagal memutar musik kisah:", error);
+        }
+      };
+
+      const openStoryLetter = () => {
+        setIsStoryLetterOpen(true);
+        setStoryAudioError("");
+        void playStoryAudio(true);
+      };
+
+      const closeStoryLetter = () => {
+        if (storyAudioRef.current) {
+          storyAudioRef.current.pause();
+          storyAudioRef.current.currentTime = 0;
+          storyAudioRef.current = null;
+        }
+        setIsStoryAudioPlaying(false);
+        setIsStoryLetterOpen(false);
+      };
+
+      const toggleStoryAudio = () => {
+        if (storyAudioRef.current && !storyAudioRef.current.paused) {
+          storyAudioRef.current.pause();
+          setIsStoryAudioPlaying(false);
+          return;
+        }
+        void playStoryAudio();
       };
 
       const toggleAmbientSound = async () => {
@@ -1529,6 +1729,9 @@
       useEffect(() => () => {
         if (ambientAudioRef.current) {
           ambientAudioRef.current.pause();
+        }
+        if (storyAudioRef.current) {
+          storyAudioRef.current.pause();
         }
       }, []);
 
@@ -1918,6 +2121,21 @@
               <div className="flex items-center gap-2">
                 <button
                   type="button"
+                  onClick={openStoryLetter}
+                  aria-label="Kisah di Balik Perjalanan"
+                  title="Kisah di Balik Perjalanan"
+                  className="inline-flex h-9 shrink-0 items-center justify-center gap-2 rounded-xl border border-amber-300/30 bg-gradient-to-br from-amber-300/15 via-amber-500/10 to-yellow-200/10 px-2.5 text-amber-100 shadow-sm shadow-amber-950/20 transition hover:border-amber-200/60 hover:from-amber-300/25 hover:to-yellow-200/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-300 sm:px-3"
+                >
+                  <svg aria-hidden="true" className="h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="none">
+                    <path d="M3.75 6.75h16.5v10.5H3.75z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
+                    <path d="m4.5 7.5 7.5 6 7.5-6" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M3.75 17.25 9 12.75m11.25 4.5L15 12.75" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
+                  </svg>
+                  <span className="hidden text-[10px] font-semibold leading-tight sm:inline xl:hidden">Kisah</span>
+                  <span className="hidden whitespace-nowrap text-[10px] font-semibold leading-tight xl:inline">Kisah di Balik Perjalanan</span>
+                </button>
+                <button
+                  type="button"
                   onClick={toggleAmbientSound}
                   aria-pressed={isAmbientPlaying}
                   title="Putar musik dan video presentasi animasi; mati secara default"
@@ -2017,6 +2235,10 @@
 
                           <p className="max-w-3xl text-sm sm:text-base leading-relaxed text-slate-300">
                             Saya lulusan Sarjana Terapan Manajemen Keuangan Sektor Publik dari Politeknik Negeri Lhokseumawe dengan predikat <strong className="font-bold text-yellow-300">cumlaude (IPK 3,59)</strong>. Melalui magang MBKM di PT Bank Tabungan Negara (Persero) Tbk, saya memperoleh pengalaman dalam administrasi pembiayaan dan layanan nasabah. Saya juga menyelesaikan penelitian ekonometrika menggunakan EViews 12.
+                          </p>
+
+                          <p className="max-w-3xl rounded-xl border border-amber-400/20 bg-amber-400/5 px-4 py-3 text-xs leading-relaxed text-amber-100/90 sm:text-sm">
+                            <strong className="text-amber-200">Keterangan nama:</strong> JEMALI adalah nama pemberian orang tua saya. Pada ijazah SD, huruf “A” keliru tertulis “E”; ejaan pada ijazah tersebut kemudian menjadi acuan data pendidikan dan dokumen resmi saya. Karena itu, nama JEMELI digunakan pada portofolio, media sosial, dan email saya. JEMALI dan JEMELI merujuk pada orang yang sama.
                           </p>
 
                           <div className="flex flex-wrap gap-2" aria-label="Bidang minat">
@@ -2864,6 +3086,9 @@
                       <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
                         Lulusan Politeknik Negeri Lhokseumawe dengan pengalaman magang di bidang administrasi pembiayaan dan layanan nasabah di BTN. Memiliki dasar akademik dalam akuntansi pemerintahan, audit sektor publik, serta analisis data menggunakan EViews 12.
                       </p>
+                      <p className="rounded-xl border border-amber-400/20 bg-amber-400/5 px-4 py-3 text-xs leading-relaxed text-amber-100/90 sm:text-sm">
+                        <strong className="text-amber-200">Keterangan nama:</strong> JEMALI adalah nama pemberian orang tua saya. Pada ijazah SD, huruf “A” keliru tertulis “E”; ejaan pada ijazah tersebut kemudian menjadi acuan data pendidikan dan dokumen resmi saya. Karena itu, nama JEMELI digunakan pada portofolio, media sosial, dan email saya. JEMALI dan JEMELI merujuk pada orang yang sama.
+                      </p>
                       <p className="text-xs sm:text-sm leading-relaxed text-cyan-100">
                         Terbuka untuk peluang entry-level di administrasi keuangan, operasional perbankan, dan keuangan sektor publik.
                       </p>
@@ -3361,6 +3586,14 @@
             </div>
           )}
 
+          {isStoryLetterOpen && (
+            <StoryLetterModal
+              onClose={closeStoryLetter}
+              isMusicPlaying={isStoryAudioPlaying}
+              musicError={storyAudioError}
+              onToggleMusic={toggleStoryAudio}
+            />
+          )}
           <CertModal cert={selectedCert} onClose={() => setSelectedCert(null)} />
           {selectedInternshipPhoto && (
             <InternshipPhotoLightbox
