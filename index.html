@@ -1790,8 +1790,14 @@
         const startNarration = () => {
           if (cancelled || hasStarted) return;
           const voices = synthesizer.getVoices();
-          const voice = voices.find((candidate) => candidate.lang.toLowerCase() === narrationLanguage.toLowerCase())
-            || voices.find((candidate) => candidate.lang.toLowerCase().startsWith(`${languageBase}-`));
+          const languageVoices = voices.filter((candidate) => candidate.lang.toLowerCase() === narrationLanguage.toLowerCase())
+            .concat(voices.filter((candidate) => candidate.lang.toLowerCase().startsWith(`${languageBase}-`)
+              && candidate.lang.toLowerCase() !== narrationLanguage.toLowerCase()));
+          const maleVoiceName = /\b(male|man|masculine|homme|hombre|uomo|männlich|masculino|erkek|david|mark|guy|ryan|eric|christopher|tony|thomas|george|james|daniel|luis|antonio|pablo|diego|carlos|miguel|pierre|henri|jacques|franz|stefan|hans|luca|marco|paolo|keita|naoki|yunyang|inj(o|u)on|hyunsu|hamed)\b/i;
+          const femaleVoiceName = /\b(female|woman|feminine|frau|femme|mujer|donna|weiblich|kadın|zira|aria|jenny|sonia|ava|emma|xiaoxiao|huihui|yaoyao|xiaoyi|nanami|haruka|ayumi|sayaka|sunhi|seoyeon|yuna|heami|salli)\b/i;
+          const voice = languageVoices.find((candidate) => maleVoiceName.test(candidate.name))
+            || languageVoices.find((candidate) => !femaleVoiceName.test(candidate.name))
+            || languageVoices[0];
 
           if (!voice) {
             setNarrationError(`Browser tidak menemukan voice ${narrationLanguages.find((language) => language.code === narrationLanguage)?.label || narrationLanguage}. Pasang voice bahasa tersebut di perangkat; teks terjemahan tetap ditampilkan.`);
@@ -1802,8 +1808,8 @@
           const utterance = new window.SpeechSynthesisUtterance(videoPresentationSlides[videoPresentationSlide].narration[narrationLanguage]);
           utterance.lang = narrationLanguage;
           utterance.voice = voice;
-          utterance.rate = 0.94;
-          utterance.pitch = 1;
+          utterance.rate = 0.97;
+          utterance.pitch = 1.02;
           utterance.onstart = () => {
             if (!cancelled && ambientAudioRef.current) ambientAudioRef.current.volume = 0.12;
           };
