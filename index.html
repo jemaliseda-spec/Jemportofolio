@@ -1644,7 +1644,6 @@
 
         setInternshipReportPasswordError("");
         setHasInternshipReportAccess(true);
-        window.open(LAPORAN_MAGANG_URL, "_blank", "noopener,noreferrer");
       };
 
       const playStoryAudio = async (restart = false) => {
@@ -2599,6 +2598,7 @@
                                 onChange={(event) => {
                                   setInternshipReportPassword(event.target.value);
                                   setInternshipReportPasswordError("");
+                                  setHasInternshipReportAccess(false);
                                 }}
                                 autoComplete="off"
                                 required
@@ -2610,7 +2610,7 @@
                                 type="submit"
                                 className="rounded-lg bg-cyan-400 px-4 py-2 text-xs font-bold text-slate-950 transition hover:bg-cyan-300"
                               >
-                                Buka dokumen
+                                Verifikasi kata sandi
                               </button>
                             </div>
                             {internshipReportPasswordError ? (
@@ -2620,11 +2620,21 @@
                             ) : (
                               <p id="internship-report-password-note" className="mt-2 text-[10px] leading-relaxed text-slate-400">
                                 {hasInternshipReportAccess ? (
-                                  <>Akses dibuka. Jika tab baru tidak muncul, <a href={LAPORAN_MAGANG_URL} target="_blank" rel="noopener noreferrer" className="text-cyan-300 underline">buka laporan di Google Drive</a>.</>
+                                  "Kata sandi benar. Klik tombol berikut untuk membuka laporan di tab baru."
                                 ) : (
                                   "Kata sandi hanya menjadi penghalang sederhana di halaman ini; tautan Google Drive yang publik tetap dapat dibuka langsung."
                                 )}
                               </p>
+                            )}
+                            {hasInternshipReportAccess && (
+                              <a
+                                href={LAPORAN_MAGANG_URL}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="mt-3 inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-600 px-4 py-2.5 text-xs font-bold text-navy-950 shadow-md transition hover:from-cyan-400 hover:to-blue-500"
+                              >
+                                Buka laporan di Google Drive ↗
+                              </a>
                             )}
                           </form>
                         )}
