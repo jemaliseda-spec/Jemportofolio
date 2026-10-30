@@ -213,6 +213,8 @@
     // Official verification documents & links
     const LINKEDIN_URL = "https://www.linkedin.com/in/jemeli-jem-672a98373";
     const NILAI_KELULUSAN_URL = "https://drive.google.com/file/d/1gwPw4rmPGyN-00sjz2YWjqZ6PDaRUgEg/view?usp=sharing";
+    const LAPORAN_MAGANG_URL = "https://drive.google.com/file/d/1vf1gwQl0V_p477mg-ST367f_8raAAvP-/view";
+    const LAPORAN_MAGANG_PASSWORD = "JM2026";
     const POSISI_MAGANG_URL = "https://www.linkedin.com/in/jemeli-jem-672a98373/edit/forms/position/2687723828/";
     const PUBLIKASI_TA_URL = "https://library.pnl.ac.id/?p=show_detail&id=41269";
     const LOA_JURNAL_TA_URL = "https://drive.google.com/file/d/1iFGWd6iRTROQEphB45YJC361gZESISFZ/view?usp=sharing";
@@ -1551,6 +1553,10 @@
       const [isManagingInternshipPhotos, setIsManagingInternshipPhotos] = useState(false);
       const [internshipPhotoMessage, setInternshipPhotoMessage] = useState("");
       const [internshipPhotoMessageIsError, setInternshipPhotoMessageIsError] = useState(false);
+      const [isInternshipReportPasswordPromptOpen, setIsInternshipReportPasswordPromptOpen] = useState(false);
+      const [internshipReportPassword, setInternshipReportPassword] = useState("");
+      const [internshipReportPasswordError, setInternshipReportPasswordError] = useState("");
+      const [hasInternshipReportAccess, setHasInternshipReportAccess] = useState(false);
       const [isAmbientPlaying, setIsAmbientPlaying] = useState(false);
       const [ambientSoundError, setAmbientSoundError] = useState("");
       const [isStoryLetterOpen, setIsStoryLetterOpen] = useState(false);
@@ -1627,6 +1633,18 @@
         setVideoPresentationSlide((nextSlideIndex + videoPresentationSlides.length) % videoPresentationSlides.length);
         setVideoPresentationMediaIndex(0);
         setVideoSlideElapsed(0);
+      };
+
+      const handleInternshipReportPasswordSubmit = (event) => {
+        event.preventDefault();
+        if (internshipReportPassword !== LAPORAN_MAGANG_PASSWORD) {
+          setInternshipReportPasswordError("Kata sandi tidak sesuai. Silakan coba lagi.");
+          return;
+        }
+
+        setInternshipReportPasswordError("");
+        setHasInternshipReportAccess(true);
+        window.open(LAPORAN_MAGANG_URL, "_blank", "noopener,noreferrer");
       };
 
       const playStoryAudio = async (restart = false) => {
@@ -2540,15 +2558,21 @@
                       <div className="mt-6 border-t border-slate-800 pt-5">
                         <div className="text-xs font-mono text-cyan-400 uppercase tracking-widest font-semibold mb-3">Dokumen & Verifikasi Magang</div>
                         <p className="mb-3 max-w-3xl text-xs leading-relaxed text-slate-400">
-                          Laporan magang memuat informasi yang bersifat sensitif. Jika diperlukan untuk keperluan rekrutmen atau verifikasi institusi, silakan hubungi saya untuk meminta akses.
+                          Laporan magang memuat informasi sensitif. Masukkan kata sandi yang diberikan pemilik portofolio untuk membuka dokumen.
                         </p>
                         <div className="flex flex-wrap gap-3">
-                          <a
-                            href={`mailto:jemaliseda@email.com?subject=${encodeURIComponent("Permohonan akses laporan magang MBKM")}&body=${encodeURIComponent("Halo Jemali, saya memerlukan akses ke laporan magang MBKM untuk keperluan rekrutmen atau verifikasi institusi. Mohon informasi mengenai proses permohonan akses. Terima kasih.")}`}
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setIsInternshipReportPasswordPromptOpen((isOpen) => !isOpen);
+                              setInternshipReportPasswordError("");
+                            }}
+                            aria-expanded={isInternshipReportPasswordPromptOpen}
+                            aria-controls="internship-report-password-form"
                             className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-navy-950 text-xs font-bold shadow-md hover:from-cyan-400 hover:to-blue-500 transition-all"
                           >
-                            📄 Minta Akses Laporan Magang MBKM
-                          </a>
+                            🔒 Buka Laporan Magang MBKM
+                          </button>
                           <a
                             href={POSISI_MAGANG_URL}
                             target="_blank"
@@ -2558,6 +2582,52 @@
                             💼 Cek Posisi Magang ↗
                           </a>
                         </div>
+                        {isInternshipReportPasswordPromptOpen && (
+                          <form
+                            id="internship-report-password-form"
+                            onSubmit={handleInternshipReportPasswordSubmit}
+                            className="mt-4 max-w-md rounded-xl border border-cyan-500/20 bg-navy-950/70 p-4"
+                          >
+                            <label htmlFor="internship-report-password" className="block text-xs font-semibold text-slate-200">
+                              Kata sandi laporan
+                            </label>
+                            <div className="mt-2 flex flex-col gap-2 sm:flex-row">
+                              <input
+                                id="internship-report-password"
+                                type="password"
+                                value={internshipReportPassword}
+                                onChange={(event) => {
+                                  setInternshipReportPassword(event.target.value);
+                                  setInternshipReportPasswordError("");
+                                }}
+                                autoComplete="off"
+                                required
+                                aria-invalid={Boolean(internshipReportPasswordError)}
+                                aria-describedby={internshipReportPasswordError ? "internship-report-password-error" : "internship-report-password-note"}
+                                className="min-w-0 flex-1 rounded-lg border border-slate-600 bg-slate-900 px-3 py-2 text-sm text-white outline-none focus:border-cyan-400"
+                              />
+                              <button
+                                type="submit"
+                                className="rounded-lg bg-cyan-400 px-4 py-2 text-xs font-bold text-slate-950 transition hover:bg-cyan-300"
+                              >
+                                Buka dokumen
+                              </button>
+                            </div>
+                            {internshipReportPasswordError ? (
+                              <p id="internship-report-password-error" role="alert" className="mt-2 text-xs text-rose-300">
+                                {internshipReportPasswordError}
+                              </p>
+                            ) : (
+                              <p id="internship-report-password-note" className="mt-2 text-[10px] leading-relaxed text-slate-400">
+                                {hasInternshipReportAccess ? (
+                                  <>Akses dibuka. Jika tab baru tidak muncul, <a href={LAPORAN_MAGANG_URL} target="_blank" rel="noopener noreferrer" className="text-cyan-300 underline">buka laporan di Google Drive</a>.</>
+                                ) : (
+                                  "Kata sandi hanya menjadi penghalang sederhana di halaman ini; tautan Google Drive yang publik tetap dapat dibuka langsung."
+                                )}
+                              </p>
+                            )}
+                          </form>
+                        )}
                       </div>
 
                       <section className="mt-6 border-t border-slate-800 pt-5" aria-labelledby="campus-activities-title">
