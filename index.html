@@ -213,7 +213,6 @@
     // Official verification documents & links
     const LINKEDIN_URL = "https://www.linkedin.com/in/jemeli-jem-672a98373";
     const NILAI_KELULUSAN_URL = "https://drive.google.com/file/d/1gwPw4rmPGyN-00sjz2YWjqZ6PDaRUgEg/view?usp=sharing";
-    const LAPORAN_MAGANG_URL = "https://drive.google.com/file/d/1vf1gwQl0V_p477mg-ST367f_8raAAvP-/view";
     const POSISI_MAGANG_URL = "https://www.linkedin.com/in/jemeli-jem-672a98373/edit/forms/position/2687723828/";
     const PUBLIKASI_TA_URL = "https://library.pnl.ac.id/?p=show_detail&id=41269";
     const LOA_JURNAL_TA_URL = "https://drive.google.com/file/d/1iFGWd6iRTROQEphB45YJC361gZESISFZ/view?usp=sharing";
@@ -2540,14 +2539,15 @@
                       {/* Verification: Internship Report & Position Activity */}
                       <div className="mt-6 border-t border-slate-800 pt-5">
                         <div className="text-xs font-mono text-cyan-400 uppercase tracking-widest font-semibold mb-3">Dokumen & Verifikasi Magang</div>
+                        <p className="mb-3 max-w-3xl text-xs leading-relaxed text-slate-400">
+                          Laporan magang memuat informasi yang bersifat sensitif. Jika diperlukan untuk keperluan rekrutmen atau verifikasi institusi, silakan hubungi saya untuk meminta akses.
+                        </p>
                         <div className="flex flex-wrap gap-3">
                           <a
-                            href={LAPORAN_MAGANG_URL}
-                            target="_blank"
-                            rel="noopener noreferrer"
+                            href={`mailto:jemaliseda@email.com?subject=${encodeURIComponent("Permohonan akses laporan magang MBKM")}&body=${encodeURIComponent("Halo Jemali, saya memerlukan akses ke laporan magang MBKM untuk keperluan rekrutmen atau verifikasi institusi. Mohon informasi mengenai proses permohonan akses. Terima kasih.")}`}
                             className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-navy-950 text-xs font-bold shadow-md hover:from-cyan-400 hover:to-blue-500 transition-all"
                           >
-                            📄 Cek Laporan Magang MBKM ↗
+                            📄 Minta Akses Laporan Magang MBKM
                           </a>
                           <a
                             href={POSISI_MAGANG_URL}
